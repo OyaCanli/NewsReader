@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">News Reader</string>
+    <string name="content_desc_thumbnail">Thumbnail image</string>
+    <string name="content_desc_share">Share button</string>
+    <string name="content_desc_bookmark">Bookmark button</string>
+    <string name="no_connection">No internet connection</string>
+    <string name="no_news_found">No news found</string>
+</resources>

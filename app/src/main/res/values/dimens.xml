@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_standard">16dp</dimen>
+    <dimen name="half_margin">8dp</dimen>
+    <dimen name="paddding_standard">16dp</dimen>
+    <dimen name="half_padding">8dp</dimen>
+    <dimen name="thumbnail_width">120dp</dimen>
+    <dimen name="thumbnail_heigth">100dp</dimen>
+    <dimen name="icon_dimension">36dp</dimen>
+    <dimen name="trail_textSize">16sp</dimen>
+</resources>
