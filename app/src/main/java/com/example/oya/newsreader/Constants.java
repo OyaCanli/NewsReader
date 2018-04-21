@@ -2,7 +2,8 @@ package com.example.oya.newsreader;
 
 public final class Constants {
 
-    static final String GUARDIAN_REQUEST_URL = "http://content.guardianapis.com/search?section=politics&show-fields=byline,trailText,thumbnail&order-by=newest&page-size=25&api-key=test";
+    static final String BASE_URL = "http://content.guardianapis.com/search?section=";
+    static final String END_QUERY = "&show-fields=byline,trailText,thumbnail&order-by=newest&page-size=25&api-key=test";
 
     static final int NEWS_LOADER_ID = 1;
 

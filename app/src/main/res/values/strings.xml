@@ -3,6 +3,12 @@
     <string name="content_desc_thumbnail">Thumbnail image</string>
     <string name="content_desc_share">Share button</string>
     <string name="content_desc_bookmark">Bookmark button</string>
-    <string name="no_connection">No internet connection</string>
+    <string name="no_connection">No internet connection. Check your connection and click to retry</string>
     <string name="no_news_found">No news found</string>
+    <string name="politics">Politics</string>
+    <string name="world">World</string>
+    <string name="business">Business</string>
+    <string name="technology">Technology</string>
+    <string name="science">Science</string>
+    <string name="content_desc_retry">Retry</string>
 </resources>

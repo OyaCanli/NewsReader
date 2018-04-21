@@ -39,10 +39,11 @@ public class NetworkUtils {
 
         // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
         List<NewsArticle> articles = extractFeatureFromJson(jsonResponse);
-
-        // Return the list of {@link Earthquake}s
-        for(int i = 0; i<articles.size(); ++i){
-            Log.v(LOG_TAG, "" + articles.get(i).toString());
+        if(articles != null){
+            // Return the list of {@link Earthquake}s
+            for(int i = 0; i<articles.size(); ++i){
+                Log.v(LOG_TAG, "" + articles.get(i).toString());
+            }
         }
         return articles;
     }
