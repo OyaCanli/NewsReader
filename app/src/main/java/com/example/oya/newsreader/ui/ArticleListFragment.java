@@ -1,16 +1,15 @@
-package com.example.oya.newsreader;
+package com.example.oya.newsreader.ui;
 
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.app.LoaderManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +21,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.adapters.NewsAdapter;
+import com.example.oya.newsreader.model.NewsArticle;
+import com.example.oya.newsreader.utils.Constants;
+import com.example.oya.newsreader.utils.NewsLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,18 +36,18 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private ArrayList<NewsArticle> articles;
     private static final String LOG_TAG = MainActivity.class.getName();
     private TextView empty_tv;
-    RecyclerView recycler;
-    LoaderManager loaderManager;
-    SwipeRefreshLayout refreshLayout;
-    View loadingIndicator;
-    ImageButton retryButton;
+    private RecyclerView recycler;
+    private LoaderManager loaderManager;
+    private SwipeRefreshLayout refreshLayout;
+    private View loadingIndicator;
+    private ImageButton retryButton;
     private static final String ARG_SECTION_NUMBER = "section_number";
-    int loaderId;
+    private int loaderId;
 
     public ArticleListFragment(){
     }
 
-    static ArticleListFragment newInstance(int sectionNumber) {
+    public static ArticleListFragment newInstance(int sectionNumber) {
         ArticleListFragment fragment = new ArticleListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -173,7 +178,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     public void onListItemClick(View view, int position) {
         switch(view.getId()){
             case R.id.container:{
-                openWebPage(position);
+                openDetails(position);
                 break;
             }
             case R.id.share:{
@@ -187,12 +192,10 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
-    private void openWebPage(int position){
-        Uri uri = Uri.parse(articles.get(position).getWebUrl());
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        if(intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivity(intent);
-        }
+    private void openDetails(int position){
+        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+        intent.putExtra(Constants.CHOSEN_ARTICLE, articles.get(position));
+        startActivity(intent);
     }
 
     private void shareTheLink(int position){

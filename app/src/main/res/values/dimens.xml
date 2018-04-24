@@ -8,4 +8,5 @@
     <dimen name="thumbnail_heigth">100dp</dimen>
     <dimen name="icon_dimension">36dp</dimen>
     <dimen name="trail_textSize">16sp</dimen>
+    <dimen name="detailsTitle_textSize">20sp</dimen>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.oya.newsreader;
+package com.example.oya.newsreader.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.model.NewsArticle;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,8 +56,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
             holder.trail_tv.setVisibility(View.GONE);
         }
         Glide.with(mContext)
-              .load(currentArticle
-              .getThumbnailUrl())
+              .load(currentArticle.getThumbnailUrl())
               .into(holder.thumbnail_iv);
     }
 

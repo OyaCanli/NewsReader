@@ -1,12 +1,14 @@
-package com.example.oya.newsreader;
+package com.example.oya.newsreader.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.oya.newsreader.ui.ArticleListFragment;
+
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    SectionsPagerAdapter(FragmentManager fm) {
+    public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

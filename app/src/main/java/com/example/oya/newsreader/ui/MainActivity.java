@@ -1,10 +1,13 @@
-package com.example.oya.newsreader;
+package com.example.oya.newsreader.ui;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.TabLayout;
+
+import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity{
 

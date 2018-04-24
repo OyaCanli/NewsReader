@@ -1,7 +1,9 @@
-package com.example.oya.newsreader;
+package com.example.oya.newsreader.utils;
 
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.example.oya.newsreader.model.NewsArticle;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,11 +20,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NetworkUtils {
+public final class NetworkUtils {
 
     private static final String LOG_TAG = NetworkUtils.class.getSimpleName();
 
     private NetworkUtils(){
+        //Make it impossible to instantiate
+        throw new AssertionError();
     }
 
     public static List<NewsArticle> fetchArticles(String requestUrl) {
@@ -154,11 +158,11 @@ public class NetworkUtils {
                 JSONObject fields = currentArticle.getJSONObject(Constants.FIELDS);
                 String author = fields.optString(Constants.AUTHOR_NAME, " ");
                 String trail = fields.optString(Constants.TRAIL,"");
-                //String body = fields.getString(Constants.BODY);
+                String body = fields.getString(Constants.BODY);
                 String thumbnail = fields.optString(Constants.THUMBNAIL);
 
                 // Add the new {@link NewsArticle} to the list of articles.
-                articleList.add(new NewsArticle(title, thumbnail, author, date, articleUrl, section, trail));
+                articleList.add(new NewsArticle(title, thumbnail, author, date, articleUrl, section, trail, body));
             }
 
         } catch (JSONException e) {
@@ -166,11 +170,6 @@ public class NetworkUtils {
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
-        }
-
-        // Return the list of earthquakes
-        for(int i=0; i<articleList.size(); ++i){
-            Log.v(LOG_TAG, ""+ articleList.get(i).toString());
         }
         return articleList;
     }

@@ -1,7 +1,9 @@
-package com.example.oya.newsreader;
+package com.example.oya.newsreader.utils;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+
+import com.example.oya.newsreader.model.NewsArticle;
 
 import java.util.List;
 
