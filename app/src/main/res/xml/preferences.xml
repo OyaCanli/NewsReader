@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditTextPreference
+        android:defaultValue="25"
+        android:inputType="number"
+        android:key="itemsPerPages"
+        android:singleLine="true"
+        android:title="Articles per pages" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="enableOfflineReading"
+        android:summaryOff="Disabled"
+        android:summaryOn="Enabled"
+        android:title="Offline reading" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="enableNotifications"
+        android:summaryOff="Disabled"
+        android:summaryOn="Enabled"
+        android:title="Notifications" />
+
+
+</PreferenceScreen>
