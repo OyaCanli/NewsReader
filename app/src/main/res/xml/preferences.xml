@@ -6,23 +6,101 @@
     <EditTextPreference
         android:defaultValue="25"
         android:inputType="number"
-        android:key="itemsPerPages"
+        android:key="@string/pref_key_itemsPerPage"
         android:singleLine="true"
-        android:title="Articles per pages" />
+        android:title="@string/articles_per_page" />
+
+    <ListPreference
+        android:defaultValue="Newest"
+        android:entries="@array/pref_orderby_labels"
+        android:entryValues="@array/pref_orderby_values"
+        android:key="@string/pref_key_orderBy"
+        android:title="@string/pref_order_by"/>
 
     <CheckBoxPreference
-        android:defaultValue="true"
+        android:defaultValue="@bool/pref_notifications_default"
+        android:key="@string/pref_key_enableNotifications"
+        android:summaryOff="@string/disabled"
+        android:summaryOn="@string/enabled"
+        android:title="@string/notifications" />
+
+    <PreferenceScreen
+        android:key="@string/pref_key_sections"
+        android:title="@string/personalize_sections"
+        android:persistent="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_politics_default"
+            android:key="showPolitics"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/politics" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_world_default"
+            android:key="showWorld"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/world" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_business_default"
+            android:key="showBusiness"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/business" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_technology_default"
+            android:key="showTechnology"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/technology" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_science_default"
+            android:key="showScience"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/science" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_culture_default"
+            android:key="showCulture"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/culture" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_sport_default"
+            android:key="showSport"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/sport" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_football_default"
+            android:key="showFootball"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/football" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_show_fashion_default"
+            android:key="showFashion"
+            android:summaryOff="@string/hidden"
+            android:summaryOn="@string/shown"
+            android:title="@string/fashion" />
+
+    </PreferenceScreen>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/pref_offline_reading_default"
         android:key="enableOfflineReading"
         android:summaryOff="Disabled"
         android:summaryOn="Enabled"
         android:title="Offline reading" />
-
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="enableNotifications"
-        android:summaryOff="Disabled"
-        android:summaryOn="Enabled"
-        android:title="Notifications" />
-
 
 </PreferenceScreen>

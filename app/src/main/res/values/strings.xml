@@ -14,4 +14,32 @@
     <string name="settings">Settings</string>
     <string name="search">Search</string>
     <string name="share">Share</string>
+    <string name="hidden">Hidden</string>
+    <string name="shown">Shown</string>
+    <string name="culture">Culture</string>
+    <string name="sport">Sport</string>
+    <string name="football">Football</string>
+    <string name="fashion">Fashion</string>
+    <string name="pref_order_by">Order articles by</string>
+    <string name="pref_key_orderBy">orderBy</string>
+    <string name="pref_key_itemsPerPage">itemsPerPages</string>
+    <string name="articles_per_page">Articles per pages</string>
+    <string name="pref_key_enableNotifications">enableNotifications</string>
+    <string name="disabled">Disabled</string>
+    <string name="enabled">Enabled</string>
+    <string name="notifications">Notifications</string>
+    <string name="personalize_sections">Personalize sections</string>
+    <string name="pref_key_sections">sectionPreferences</string>
+
+    <string-array name="pref_orderby_labels">
+        <item>Newest</item>
+        <item>Oldest</item>
+        <item>Relevance</item>
+    </string-array>
+
+    <string-array name="pref_orderby_values">
+        <item>newest</item>
+        <item>oldest</item>
+        <item>relevance</item>
+    </string-array>
 </resources>

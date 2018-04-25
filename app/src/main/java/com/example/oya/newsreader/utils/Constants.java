@@ -2,8 +2,14 @@ package com.example.oya.newsreader.utils;
 
 public final class Constants {
 
-    public static final String BASE_URL = "http://content.guardianapis.com/search?section=";
-    public static final String END_QUERY = "&show-fields=byline,trailText,thumbnail,body&order-by=newest&page-size=25&api-key=test";
+    public static final String BASE_URL = "http://content.guardianapis.com/search?";
+    public static final String SECTION_PARAM = "section";
+    public static final String SHOW_FIELDS_KEY = "show-fields";
+    public static final String SHOW_FIELDS_VALUE = "byline,trailText,thumbnail,body";
+    public static final String ORDER_BY_PARAM = "order-by";
+    public static final String PAGE_SIZE_PARAM = "page-size";
+    public static final String GUARDIAN_API_KEY = "api-key";
+    public static final String GUARDIAN_API_VALUE = "test";
     public static final String RESPONSE = "response";
     public static final String RESULTS = "results";
     public static final String WEB_TITLE = "webTitle";

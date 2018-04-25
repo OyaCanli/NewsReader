@@ -63,7 +63,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler.setItemAnimator(new DefaultItemAnimator());
         articles = new ArrayList<>();
-        adapter = new NewsAdapter(getActivity(), articles, this);
+        adapter = new NewsAdapter(getContext(), articles, this);
         recycler.setAdapter(adapter);
         empty_tv = rootView.findViewById(R.id.empty_view);
         refreshLayout = rootView.findViewById(R.id.swipe_to_refresh);
@@ -139,8 +139,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
                 section = "politics";
             }
         }
-        String request_url = Constants.BASE_URL + section + Constants.END_QUERY;
-        return new NewsLoader(getActivity(), request_url);
+        return new NewsLoader(getActivity(), section);
     }
 
     @Override

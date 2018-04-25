@@ -1,5 +1,6 @@
 package com.example.oya.newsreader.utils;
 
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -29,9 +30,10 @@ public final class NetworkUtils {
         throw new AssertionError();
     }
 
-    public static List<NewsArticle> fetchArticles(String requestUrl) {
+    public static List<NewsArticle> fetchArticles(String section) {
         // Create URL object
-        URL url = createUrl(requestUrl);
+        URL url = buildUrl(section);
+        Log.d("NETWORK_UTILS", "" + url);
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
@@ -52,16 +54,24 @@ public final class NetworkUtils {
         return articles;
     }
 
-    private static URL createUrl(String stringUrl) {
+    private static URL buildUrl(String section) {
+
+        Uri builtUri = Uri.parse(Constants.BASE_URL).buildUpon()
+                .appendQueryParameter(Constants.SECTION_PARAM, section)
+                .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
+                .appendQueryParameter(Constants.ORDER_BY_PARAM, "newest")
+                .appendQueryParameter(Constants.PAGE_SIZE_PARAM, "25")
+                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
+                .build();
+
         URL url = null;
         try {
-            url = new URL(stringUrl);
+            url = new URL(builtUri.toString());
         } catch (MalformedURLException e) {
             Log.e(LOG_TAG, "Problem building the URL ", e);
         }
         return url;
     }
-
     /**
      * Make an HTTP request to the given URL and return a String as the response.
      */
@@ -158,8 +168,8 @@ public final class NetworkUtils {
                 JSONObject fields = currentArticle.getJSONObject(Constants.FIELDS);
                 String author = fields.optString(Constants.AUTHOR_NAME, " ");
                 String trail = fields.optString(Constants.TRAIL,"");
-                String body = fields.getString(Constants.BODY);
-                String thumbnail = fields.optString(Constants.THUMBNAIL);
+                String body = fields.optString(Constants.BODY, " ");
+                String thumbnail = fields.optString(Constants.THUMBNAIL, "");
 
                 // Add the new {@link NewsArticle} to the list of articles.
                 articleList.add(new NewsArticle(title, thumbnail, author, date, articleUrl, section, trail, body));
