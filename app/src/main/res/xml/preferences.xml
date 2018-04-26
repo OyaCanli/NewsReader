@@ -11,7 +11,7 @@
         android:title="@string/articles_per_page" />
 
     <ListPreference
-        android:defaultValue="Newest"
+        android:defaultValue="@string/pref_orderby_default"
         android:entries="@array/pref_orderby_labels"
         android:entryValues="@array/pref_orderby_values"
         android:key="@string/pref_key_orderBy"

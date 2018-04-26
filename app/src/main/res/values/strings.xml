@@ -30,6 +30,8 @@
     <string name="notifications">Notifications</string>
     <string name="personalize_sections">Personalize sections</string>
     <string name="pref_key_sections">sectionPreferences</string>
+    <string name="pref_orderby_default">Newest</string>
+    <string name="pref_itemPerPage_default">25</string>
 
     <string-array name="pref_orderby_labels">
         <item>Newest</item>

@@ -1,9 +1,13 @@
 package com.example.oya.newsreader.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.model.NewsArticle;
 
 import org.json.JSONArray;
@@ -30,9 +34,9 @@ public final class NetworkUtils {
         throw new AssertionError();
     }
 
-    public static List<NewsArticle> fetchArticles(String section) {
+    public static List<NewsArticle> fetchArticles(String section, Context context) {
         // Create URL object
-        URL url = buildUrl(section);
+        URL url = buildUrl(section, context);
         Log.d("NETWORK_UTILS", "" + url);
 
         // Perform HTTP request to the URL and receive a JSON response back
@@ -54,13 +58,15 @@ public final class NetworkUtils {
         return articles;
     }
 
-    private static URL buildUrl(String section) {
+    private static URL buildUrl(String section, Context context) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         Uri builtUri = Uri.parse(Constants.BASE_URL).buildUpon()
                 .appendQueryParameter(Constants.SECTION_PARAM, section)
                 .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
-                .appendQueryParameter(Constants.ORDER_BY_PARAM, "newest")
-                .appendQueryParameter(Constants.PAGE_SIZE_PARAM, "25")
+                .appendQueryParameter(Constants.ORDER_BY_PARAM, sharedPreferences.getString(context.getString(R.string.pref_key_orderBy), context.getString(R.string.pref_orderby_default)))
+                .appendQueryParameter(Constants.PAGE_SIZE_PARAM, sharedPreferences.getString(context.getString(R.string.pref_key_itemsPerPage), context.getString(R.string.pref_itemPerPage_default)))
                 .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
                 .build();
 

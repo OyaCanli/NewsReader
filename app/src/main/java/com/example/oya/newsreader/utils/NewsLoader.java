@@ -2,7 +2,6 @@ package com.example.oya.newsreader.utils;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.util.Log;
 
 import com.example.oya.newsreader.model.NewsArticle;
 
@@ -15,6 +14,7 @@ public class NewsLoader extends AsyncTaskLoader<List<NewsArticle>> {
 
     /** Query URL */
     private String mSection;
+    private Context mContext;
 
     /**
      * Constructs a new {@link NewsLoader}.
@@ -25,6 +25,7 @@ public class NewsLoader extends AsyncTaskLoader<List<NewsArticle>> {
     public NewsLoader(Context context, String section) {
         super(context);
         mSection = section;
+        mContext = context;
     }
 
     @Override
@@ -40,12 +41,8 @@ public class NewsLoader extends AsyncTaskLoader<List<NewsArticle>> {
         if (mSection == null) {
             return null;
         }
-
         // Perform the network request, parse the response, and extract a list of earthquakes.
-        List<NewsArticle> articles = NetworkUtils.fetchArticles(mSection);
-        for(int i=0; i<articles.size(); i++){
-            Log.d("NEEWSLOADER", ""+ articles.get(i).toString());
-        }
+        List<NewsArticle> articles = NetworkUtils.fetchArticles(mSection, mContext);
         return articles;
     }
 
