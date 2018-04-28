@@ -31,39 +31,10 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabGravity="fill"
             app:tabMode="scrollable"
             app:tabIndicatorHeight="4dp"
             app:tabIndicatorColor="@android:color/white">
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/politics" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/world" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/business" />
-
-            <android.support.design.widget.TabItem
-            android:id="@+id/tabItem4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/technology" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tabItem5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/science" />
 
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>

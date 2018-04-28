@@ -37,7 +37,6 @@ public final class NetworkUtils {
     public static List<NewsArticle> fetchArticles(String section, Context context) {
         // Create URL object
         URL url = buildUrl(section, context);
-        Log.d("NETWORK_UTILS", "" + url);
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
@@ -49,6 +48,27 @@ public final class NetworkUtils {
 
         // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
         List<NewsArticle> articles = extractFeatureFromJson(jsonResponse);
+        /*if(articles != null){
+            // Return the list of {@link Earthquake}s
+            for(int i = 0; i<articles.size(); ++i){
+                Log.v(LOG_TAG, "" + articles.get(i).toString());
+            }
+        }*/
+        return articles;
+    }
+
+    public static List<NewsArticle> searchOnline(String section) {
+        // Create URL object
+        URL url = buildSearchUrl(section);
+        // Perform HTTP request to the URL and receive a JSON response back
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+        // Extract relevant fields from the JSON response and create a list of {@link NewsArticle}s
+        List<NewsArticle> articles = extractFeatureFromJson(jsonResponse);
         if(articles != null){
             // Return the list of {@link Earthquake}s
             for(int i = 0; i<articles.size(); ++i){
@@ -56,6 +76,24 @@ public final class NetworkUtils {
             }
         }
         return articles;
+    }
+
+    private static URL buildSearchUrl(String query){
+        Uri uri = Uri.parse(Constants.BASE_URL).buildUpon()
+                .appendQueryParameter("q", query)
+                .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
+                .appendQueryParameter(Constants.ORDER_BY_PARAM, "relevance")
+                .appendQueryParameter(Constants.PAGE_SIZE_PARAM, "25")
+                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, "Problem building the URL ", e);
+        }
+        return url;
     }
 
     private static URL buildUrl(String section, Context context) {

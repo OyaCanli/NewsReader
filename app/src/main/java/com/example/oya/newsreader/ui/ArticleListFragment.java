@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ import com.example.oya.newsreader.utils.NewsLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleListFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<NewsArticle>>, NewsAdapter.ListItemClickListener, SwipeRefreshLayout.OnRefreshListener{
+public class ArticleListFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<NewsArticle>>, NewsAdapter.ListItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private NewsAdapter adapter;
     private ArrayList<NewsArticle> articles;
@@ -41,16 +42,19 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private SwipeRefreshLayout refreshLayout;
     private View loadingIndicator;
     private ImageButton retryButton;
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_SECTION_NAME = "sectionName";
+    private static final String ARG_SECTION_NUMBER = "sectionNumber";
     private int loaderId;
 
-    public ArticleListFragment(){
+    public ArticleListFragment() {
     }
 
-    public static ArticleListFragment newInstance(int sectionNumber) {
+    public static ArticleListFragment newInstance(int sectionNumber, String sectionName) {
         ArticleListFragment fragment = new ArticleListFragment();
+        Log.d("ListFragment", "newInstance is called");
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putString(ARG_SECTION_NAME, sectionName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,7 +62,8 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.article_list, container, false);
+        Log.d("ListFragment", "OnCreateView is called");
+        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         recycler = rootView.findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler.setItemAnimator(new DefaultItemAnimator());
@@ -69,7 +74,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         refreshLayout = rootView.findViewById(R.id.swipe_to_refresh);
         refreshLayout.setOnRefreshListener(this);
         loadingIndicator = rootView.findViewById(R.id.loading_indicator);
-        // Get a reference to the ConnectivityManager to check state of network connectivity
         retryButton = rootView.findViewById(R.id.retry);
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +85,8 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         return rootView;
     }
 
-    private boolean thereIsConnection(){
+    private boolean thereIsConnection() {
+        // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         // Get details on the currently active default data network
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -89,7 +94,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    private void startLoader(){
+    private void startLoader() {
         if (thereIsConnection()) {
             // Get a reference to the LoaderManager, in order to interact with loaders.
             loadingIndicator.setVisibility(View.VISIBLE);
@@ -113,33 +118,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<List<NewsArticle>> onCreateLoader(int id, Bundle args) {
-        String section;
-        switch (id){
-            case 1:{
-                section = "politics";
-                break;
-            }
-            case 2:{
-                section = "world";
-                break;
-            }
-            case 3:{
-                section = "business";
-                break;
-            }
-            case 4:{
-                section = "technology";
-                break;
-            }
-            case 5:{
-                section = "science";
-                break;
-            }
-            default:{
-                section = "politics";
-            }
-        }
-        return new NewsLoader(getActivity(), section);
+        return new NewsLoader(getActivity(), getArguments().getString(ARG_SECTION_NAME));
     }
 
     @Override
@@ -147,24 +126,16 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         loadingIndicator.setVisibility(View.GONE);
         refreshLayout.setRefreshing(false);
 
-
         if (list != null && !list.isEmpty()) {
             articles.clear();
             articles.addAll(list);
             adapter.notifyDataSetChanged();
         } else {
-            if(thereIsConnection()){
-                //Set empty state text to display "No news found."
-                empty_tv.setText(R.string.no_news_found);
-                recycler.setVisibility(View.GONE);
-                empty_tv.setVisibility(View.VISIBLE);
-                if(retryButton != null) retryButton.setVisibility(View.GONE);
-            } else {
-                empty_tv.setText(R.string.no_connection);
-                recycler.setVisibility(View.GONE);
-                empty_tv.setVisibility(View.VISIBLE);
-                if(retryButton != null) retryButton.setVisibility(View.VISIBLE);
-            }
+            if (thereIsConnection()) empty_tv.setText(R.string.no_news_found);
+            else empty_tv.setText(R.string.no_connection);
+            recycler.setVisibility(View.GONE);
+            empty_tv.setVisibility(View.VISIBLE);
+            if (retryButton != null) retryButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -175,29 +146,29 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onListItemClick(View view, int position) {
-        switch(view.getId()){
-            case R.id.container:{
+        switch (view.getId()) {
+            case R.id.container: {
                 openDetails(position);
                 break;
             }
-            case R.id.share:{
+            case R.id.share: {
                 shareTheLink(position);
                 break;
             }
-            case R.id.bookmark:{
+            case R.id.bookmark: {
                 Toast.makeText(getActivity(), "bookmark " + position, Toast.LENGTH_LONG).show();
                 break;
             }
         }
     }
 
-    private void openDetails(int position){
+    private void openDetails(int position) {
         Intent intent = new Intent(getActivity(), DetailsActivity.class);
         intent.putExtra(Constants.CHOSEN_ARTICLE, articles.get(position));
         startActivity(intent);
     }
 
-    private void shareTheLink(int position){
+    private void shareTheLink(int position) {
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, articles.get(position).getWebUrl());
@@ -211,11 +182,11 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         startLoader();
     }
 
-    private void restartLoading(){
-        if(loaderManager == null){
+    private void restartLoading() {
+        if (loaderManager == null) {
             loaderManager = getActivity().getLoaderManager();
             loaderManager.initLoader(loaderId, null, this);
-        } else{
+        } else {
             loaderManager.restartLoader(loaderId, null, this);
         }
     }

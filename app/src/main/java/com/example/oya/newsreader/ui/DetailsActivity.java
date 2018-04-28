@@ -62,6 +62,7 @@ public class DetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent intent = new Intent(DetailsActivity.this, SettingsActivity.class);
+            intent.putExtra(Constants.USER_CLICKED_SETTINGS_FROM, DetailsActivity.class.getSimpleName());
             startActivity(intent);
         } else if (id == R.id.action_share) {
             Intent intent = new Intent(android.content.Intent.ACTION_SEND);

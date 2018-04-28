@@ -29,9 +29,10 @@
     <string name="enabled">Enabled</string>
     <string name="notifications">Notifications</string>
     <string name="personalize_sections">Personalize sections</string>
-    <string name="pref_key_sections">sectionPreferences</string>
+    <string name="pref_key_sections">choseSections</string>
     <string name="pref_orderby_default">Newest</string>
     <string name="pref_itemPerPage_default">25</string>
+    <string name="warning_edittext_preference">Please select a number between 1 and 50</string>
 
     <string-array name="pref_orderby_labels">
         <item>Newest</item>
@@ -44,4 +45,42 @@
         <item>oldest</item>
         <item>relevance</item>
     </string-array>
+
+    <string-array name="pref_section_labels">
+        <item>Politics</item>
+        <item>World</item>
+        <item>Business</item>
+        <item>Technology</item>
+        <item>Science</item>
+        <item>Music</item>
+        <item>Culture</item>
+        <item>Sport</item>
+        <item>Football</item>
+        <item>Fashion</item>
+        <item>Travel</item>
+    </string-array>
+
+    <string-array name="pref_section_values">
+        <item>politics</item>
+        <item>world</item>
+        <item>business</item>
+        <item>technology</item>
+        <item>science</item>
+        <item>music</item>
+        <item>culture</item>
+        <item>sport</item>
+        <item>football</item>
+        <item>fashion</item>
+        <item>travel</item>
+    </string-array>
+
+    <string-array name="pref_section_default_values">
+        <item>politics</item>
+        <item>world</item>
+        <item>business</item>
+        <item>technology</item>
+        <item>science</item>
+    </string-array>
+
+    <string-array name="empty_array"></string-array>
 </resources>

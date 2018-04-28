@@ -23,4 +23,7 @@ public final class Constants {
     public static final String THUMBNAIL = "thumbnail";
 
     public static final String CHOSEN_ARTICLE = "chosenArticle";
+    public static final String USER_CLICKED_SETTINGS_FROM = "userClickedSettingFrom";
+    public static final String SEARCH_QUERY = "searchQuery";
+    public static final int SEARCH_LOADER_ID = 101;
 }
