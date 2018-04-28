@@ -1,11 +1,13 @@
 package com.example.oya.newsreader.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
+import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.ui.ArticleListFragment;
 
 import java.util.ArrayList;
@@ -14,37 +16,53 @@ import java.util.Set;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<String> mSections = new ArrayList<>();
+    private Context mContext;
 
-    public SectionsPagerAdapter(FragmentManager fm, Set<String> sections) {
+    public SectionsPagerAdapter(FragmentManager fm, Set<String> sections, Context context) {
         super(fm);
+        mContext = context;
         setPreferredSections(sections);
     }
 
     public void setPreferredSections(Set<String> sections){
         mSections.clear();
         mSections.addAll(sections);
+        Log.d("sectionsAdapter", "setPreferred.." + mSections.size());
         sortSections();
     }
 
     private void sortSections(){
         ArrayList<String> sort = new ArrayList<>();
-        if(mSections.contains("politics")) sort.add("politics");
-        if(mSections.contains("world")) sort.add("world");
-        if(mSections.contains("business")) sort.add("business");
-        if(mSections.contains("technology")) sort.add("technology");
-        if(mSections.contains("science")) sort.add("science");
-        if(mSections.contains("sport")) sort.add("sport");
-        if(mSections.contains("football")) sort.add("football");
-        if(mSections.contains("music")) sort.add("music");
-        if(mSections.contains("culture")) sort.add("culture");
-        if(mSections.contains("travel")) sort.add("travel");
-        if(mSections.contains("fashion")) sort.add("fashion");
+        if(mSections.contains(mContext.getString(R.string.politics).toLowerCase()))
+            sort.add(mContext.getString(R.string.politics).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.world).toLowerCase()))
+            sort.add(mContext.getString(R.string.world).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.business).toLowerCase()))
+            sort.add(mContext.getString(R.string.business).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.technology).toLowerCase()))
+            sort.add(mContext.getString(R.string.technology).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.science).toLowerCase()))
+            sort.add(mContext.getString(R.string.science).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.sport).toLowerCase()))
+            sort.add(mContext.getString(R.string.sport).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.football).toLowerCase()))
+            sort.add(mContext.getString(R.string.football).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.music).toLowerCase()))
+            sort.add(mContext.getString(R.string.music).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.culture).toLowerCase()))
+            sort.add(mContext.getString(R.string.culture).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.travel).toLowerCase()))
+            sort.add(mContext.getString(R.string.travel).toLowerCase());
+        if(mSections.contains(mContext.getString(R.string.fashion).toLowerCase()))
+            sort.add(mContext.getString(R.string.fashion).toLowerCase());
         mSections.clear();
         mSections.addAll(sort);
+        Log.d("sectionsAdapter", "after sorting" + mSections.size());
     }
 
     @Override
     public Fragment getItem(int position) {
+        Log.d("sectionsAdapter", "getItem is called");
         return ArticleListFragment.newInstance(position, mSections.get(position));
     }
 
@@ -55,7 +73,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        Log.d("SectionsAdapter", "" +mSections.size());
+        Log.d("SectionsAdapter", "inside getCount" +mSections.size());
         for(int i = 0; i < mSections.size() ; i++){
             Log.d("adapter/sections ", "" + mSections.get(i));
         }

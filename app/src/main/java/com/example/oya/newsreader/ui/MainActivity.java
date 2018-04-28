@@ -40,14 +40,16 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         default_sections = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
+        Log.d("MainActivity", "default sections" + default_sections.size());
         Set<String> sections = preferences.getStringSet(getString(R.string.pref_key_sections), default_sections);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sections);
+        Log.d("MainActivity", "sections" + sections.size());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sections, this);
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        mSectionsPagerAdapter.setPreferredSections(sections);
+        //mSectionsPagerAdapter.setPreferredSections(sections);
         ArrayList<String> sectionList = mSectionsPagerAdapter.getSections();
         tabLayout.removeAllTabs();
         for (int i = 0; i < sectionList.size(); i++) {

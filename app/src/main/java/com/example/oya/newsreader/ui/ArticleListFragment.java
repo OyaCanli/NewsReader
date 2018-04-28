@@ -51,7 +51,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     public static ArticleListFragment newInstance(int sectionNumber, String sectionName) {
         ArticleListFragment fragment = new ArticleListFragment();
-        Log.d("ListFragment", "newInstance is called");
+        Log.d("ListFragment", "inside newInstance" + sectionName);
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putString(ARG_SECTION_NAME, sectionName);
@@ -118,6 +118,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<List<NewsArticle>> onCreateLoader(int id, Bundle args) {
+        Log.d("ListFragment", "onCreateLoader" + getArguments().getString(ARG_SECTION_NAME));
         return new NewsLoader(getActivity(), getArguments().getString(ARG_SECTION_NAME));
     }
 

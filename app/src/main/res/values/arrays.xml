@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_orderby_labels">
+        <item>@string/newest</item>
+        <item>@string/oldest</item>
+        <item>@string/relevance</item>
+    </string-array>
+
+    <string-array name="pref_orderby_values">
+        <item>newest</item>
+        <item>oldest</item>
+        <item>relevance</item>
+    </string-array>
+
+    <string-array name="pref_section_labels">
+        <item>@string/politics</item>
+        <item>@string/world</item>
+        <item>@string/business</item>
+        <item>@string/technology</item>
+        <item>@string/science</item>
+        <item>@string/sport</item>
+        <item>@string/football</item>
+        <item>@string/music</item>
+        <item>@string/culture</item>
+        <item>@string/travel</item>
+        <item>@string/fashion</item>
+    </string-array>
+
+    <string-array name="pref_section_values">
+        <item>politics</item>
+        <item>world</item>
+        <item>business</item>
+        <item>technology</item>
+        <item>science</item>
+        <item>music</item>
+        <item>culture</item>
+        <item>sport</item>
+        <item>football</item>
+        <item>fashion</item>
+        <item>travel</item>
+    </string-array>
+
+    <string-array name="pref_section_default_values">
+        <item>politics</item>
+        <item>world</item>
+        <item>business</item>
+        <item>technology</item>
+        <item>science</item>
+    </string-array>
+</resources>
