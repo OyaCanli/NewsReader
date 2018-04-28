@@ -9,7 +9,6 @@ import android.util.Log;
 import com.example.oya.newsreader.ui.ArticleListFragment;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Set;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -24,8 +23,24 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public void setPreferredSections(Set<String> sections){
         mSections.clear();
         mSections.addAll(sections);
-        Collections.sort(mSections);
-        Collections.reverse(mSections);
+        sortSections();
+    }
+
+    private void sortSections(){
+        ArrayList<String> sort = new ArrayList<>();
+        if(mSections.contains("politics")) sort.add("politics");
+        if(mSections.contains("world")) sort.add("world");
+        if(mSections.contains("business")) sort.add("business");
+        if(mSections.contains("technology")) sort.add("technology");
+        if(mSections.contains("science")) sort.add("science");
+        if(mSections.contains("sport")) sort.add("sport");
+        if(mSections.contains("football")) sort.add("football");
+        if(mSections.contains("music")) sort.add("music");
+        if(mSections.contains("culture")) sort.add("culture");
+        if(mSections.contains("travel")) sort.add("travel");
+        if(mSections.contains("fashion")) sort.add("fashion");
+        mSections.clear();
+        mSections.addAll(sort);
     }
 
     @Override
