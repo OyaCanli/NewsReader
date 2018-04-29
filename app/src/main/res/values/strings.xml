@@ -38,5 +38,6 @@
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
     <string name="relevance">Relevance</string>
+    <string name="serviceDescription">Notification service</string>
 
 </resources>

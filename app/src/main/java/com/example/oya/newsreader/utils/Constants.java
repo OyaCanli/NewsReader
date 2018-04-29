@@ -8,6 +8,7 @@ public final class Constants {
     public static final String SHOW_FIELDS_VALUE = "byline,trailText,thumbnail,body";
     public static final String ORDER_BY_PARAM = "order-by";
     public static final String PAGE_SIZE_PARAM = "page-size";
+    public static final String FROM_DATE = "from-date";
     public static final String GUARDIAN_API_KEY = "api-key";
     public static final String GUARDIAN_API_VALUE = "test";
     public static final String RESPONSE = "response";

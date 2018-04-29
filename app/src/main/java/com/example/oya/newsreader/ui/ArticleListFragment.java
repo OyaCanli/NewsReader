@@ -103,7 +103,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
             loaderId = getArguments().getInt(ARG_SECTION_NUMBER);
-            loaderManager.initLoader(loaderId, null, this);
+            loaderManager.initLoader(loaderId, getArguments(), this);
         } else {
             // Otherwise, display error
             // First, hide loading indicator so error message will be visible
@@ -119,7 +119,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public Loader<List<NewsArticle>> onCreateLoader(int id, Bundle args) {
         Log.d("ListFragment", "onCreateLoader" + getArguments().getString(ARG_SECTION_NAME));
-        return new NewsLoader(getActivity(), getArguments().getString(ARG_SECTION_NAME));
+        return new NewsLoader(getActivity(), args.getString(ARG_SECTION_NAME));
     }
 
     @Override

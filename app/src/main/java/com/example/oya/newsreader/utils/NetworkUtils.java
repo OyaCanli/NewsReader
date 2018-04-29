@@ -22,7 +22,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public final class NetworkUtils {
@@ -78,6 +81,30 @@ public final class NetworkUtils {
         return articles;
     }
 
+    public static List<NewsArticle> checkForNewArticle(Context context) {
+        // Create URL object
+        URL url = buildUrlforNotification(context);
+
+        // Perform HTTP request to the URL and receive a JSON response back
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+
+        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        List<NewsArticle> articles = extractFeatureFromJson(jsonResponse);
+        if(articles != null){
+            // Return the list of {@link Earthquake}s
+            for(int i = 0; i<articles.size(); ++i){
+                Log.v(LOG_TAG, "article is" + articles.get(i).toString());
+            }
+            Log.v(LOG_TAG, "articles size" + articles.size());
+        }
+        return articles;
+    }
+
     private static URL buildSearchUrl(String query){
         Uri uri = Uri.parse(Constants.BASE_URL).buildUpon()
                 .appendQueryParameter("q", query)
@@ -94,6 +121,51 @@ public final class NetworkUtils {
             Log.e(LOG_TAG, "Problem building the URL ", e);
         }
         return url;
+    }
+
+    private static URL buildUrlforNotification(Context context){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+       /* Uri builtUri = Uri.parse(Constants.BASE_URL).buildUpon()
+                .appendQueryParameter(Constants.SECTION_PARAM, "politics")
+                .appendQueryParameter(Constants.FROM_DATE, getFormattedDateTime())
+                .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
+                .appendQueryParameter(Constants.ORDER_BY_PARAM, "newest")
+                .appendQueryParameter(Constants.PAGE_SIZE_PARAM, "1")
+                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
+                .build();*/
+
+        String uglyConcatenation = "content.guardianapis.com/search?section=politics&from-date=" + getFormattedDateTime() + "&show-fields=byline%2CtrailText%2Cthumbnail%2Cbody&order-by=newest&page-size=1&api-key=test";
+
+        URL url = null;
+        try {
+            url = new URL(uglyConcatenation);
+        } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, "Problem building the URL ", e);
+        }
+        return url;
+    }
+
+    private static String getFormattedDateTime(){
+        String currentDateTime = getFormattedSystemDate() + "T" + getFormattedSystemTime() + "Z";
+        return currentDateTime;
+    }
+
+    private static String getFormattedSystemDate() {
+        Date currentDate= Calendar.getInstance().getTime();
+        /*try {
+            dateObject = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }*/
+        return new SimpleDateFormat("yyyy-MM-dd").format(currentDate);
+    }
+
+    private static String getFormattedSystemTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        long now = Calendar.getInstance().getTimeInMillis();
+        String temp = dateFormat.format(now-1800000);
+        return dateFormat.format(now-1800000);
     }
 
     private static URL buildUrl(String section, Context context) {

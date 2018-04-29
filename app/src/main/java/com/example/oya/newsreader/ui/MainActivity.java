@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
 import com.example.oya.newsreader.utils.Constants;
+import com.example.oya.newsreader.utils.NotificationUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity{
             tabLayout.addTab(
                     tabLayout.newTab().setText(sectionList.get(i)));
         }
+        NotificationUtils.scheduleNewsChecker(this);
     }
 
     @Override
