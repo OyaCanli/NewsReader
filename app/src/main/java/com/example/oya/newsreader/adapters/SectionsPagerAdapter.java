@@ -1,10 +1,9 @@
 package com.example.oya.newsreader.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 import com.example.oya.newsreader.R;
@@ -13,9 +12,9 @@ import com.example.oya.newsreader.ui.ArticleListFragment;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    private ArrayList<String> mSections = new ArrayList<>();
+    private static ArrayList<String> mSections = new ArrayList<>();
     private Context mContext;
 
     public SectionsPagerAdapter(FragmentManager fm, Set<String> sections, Context context) {
@@ -25,7 +24,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void setPreferredSections(Set<String> sections){
-        mSections.clear();
+        if(!mSections.isEmpty()) mSections.clear();
         mSections.addAll(sections);
         Log.d("sectionsAdapter", "setPreferred.." + mSections.size());
         sortSections();
@@ -67,11 +66,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public int getItemPosition(@NonNull Object object) {
-        return POSITION_NONE;
-    }
-
-    @Override
     public int getCount() {
         Log.d("SectionsAdapter", "inside getCount" +mSections.size());
         for(int i = 0; i < mSections.size() ; i++){
@@ -85,7 +79,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return mSections.get(position);
     }
 
-    public ArrayList<String> getSections(){
+    public static ArrayList<String> getSections(){
         return mSections;
     }
 }

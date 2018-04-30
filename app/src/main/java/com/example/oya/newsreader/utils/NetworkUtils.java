@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
 import com.example.oya.newsreader.model.NewsArticle;
 
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,7 +41,12 @@ public final class NetworkUtils {
 
     public static List<NewsArticle> fetchArticles(String section, Context context) {
         // Create URL object
-        URL url = buildUrl(section, context);
+        URL url = null;
+        try {
+            url = buildUrl(section, context);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
@@ -124,22 +131,43 @@ public final class NetworkUtils {
     }
 
     private static URL buildUrlforNotification(Context context){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-       /* Uri builtUri = Uri.parse(Constants.BASE_URL).buildUpon()
+        StringBuilder builtUri = new StringBuilder();
+        builtUri.append(Constants.BASE_URL)
+                .append(Constants.SECTION_PARAM)
+                .append("=")
+                .append(context.getString(R.string.politics).toLowerCase())
+                .append("&")
+                .append(Constants.FROM_DATE)
+                .append("=")
+                .append(getFormattedDateTime())
+                .append("&")
+                .append(Constants.SHOW_FIELDS_KEY)
+                .append("=")
+                .append(Constants.SHOW_FIELDS_VALUE)
+                .append("&")
+                .append(Constants.ORDER_BY_PARAM)
+                .append("=")
+                .append(context.getString(R.string.pref_orderby_default))
+                .append("&")
+                .append(Constants.PAGE_SIZE_PARAM)
+                .append("=1&")
+                .append(Constants.GUARDIAN_API_KEY)
+                .append("=")
+                .append(Constants.GUARDIAN_API_VALUE);
+
+       /*Uri builtUri = Uri.parse(Constants.BASE_URL).buildUpon()
                 .appendQueryParameter(Constants.SECTION_PARAM, "politics")
                 .appendQueryParameter(Constants.FROM_DATE, getFormattedDateTime())
                 .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
-                .appendQueryParameter(Constants.ORDER_BY_PARAM, "newest")
+                .appendQueryParameter(Constants.ORDER_BY_PARAM, context.getString(R.string.pref_orderby_default))
                 .appendQueryParameter(Constants.PAGE_SIZE_PARAM, "1")
                 .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
                 .build();*/
 
-        String uglyConcatenation = "content.guardianapis.com/search?section=politics&from-date=" + getFormattedDateTime() + "&show-fields=byline%2CtrailText%2Cthumbnail%2Cbody&order-by=newest&page-size=1&api-key=test";
-
         URL url = null;
         try {
-            url = new URL(uglyConcatenation);
+            url = new URL(builtUri.toString());
         } catch (MalformedURLException e) {
             Log.e(LOG_TAG, "Problem building the URL ", e);
         }
@@ -153,11 +181,6 @@ public final class NetworkUtils {
 
     private static String getFormattedSystemDate() {
         Date currentDate= Calendar.getInstance().getTime();
-        /*try {
-            dateObject = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
         return new SimpleDateFormat("yyyy-MM-dd").format(currentDate);
     }
 
@@ -168,7 +191,19 @@ public final class NetworkUtils {
         return dateFormat.format(now-1800000);
     }
 
-    private static URL buildUrl(String section, Context context) {
+    private static String buildSectionsParam(){
+        StringBuilder sectionsParam = new StringBuilder();
+        ArrayList<String> sections = SectionsPagerAdapter.getSections();
+        int size = sections.size();
+        for(int i=0; i < size-1 ; i++){
+            sectionsParam.append(sections.get(i));
+            sectionsParam.append(",");
+        }
+        sectionsParam.append(sections.get(size-1));
+        return sectionsParam.toString();
+    }
+
+    private static URL buildUrl(String section, Context context) throws UnsupportedEncodingException {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
