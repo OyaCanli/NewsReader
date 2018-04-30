@@ -12,7 +12,7 @@ import java.util.List;
 
 public class NewsReminderService extends JobService{
 
-    private static AsyncTask mBackgroundTask;
+    private AsyncTask mBackgroundTask;
 
     @Override
     public boolean onStartJob(final JobParameters job) {
