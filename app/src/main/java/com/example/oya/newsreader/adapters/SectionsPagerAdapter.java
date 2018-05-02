@@ -56,21 +56,15 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
             sort.add(mContext.getString(R.string.fashion).toLowerCase());
         mSections.clear();
         mSections.addAll(sort);
-        Log.d("sectionsAdapter", "after sorting" + mSections.size());
     }
 
     @Override
     public Fragment getItem(int position) {
-        Log.d("sectionsAdapter", "getItem is called");
         return ArticleListFragment.newInstance(position, mSections.get(position));
     }
 
     @Override
     public int getCount() {
-        Log.d("SectionsAdapter", "inside getCount" +mSections.size());
-        for(int i = 0; i < mSections.size() ; i++){
-            Log.d("adapter/sections ", "" + mSections.get(i));
-        }
         return mSections.size();
     }
 

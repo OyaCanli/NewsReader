@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.NewsAdapter;
+import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.NewsLoader;
@@ -45,13 +46,13 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private static final String ARG_SECTION_NAME = "sectionName";
     private static final String ARG_SECTION_NUMBER = "sectionNumber";
     private int loaderId;
+    private String sectionName;
 
     public ArticleListFragment() {
     }
 
     public static ArticleListFragment newInstance(int sectionNumber, String sectionName) {
         ArticleListFragment fragment = new ArticleListFragment();
-        Log.d("ListFragment", "inside newInstance" + sectionName);
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putString(ARG_SECTION_NAME, sectionName);
@@ -62,7 +63,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d("ListFragment", "OnCreateView is called");
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         recycler = rootView.findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -81,6 +81,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
                 startLoader();
             }
         });
+        sectionName = getArguments().getString(ARG_SECTION_NAME);
         startLoader();
         return rootView;
     }
@@ -105,20 +106,26 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
             loaderId = getArguments().getInt(ARG_SECTION_NUMBER);
             loaderManager.initLoader(loaderId, getArguments(), this);
         } else {
-            // Otherwise, display error
-            // First, hide loading indicator so error message will be visible
             loadingIndicator.setVisibility(View.GONE);
-            // Update empty state with no connection error message
-            empty_tv.setText(R.string.no_connection);
-            recycler.setVisibility(View.GONE);
-            empty_tv.setVisibility(View.VISIBLE);
-            retryButton.setVisibility(View.VISIBLE);
+            NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
+            List<NewsArticle> backedArticles = dbHelper.readFromDatabase(sectionName);
+            Log.d("ListFragment", "" + backedArticles.size());
+            if(!backedArticles.isEmpty()) {
+                articles.clear();
+                articles.addAll(backedArticles);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(getActivity(), "No internet connection. Cached articles will be shown.", Toast.LENGTH_SHORT).show();
+            } else {
+                empty_tv.setText(R.string.no_connection);
+                recycler.setVisibility(View.GONE);
+                empty_tv.setVisibility(View.VISIBLE);
+                retryButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Override
     public Loader<List<NewsArticle>> onCreateLoader(int id, Bundle args) {
-        Log.d("ListFragment", "onCreateLoader" + getArguments().getString(ARG_SECTION_NAME));
         return new NewsLoader(getActivity(), args.getString(ARG_SECTION_NAME));
     }
 
@@ -126,17 +133,27 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     public void onLoadFinished(Loader<List<NewsArticle>> loader, List<NewsArticle> list) {
         loadingIndicator.setVisibility(View.GONE);
         refreshLayout.setRefreshing(false);
-
         if (list != null && !list.isEmpty()) {
             articles.clear();
             articles.addAll(list);
             adapter.notifyDataSetChanged();
+            NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
+            dbHelper.backUpToDatabase(list);
         } else {
             if (thereIsConnection()) empty_tv.setText(R.string.no_news_found);
-            else empty_tv.setText(R.string.no_connection);
+            else {
+                Toast.makeText(getActivity(), "No internet connection. Cached articles will be shown.", Toast.LENGTH_SHORT).show();
+                NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
+                List<NewsArticle> backedArticles = dbHelper.readFromDatabase(sectionName);
+                articles.clear();
+                articles.addAll(backedArticles);
+                adapter.notifyDataSetChanged();
+            }
+
+                /*empty_tv.setText(R.string.no_connection);
             recycler.setVisibility(View.GONE);
             empty_tv.setVisibility(View.VISIBLE);
-            if (retryButton != null) retryButton.setVisibility(View.VISIBLE);
+            if (retryButton != null) retryButton.setVisibility(View.VISIBLE);*/
         }
     }
 

@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity{
                     tabLayout.newTab().setText(sectionList.get(i)));
         }
         NotificationUtils.scheduleNewsChecker(this);
+        //DatabaseUtils.scheduleNewsBackUp(this);
     }
 
     @Override

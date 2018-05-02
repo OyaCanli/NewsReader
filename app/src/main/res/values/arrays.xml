@@ -32,12 +32,12 @@
         <item>business</item>
         <item>technology</item>
         <item>science</item>
-        <item>music</item>
-        <item>culture</item>
         <item>sport</item>
         <item>football</item>
-        <item>fashion</item>
+        <item>music</item>
+        <item>culture</item>
         <item>travel</item>
+        <item>fashion</item>
     </string-array>
 
     <string-array name="pref_section_default_values">

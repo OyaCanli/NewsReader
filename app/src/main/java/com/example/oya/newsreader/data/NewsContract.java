@@ -11,7 +11,7 @@ public class NewsContract {
     public static final class NewsEntry implements BaseColumns {
 
         //Table where news will temporarily cached for offline reading
-        public static final String TABLE_NAME = "cached_news";
+        //public static final String TABLE_NAME = "cached_news";
 
         //Unique id for each article
         public final static String _ID = BaseColumns._ID;
@@ -27,6 +27,9 @@ public class NewsContract {
 
         //Date and time of the article. Type: Text
         public static final String COLUMN_DATE = "date";
+
+        //Web url of the article. Type: Text
+        public static final String COLUMN_WEB_URL = "webUrl";
 
         //Section of the article. Type: Text
         public static final String COLUMN_SECTION= "section";

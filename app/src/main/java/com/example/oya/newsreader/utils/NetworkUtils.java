@@ -186,8 +186,8 @@ public final class NetworkUtils {
     private static String getFormattedSystemTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         long now = Calendar.getInstance().getTimeInMillis();
-        String temp = dateFormat.format(now-1800000);
-        return dateFormat.format(now-1800000);
+        return dateFormat.format(now-5400000);
+        //TODO: this should be localized. Times on api are time of UK. User can be anywhere.
     }
 
     /*private static String buildSectionsParam(){

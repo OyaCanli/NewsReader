@@ -25,7 +25,7 @@ import com.firebase.jobdispatcher.Trigger;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class NotificationUtils {
+public final class NotificationUtils {
 
     private static final int NEW_ARTICLE_PENDING_INTENT_ID = 1234;
     private static final int NEWS_NOTIFICATION_ID = 4567;

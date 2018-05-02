@@ -54,6 +54,14 @@
             </intent-filter>
         </service>
 
+        <service android:name=".utils.NewsBackUpService"
+            android:exported="false"
+            android:description="@string/serviceDescription">
+            <intent-filter>
+                <action android:name='com.firebase.jobdispatcher.ACTION_EXECUTE'/>"
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
