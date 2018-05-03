@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public final class NetworkUtils {
 
@@ -140,30 +141,6 @@ public final class NetworkUtils {
                 .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
                 .build();
 
-        /*StringBuilder builtUri = new StringBuilder();
-        builtUri.append(Constants.BASE_URL)
-                .append(Constants.SECTION_PARAM)
-                .append("=")
-                .append(context.getString(R.string.politics).toLowerCase())
-                .append("&")
-                .append(Constants.FROM_DATE)
-                .append("=")
-                .append(getFormattedDateTime())
-                .append("&")
-                .append(Constants.SHOW_FIELDS_KEY)
-                .append("=")
-                .append(Constants.SHOW_FIELDS_VALUE)
-                .append("&")
-                .append(Constants.ORDER_BY_PARAM)
-                .append("=")
-                .append(context.getString(R.string.pref_orderby_default))
-                .append("&")
-                .append(Constants.PAGE_SIZE_PARAM)
-                .append("=1&")
-                .append(Constants.GUARDIAN_API_KEY)
-                .append("=")
-                .append(Constants.GUARDIAN_API_VALUE);*/
-
         URL url = null;
         try {
             url = new URL(builtUri.toString());
@@ -185,10 +162,11 @@ public final class NetworkUtils {
 
     private static String getFormattedSystemTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        TimeZone timeZone = TimeZone.getTimeZone("GMT");
+        dateFormat.setTimeZone(timeZone);
         long now = Calendar.getInstance().getTimeInMillis();
-        return dateFormat.format(now-5400000);
-        //TODO: this should be localized. Times on api are time of UK. User can be anywhere.
-    }
+        return dateFormat.format(now-1800000);
+}
 
     /*private static String buildSectionsParam(){
         StringBuilder sectionsParam = new StringBuilder();

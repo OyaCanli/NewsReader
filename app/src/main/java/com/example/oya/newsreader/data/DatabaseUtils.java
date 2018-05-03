@@ -1,4 +1,4 @@
-package com.example.oya.newsreader.utils;
+package com.example.oya.newsreader.data;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

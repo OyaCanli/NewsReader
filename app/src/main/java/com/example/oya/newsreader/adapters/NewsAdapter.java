@@ -20,6 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
+
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
 
@@ -48,8 +50,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
             holder.author_tv.setText("By " + currentArticle.getAuthor());
         }
         holder.section_tv.setText(currentArticle.getSection());
-        String[] dateAndTime = currentArticle.getDate().split("T");
-        holder.date_tv.setText(formatDate(dateAndTime[0]) + "\n" + dateAndTime[1].substring(0,5));
+        String[] dateAndTime = formatDateTime(currentArticle.getDate()).split("T");
+        holder.date_tv.setText(dateAndTime[0] + "\n" + dateAndTime[1]);
         if(!TextUtils.isEmpty(currentArticle.getArticleTrail())){
             holder.trail_tv.setText(Html.fromHtml(currentArticle.getArticleTrail()));
         } else {
@@ -99,14 +101,21 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
         }
     }
 
-    private String formatDate(String date) {
-        Date dateObject = null;
+    private String formatDateTime(String dateTime){
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        sourceFormat.setTimeZone(timeZone);
+        Date parsedTime = null;
         try {
-            dateObject = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+            parsedTime = sourceFormat.parse(dateTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return new SimpleDateFormat("LLL dd, yyyy").format(dateObject);
+
+        TimeZone tz = TimeZone.getDefault();
+        SimpleDateFormat destFormat = new SimpleDateFormat("LLL dd, yyyy'T'HH:mm");
+        destFormat.setTimeZone(tz);
+        return destFormat.format(parsedTime);
     }
 
     public interface ListItemClickListener {

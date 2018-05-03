@@ -54,7 +54,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".utils.NewsBackUpService"
+        <service android:name=".data.NewsBackUpService"
             android:exported="false"
             android:description="@string/serviceDescription">
             <intent-filter>

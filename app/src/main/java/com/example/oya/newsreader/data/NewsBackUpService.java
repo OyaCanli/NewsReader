@@ -1,11 +1,11 @@
-package com.example.oya.newsreader.utils;
+package com.example.oya.newsreader.data;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
+import com.example.oya.newsreader.utils.NetworkUtils;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
