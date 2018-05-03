@@ -198,7 +198,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private void saveToBookmarks(int position){
         NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
         dbHelper.addToBookmarks(articles.get(position));
-        Toast.makeText(getActivity(), "Article is addded in bookmarks. You can find your bookmarked articles from the menu", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.article_bookmarked, Toast.LENGTH_SHORT).show();
     }
 
     @Override

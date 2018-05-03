@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.utils.Constants;
@@ -19,8 +20,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        Toolbar toolbar = findViewById(R.id.toolbar_settings);
+        setContentView(R.layout.activity_base);
+        ViewFlipper vf = findViewById(R.id.main_flipper);
+        vf.setDisplayedChild(2);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();

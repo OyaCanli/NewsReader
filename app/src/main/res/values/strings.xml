@@ -41,5 +41,6 @@
     <string name="serviceDescription">Notification service</string>
     <string name="bookmark">Bookmarks</string>
     <string name="no_bookmarks">You don\'t have any bookmarks yet.</string>
+    <string name="article_bookmarked">Article is added in bookmarks. You can find your bookmarked articles from the menu</string>
 
 </resources>

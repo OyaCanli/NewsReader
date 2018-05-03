@@ -16,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.NewsAdapter;
@@ -38,8 +40,10 @@ public class SearchableActivity extends AppCompatActivity implements LoaderManag
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_searchable);
-        Toolbar toolbar = findViewById(R.id.toolbar_search);
+        setContentView(R.layout.activity_base);
+        ViewFlipper vf = findViewById(R.id.main_flipper);
+        vf.setDisplayedChild(1);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
@@ -145,6 +149,7 @@ public class SearchableActivity extends AppCompatActivity implements LoaderManag
     private void saveToBookmarks(int position){
         NewsDbHelper dbHelper = new NewsDbHelper(this, null);
         dbHelper.addToBookmarks(searchResults.get(position));
+        Toast.makeText(this, R.string.article_bookmarked, Toast.LENGTH_SHORT).show();
     }
 
 }
