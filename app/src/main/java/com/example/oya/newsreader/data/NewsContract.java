@@ -39,7 +39,38 @@ public class NewsContract {
 
         //Body of the article. Type: Text
         public static final String COLUMN_BODY = "body";
+    }
 
+    public static final class BookmarkEntry implements BaseColumns {
 
+        //Table where news will temporarily cached for offline reading
+        public static final String TABLE_NAME = "bookmarks";
+
+        //Unique id for each article
+        public final static String _ID = BaseColumns._ID;
+
+        //Title for each article. Type: Text
+        public static final String COLUMN_TITLE = "title";
+
+        //Url for thumbnail image of the article. Type: TEXT
+        public static final String COLUMN_THUMBNAIL_URL = "thumbnailUrl";
+
+        //Author of the article. Type: Text
+        public static final String COLUMN_AUTHOR = "author";
+
+        //Date and time of the article. Type: Text
+        public static final String COLUMN_DATE = "date";
+
+        //Web url of the article. Type: Text
+        public static final String COLUMN_WEB_URL = "webUrl";
+
+        //Section of the article. Type: Text
+        public static final String COLUMN_SECTION= "section";
+
+        //Trail text(short description) of the article. Type: TEXT
+        public static final String COLUMN_TRAIL = "trail";
+
+        //Body of the article. Type: Text
+        public static final String COLUMN_BODY = "body";
     }
 }

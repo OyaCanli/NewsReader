@@ -46,6 +46,10 @@
                 android:resource="@xml/searchable" />
         </activity>
 
+        <activity android:name=".ui.BookmarksActivity"
+            android:label="@string/bookmark"
+            android:parentActivityName=".ui.MainActivity"/>
+
         <service android:name=".utils.NewsReminderService"
             android:exported="false"
             android:description="@string/serviceDescription">

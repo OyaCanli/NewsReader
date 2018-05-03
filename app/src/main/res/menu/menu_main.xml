@@ -6,6 +6,10 @@
         android:title="@string/settings"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/action_bookmarks"
+        android:title="@string/bookmark"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/magnify"
         android:title="@string/search"

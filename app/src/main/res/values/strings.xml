@@ -39,5 +39,7 @@
     <string name="oldest">Oldest</string>
     <string name="relevance">Relevance</string>
     <string name="serviceDescription">Notification service</string>
+    <string name="bookmark">Bookmarks</string>
+    <string name="no_bookmarks">You don\'t have any bookmarks yet.</string>
 
 </resources>

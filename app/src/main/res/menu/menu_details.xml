@@ -10,4 +10,9 @@
         android:icon="@drawable/ic_share_white_24dp"
         android:title="@string/share"
         app:showAsAction="ifRoom|collapseActionView" />
+    <item
+        android:id="@+id/action_bookmark"
+        android:icon="@drawable/ic_bookmark_border_white_24dp"
+        android:title="@string/bookmark"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

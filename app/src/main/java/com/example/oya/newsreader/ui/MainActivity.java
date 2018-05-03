@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
+import com.example.oya.newsreader.data.DatabaseUtils;
 import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.NotificationUtils;
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity{
                     tabLayout.newTab().setText(sectionList.get(i)));
         }
         NotificationUtils.scheduleNewsChecker(this);
-        //DatabaseUtils.scheduleNewsBackUp(this);
+        DatabaseUtils.scheduleNewsBackUp(this);
     }
 
     @Override
@@ -77,6 +78,9 @@ public class MainActivity extends AppCompatActivity{
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             intent.putExtra(Constants.USER_CLICKED_SETTINGS_FROM, MainActivity.class.getSimpleName());
+            startActivity(intent);
+        } else if (id == R.id.action_bookmarks){
+            Intent intent = new Intent(MainActivity.this, BookmarksActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

@@ -16,10 +16,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.NewsAdapter;
+import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.SearchLoader;
@@ -121,7 +121,7 @@ public class SearchableActivity extends AppCompatActivity implements LoaderManag
                 break;
             }
             case R.id.bookmark: {
-                Toast.makeText(this, "bookmark " + position, Toast.LENGTH_LONG).show();
+                saveToBookmarks(position);
                 break;
             }
         }
@@ -141,4 +141,10 @@ public class SearchableActivity extends AppCompatActivity implements LoaderManag
             startActivity(intent);
         }
     }
+
+    private void saveToBookmarks(int position){
+        NewsDbHelper dbHelper = new NewsDbHelper(this, null);
+        dbHelper.addToBookmarks(searchResults.get(position));
+    }
+
 }

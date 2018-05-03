@@ -174,7 +174,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
                 break;
             }
             case R.id.bookmark: {
-                Toast.makeText(getActivity(), "bookmark " + position, Toast.LENGTH_LONG).show();
+                saveToBookmarks(position);
                 break;
             }
         }
@@ -195,17 +195,15 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
+    private void saveToBookmarks(int position){
+        NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
+        dbHelper.addToBookmarks(articles.get(position));
+        Toast.makeText(getActivity(), "Article is addded in bookmarks. You can find your bookmarked articles from the menu", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onRefresh() {
         startLoader();
     }
 
-    private void restartLoading() {
-        if (loaderManager == null) {
-            loaderManager = getActivity().getLoaderManager();
-            loaderManager.initLoader(loaderId, null, this);
-        } else {
-            loaderManager.restartLoader(loaderId, null, this);
-        }
-    }
 }
