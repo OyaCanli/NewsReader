@@ -35,6 +35,7 @@
         <include layout="@layout/activity_details"/>
         <include layout="@layout/activity_searchable"/>
         <include layout="@layout/activity_settings"/>
+        <include layout="@layout/activity_sort_sections"/>
 
     </ViewFlipper>
 

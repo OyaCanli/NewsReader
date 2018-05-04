@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity">
+            android:name=".ui.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,7 +32,12 @@
 
         <activity
             android:name=".ui.SettingsActivity"
-            android:label="@string/settings" />
+            android:label="@string/settings"
+            android:launchMode="singleTop"/>
+
+        <activity android:name=".ui.SortSectionsActivity"
+            android:label="@string/sort_sections"
+            android:parentActivityName=".ui.SettingsActivity"/>
 
         <activity
             android:name=".ui.SearchableActivity"

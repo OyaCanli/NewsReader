@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.ui.ArticleListFragment;
@@ -16,11 +17,13 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     private static ArrayList<String> mSections = new ArrayList<>();
     private Context mContext;
+    Fragment[] mFragments;
 
     public SectionsPagerAdapter(FragmentManager fm, Set<String> sections, Context context) {
         super(fm);
         mContext = context;
         setPreferredSections(sections);
+        mFragments = new Fragment[mSections.size()];
     }
 
     public void setPreferredSections(Set<String> sections){
@@ -58,9 +61,25 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         mSections.addAll(sort);
     }
 
+    public Object instantiateItem(ViewGroup container, int position)
+    {
+        Object ret = super.instantiateItem(container, position);
+        mFragments[position] = (Fragment) ret;
+        return ret;
+    }
+
     @Override
-    public Fragment getItem(int position) {
-        return ArticleListFragment.newInstance(position, mSections.get(position));
+    public Fragment getItem(int position)
+    {
+        Log.d("SectionsAdapter", "getItem is called");
+        Fragment frag = mFragments[position];
+        if (frag == null)
+        {
+            Log.d("SectionsAdapter", "frag is null");
+            frag = ArticleListFragment.newInstance(position, mSections.get(position));
+            mFragments[position] = frag;
+        }
+        return frag;
     }
 
     @Override

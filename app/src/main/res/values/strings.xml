@@ -42,5 +42,14 @@
     <string name="bookmark">Bookmarks</string>
     <string name="no_bookmarks">You don\'t have any bookmarks yet.</string>
     <string name="article_bookmarked">Article is added in bookmarks. You can find your bookmarked articles from the menu</string>
+    <string name="sort_sections">Sort sections</string>
+    <string name="pref_key_sort_sections">sortSections</string>
+    <string name="pref_key_offline_reading">enableOfflineReading</string>
+    <string name="offline_reading">Offline reading</string>
+    <string name="background_services">Background Services</string>
+    <string name="pref_key_background_services">backgroundServices</string>
+    <string name="choose_sections">Choose sections</string>
+    <string name="pref_key_personalize_sections">personalizeSections</string>
+    <string name="toast_message_sort_sections">Sort sections by dragging them up or down</string>
 
 </resources>

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
         ViewFlipper vf = findViewById(R.id.main_flipper);
         vf.setDisplayedChild(0);
+        Log.d("intent action is: ", "" + getIntent().getAction());
         //Set the toolbar and enable up button
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

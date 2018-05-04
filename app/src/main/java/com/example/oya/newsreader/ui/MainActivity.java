@@ -40,26 +40,35 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //Get the preferred sections or default ones from shared preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         default_sections = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
-        Log.d("MainActivity", "default sections" + default_sections.size());
         Set<String> sections = preferences.getStringSet(getString(R.string.pref_key_sections), default_sections);
-        Log.d("MainActivity", "sections" + sections.size());
+        //Set the adapter and pass the sections to display to the adapter
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sections, this);
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
         tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        //mSectionsPagerAdapter.setPreferredSections(sections);
-        ArrayList<String> sectionList = mSectionsPagerAdapter.getSections();
+        //Get the sorted list of sections from the adapter
+        ArrayList<String> sectionList = SectionsPagerAdapter.getSections();
+        //Add tabs dynamically according to user preferences
         tabLayout.removeAllTabs();
         for (int i = 0; i < sectionList.size(); i++) {
             tabLayout.addTab(
                     tabLayout.newTab().setText(sectionList.get(i)));
         }
-        NotificationUtils.scheduleNewsChecker(this);
-        DatabaseUtils.scheduleNewsBackUp(this);
+        if(preferences.getBoolean(getString(R.string.pref_key_enableNotifications), getResources().getBoolean(R.bool.pref_notifications_default))){
+            //Schedule a background service for checking for recent news
+            NotificationUtils.scheduleNewsChecker(this);
+        }
+        if(preferences.getBoolean(getString(R.string.pref_key_offline_reading), getResources().getBoolean(R.bool.pref_offline_reading_default))){
+            //Schedule a background service for bakcing up new articles to database
+            DatabaseUtils.scheduleNewsBackUp(this);
+        }
+        //TODO : to ask : If user disables it previously scheduled jobs are automatically cancelled or do I need to do something extra here?
     }
 
     @Override

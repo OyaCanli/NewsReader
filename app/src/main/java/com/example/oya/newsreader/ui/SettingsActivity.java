@@ -14,7 +14,7 @@ import com.example.oya.newsreader.utils.Constants;
 
 public class SettingsActivity extends AppCompatPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    String intentComingFrom;
+    String intentComingFrom = MainActivity.class.getSimpleName(); //default case
     boolean sectionsChanged = false;
 
     @Override
@@ -25,10 +25,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
         vf.setDisplayedChild(2);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(R.string.settings);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null)
-            intentComingFrom = bundle.getString(Constants.USER_CLICKED_SETTINGS_FROM);
+        if (bundle != null) intentComingFrom = bundle.getString(Constants.USER_CLICKED_SETTINGS_FROM);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.registerOnSharedPreferenceChangeListener(this);
     }

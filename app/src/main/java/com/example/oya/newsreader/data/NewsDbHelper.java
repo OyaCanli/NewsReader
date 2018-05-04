@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.oya.newsreader.data.NewsContract.NewsEntry;
@@ -68,23 +69,31 @@ public class NewsDbHelper extends SQLiteOpenHelper {
 
     }
 
-    public void backUpToDatabase(List<NewsArticle> list) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL(SQL_CREATE_NEWS_TABLE);
-        db.delete(mSection, null, null);
-        for (int i = 0; i < list.size(); i++) {
-            ContentValues values = new ContentValues();
-            values.put(NewsEntry.COLUMN_TITLE, list.get(i).getTitle());
-            values.put(NewsEntry.COLUMN_THUMBNAIL_URL, list.get(i).getThumbnailUrl());
-            values.put(NewsEntry.COLUMN_AUTHOR, list.get(i).getAuthor());
-            values.put(NewsEntry.COLUMN_DATE, list.get(i).getDate());
-            values.put(NewsEntry.COLUMN_WEB_URL, list.get(i).getWebUrl());
-            values.put(NewsEntry.COLUMN_SECTION, list.get(i).getSection());
-            values.put(NewsEntry.COLUMN_TRAIL, list.get(i).getArticleTrail());
-            values.put(NewsEntry.COLUMN_BODY, list.get(i).getArticleBody());
-            long newRowId = db.insert(mSection, null, values);
-            Log.d("NewsDbHelper", "newRowId" + newRowId);
-        }
+    synchronized public void backUpToDatabase(final List<NewsArticle> list) {
+        AsyncTask mTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                SQLiteDatabase db = getWritableDatabase();
+                db.execSQL(SQL_CREATE_NEWS_TABLE);
+                db.delete(mSection, null, null);
+                for (int i = 0; i < list.size(); i++) {
+                    ContentValues values = new ContentValues();
+                    values.put(NewsEntry.COLUMN_TITLE, list.get(i).getTitle());
+                    values.put(NewsEntry.COLUMN_THUMBNAIL_URL, list.get(i).getThumbnailUrl());
+                    values.put(NewsEntry.COLUMN_AUTHOR, list.get(i).getAuthor());
+                    values.put(NewsEntry.COLUMN_DATE, list.get(i).getDate());
+                    values.put(NewsEntry.COLUMN_WEB_URL, list.get(i).getWebUrl());
+                    values.put(NewsEntry.COLUMN_SECTION, list.get(i).getSection());
+                    values.put(NewsEntry.COLUMN_TRAIL, list.get(i).getArticleTrail());
+                    values.put(NewsEntry.COLUMN_BODY, list.get(i).getArticleBody());
+                    long newRowId = db.insert(mSection, null, values);
+                    Log.d("NewsDbHelper", "newRowId" + newRowId);
+                }
+                db.close();
+                return null;
+            }
+        };
+        mTask.execute();
     }
 
     /*private boolean tableEmpty(String tableName) {
@@ -132,7 +141,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
         cursor.close();
-        if (db != null) db.close();
+        db.close();
         return newsList;
     }
 
@@ -149,6 +158,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
         values.put(BookmarkEntry.COLUMN_TRAIL, article.getArticleTrail());
         values.put(BookmarkEntry.COLUMN_BODY, article.getArticleBody());
         long newRowId = db.insert(BookmarkEntry.TABLE_NAME, null, values);
+        db.close();
         Log.d("NewsDbHelper", "newRowId" + newRowId);
     }
 

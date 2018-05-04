@@ -4,9 +4,11 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -39,16 +41,20 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private static final String LOG_TAG = MainActivity.class.getName();
     private TextView empty_tv;
     private RecyclerView recycler;
-    private LoaderManager loaderManager;
     private SwipeRefreshLayout refreshLayout;
     private View loadingIndicator;
     private ImageButton retryButton;
     private static final String ARG_SECTION_NAME = "sectionName";
     private static final String ARG_SECTION_NUMBER = "sectionNumber";
-    private int loaderId;
     private String sectionName;
 
     public ArticleListFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     public static ArticleListFragment newInstance(int sectionNumber, String sectionName) {
@@ -83,7 +89,14 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         });
         sectionName = getArguments().getString(ARG_SECTION_NAME);
         startLoader();
+
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("rotated", true);
     }
 
     private boolean thereIsConnection() {
@@ -96,21 +109,23 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     }
 
     private void startLoader() {
+
+        Log.d("ListFragment", "Loader is started");
         if (thereIsConnection()) {
             // Get a reference to the LoaderManager, in order to interact with loaders.
             loadingIndicator.setVisibility(View.VISIBLE);
-            loaderManager = getActivity().getLoaderManager();
+            LoaderManager loaderManager = getActivity().getLoaderManager();
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            loaderId = getArguments().getInt(ARG_SECTION_NUMBER);
+            int loaderId = getArguments().getInt(ARG_SECTION_NUMBER);
             loaderManager.initLoader(loaderId, getArguments(), this);
         } else {
             loadingIndicator.setVisibility(View.GONE);
             NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
             List<NewsArticle> backedArticles = dbHelper.readFromDatabase(sectionName);
             Log.d("ListFragment", "" + backedArticles.size());
-            if(!backedArticles.isEmpty()) {
+            if (!backedArticles.isEmpty()) {
                 articles.clear();
                 articles.addAll(backedArticles);
                 adapter.notifyDataSetChanged();
@@ -137,8 +152,11 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
             articles.clear();
             articles.addAll(list);
             adapter.notifyDataSetChanged();
-            NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
-            dbHelper.backUpToDatabase(list);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            if(preferences.getBoolean(getString(R.string.pref_key_offline_reading), getResources().getBoolean(R.bool.pref_offline_reading_default))){
+                NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
+                dbHelper.backUpToDatabase(list);
+            }
         } else {
             if (thereIsConnection()) empty_tv.setText(R.string.no_news_found);
             else {
@@ -149,11 +167,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
                 articles.addAll(backedArticles);
                 adapter.notifyDataSetChanged();
             }
-
-                /*empty_tv.setText(R.string.no_connection);
-            recycler.setVisibility(View.GONE);
-            empty_tv.setVisibility(View.VISIBLE);
-            if (retryButton != null) retryButton.setVisibility(View.VISIBLE);*/
         }
     }
 
@@ -195,7 +208,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
-    private void saveToBookmarks(int position){
+    private void saveToBookmarks(int position) {
         NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
         dbHelper.addToBookmarks(articles.get(position));
         Toast.makeText(getActivity(), R.string.article_bookmarked, Toast.LENGTH_SHORT).show();

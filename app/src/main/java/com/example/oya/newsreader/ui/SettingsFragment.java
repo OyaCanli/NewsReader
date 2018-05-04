@@ -1,5 +1,6 @@
 package com.example.oya.newsreader.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -20,8 +21,17 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         setHasOptionsMenu(true);
-        Preference pref = findPreference(getString(R.string.pref_key_itemsPerPage));
-        pref.setOnPreferenceChangeListener(this);
+        Preference pref_itemPerPage = findPreference(getString(R.string.pref_key_itemsPerPage));
+        pref_itemPerPage.setOnPreferenceChangeListener(this);
+        Preference pref_sortSections = findPreference(getString(R.string.pref_key_sort_sections));
+        pref_sortSections.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), SortSectionsActivity.class);
+                startActivity(intent);
+                return false;
+            }
+        });
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         PreferenceScreen prefScreen = getPreferenceScreen();

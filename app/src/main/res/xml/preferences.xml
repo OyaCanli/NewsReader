@@ -15,28 +15,44 @@
         android:entries="@array/pref_orderby_labels"
         android:entryValues="@array/pref_orderby_values"
         android:key="@string/pref_key_orderBy"
-        android:title="@string/pref_order_by"/>
+        android:title="@string/pref_order_by" />
 
-    <CheckBoxPreference
-        android:defaultValue="@bool/pref_notifications_default"
-        android:key="@string/pref_key_enableNotifications"
-        android:summaryOff="@string/disabled"
-        android:summaryOn="@string/enabled"
-        android:title="@string/notifications" />
+    <PreferenceCategory
+        android:key="@string/pref_key_personalize_sections"
+        android:title="@string/personalize_sections">
 
-    <MultiSelectListPreference
-        android:title="@string/personalize_sections"
-        android:dialogTitle="@string/personalize_sections"
-        android:key="@string/pref_key_sections"
-        android:entries="@array/pref_section_labels"
-        android:entryValues="@array/pref_section_values"
-        android:defaultValue="@array/pref_section_default_values"/>
+        <MultiSelectListPreference
+            android:defaultValue="@array/pref_section_default_values"
+            android:dialogTitle="@string/choose_sections"
+            android:entries="@array/pref_section_labels"
+            android:entryValues="@array/pref_section_values"
+            android:key="@string/pref_key_sections"
+            android:title="@string/choose_sections" />
 
-    <CheckBoxPreference
-        android:defaultValue="@bool/pref_offline_reading_default"
-        android:key="enableOfflineReading"
-        android:summaryOff="Disabled"
-        android:summaryOn="Enabled"
-        android:title="Offline reading" />
+        <Preference
+            android:key="@string/pref_key_sort_sections"
+            android:title="@string/sort_sections" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/pref_key_background_services"
+        android:title="@string/background_services">
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_notifications_default"
+            android:key="@string/pref_key_enableNotifications"
+            android:summaryOff="@string/disabled"
+            android:summaryOn="@string/enabled"
+            android:title="@string/notifications" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_offline_reading_default"
+            android:key="@string/pref_key_offline_reading"
+            android:summaryOff="Disabled"
+            android:summaryOn="Enabled"
+            android:title="@string/offline_reading" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
