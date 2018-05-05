@@ -51,5 +51,6 @@
     <string name="choose_sections">Choose sections</string>
     <string name="pref_key_personalize_sections">personalizeSections</string>
     <string name="toast_message_sort_sections">Sort sections by dragging them up or down</string>
+    <string name="sections_changed_info">Sections changed. Main activity will be restarted.</string>
 
 </resources>

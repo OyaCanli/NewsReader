@@ -1,6 +1,8 @@
 package com.example.oya.newsreader.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -9,72 +11,38 @@ import android.view.ViewGroup;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.ui.ArticleListFragment;
+import com.example.oya.newsreader.ui.SettingsActivity;
+import com.example.oya.newsreader.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    private static ArrayList<String> mSections = new ArrayList<>();
+    private static ArrayList<String> mSections;
     private Context mContext;
-    Fragment[] mFragments;
+    private Fragment[] mFragments;
 
-    public SectionsPagerAdapter(FragmentManager fm, Set<String> sections, Context context) {
+    public SectionsPagerAdapter(FragmentManager fm,Context context) {
         super(fm);
         mContext = context;
-        setPreferredSections(sections);
+        mSections = getSections();
         mFragments = new Fragment[mSections.size()];
     }
 
-    public void setPreferredSections(Set<String> sections){
-        if(!mSections.isEmpty()) mSections.clear();
-        mSections.addAll(sections);
-        Log.d("sectionsAdapter", "setPreferred.." + mSections.size());
-        sortSections();
-    }
-
-    private void sortSections(){
-        ArrayList<String> sort = new ArrayList<>();
-        if(mSections.contains(mContext.getString(R.string.politics).toLowerCase()))
-            sort.add(mContext.getString(R.string.politics).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.world).toLowerCase()))
-            sort.add(mContext.getString(R.string.world).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.business).toLowerCase()))
-            sort.add(mContext.getString(R.string.business).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.technology).toLowerCase()))
-            sort.add(mContext.getString(R.string.technology).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.science).toLowerCase()))
-            sort.add(mContext.getString(R.string.science).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.sport).toLowerCase()))
-            sort.add(mContext.getString(R.string.sport).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.football).toLowerCase()))
-            sort.add(mContext.getString(R.string.football).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.music).toLowerCase()))
-            sort.add(mContext.getString(R.string.music).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.culture).toLowerCase()))
-            sort.add(mContext.getString(R.string.culture).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.travel).toLowerCase()))
-            sort.add(mContext.getString(R.string.travel).toLowerCase());
-        if(mSections.contains(mContext.getString(R.string.fashion).toLowerCase()))
-            sort.add(mContext.getString(R.string.fashion).toLowerCase());
-        mSections.clear();
-        mSections.addAll(sort);
-    }
-
-    public Object instantiateItem(ViewGroup container, int position)
-    {
+    public Object instantiateItem(ViewGroup container, int position) {
         Object ret = super.instantiateItem(container, position);
         mFragments[position] = (Fragment) ret;
         return ret;
     }
 
     @Override
-    public Fragment getItem(int position)
-    {
+    public Fragment getItem(int position) {
         Log.d("SectionsAdapter", "getItem is called");
         Fragment frag = mFragments[position];
-        if (frag == null)
-        {
+        if (frag == null) {
             Log.d("SectionsAdapter", "frag is null");
             frag = ArticleListFragment.newInstance(position, mSections.get(position));
             mFragments[position] = frag;
@@ -92,7 +60,10 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         return mSections.get(position);
     }
 
-    public static ArrayList<String> getSections(){
-        return mSections;
+    public ArrayList<String> getSections(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        Set<String> default_sections = new HashSet<>(Arrays.asList(mContext.getResources().getStringArray(R.array.pref_section_default_values)));
+        Set<String> orderedSections = sharedPreferences.getStringSet(Constants.PREF_SORTED_SECTIONS, SettingsActivity.sortInDefaultOrder(default_sections));
+        return new ArrayList<>(orderedSections);
     }
 }

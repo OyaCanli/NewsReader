@@ -47,6 +47,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private static final String ARG_SECTION_NAME = "sectionName";
     private static final String ARG_SECTION_NUMBER = "sectionNumber";
     private String sectionName;
+    //private static boolean newInstance = false;
 
     public ArticleListFragment() {
     }
@@ -63,6 +64,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putString(ARG_SECTION_NAME, sectionName);
         fragment.setArguments(args);
+        //newInstance = true;
         return fragment;
     }
 
@@ -89,14 +91,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         });
         sectionName = getArguments().getString(ARG_SECTION_NAME);
         startLoader();
-
         return rootView;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("rotated", true);
     }
 
     private boolean thereIsConnection() {
@@ -110,7 +105,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     private void startLoader() {
 
-        Log.d("ListFragment", "Loader is started");
+        Log.d("ListFragment", "startLoader is called");
         if (thereIsConnection()) {
             // Get a reference to the LoaderManager, in order to interact with loaders.
             loadingIndicator.setVisibility(View.VISIBLE);
@@ -141,6 +136,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<List<NewsArticle>> onCreateLoader(int id, Bundle args) {
+        Log.d("ListFragment", "onCreateLoader is called");
         return new NewsLoader(getActivity(), args.getString(ARG_SECTION_NAME));
     }
 

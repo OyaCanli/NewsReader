@@ -12,6 +12,11 @@ import android.widget.ViewFlipper;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.utils.Constants;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class SettingsActivity extends AppCompatPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     String intentComingFrom = MainActivity.class.getSimpleName(); //default case
@@ -37,10 +42,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (intentComingFrom.equals(MainActivity.class.getSimpleName()) && sectionsChanged) {
+            if ((intentComingFrom.equals(MainActivity.class.getSimpleName()) && sectionsChanged)
+                    || intentComingFrom.equals(SortSectionsActivity.class.getSimpleName())) {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
-                Toast.makeText(this, "Sections changed. Main activity will be restarted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.sections_changed_info, Toast.LENGTH_SHORT).show();
             } else {
                 onBackPressed();
             }
@@ -51,7 +57,42 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         String sectionChoicesKey = getString(R.string.pref_key_sections);
-        if (key.equals(sectionChoicesKey)) sectionsChanged = true;
+        if (key.equals(sectionChoicesKey)) {
+            sectionsChanged = true;
+            Set<String> default_sections = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
+            Set<String> sections = sharedPreferences.getStringSet(key, default_sections);
+            LinkedHashSet<String> sortedSections = sortInDefaultOrder(sections);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putStringSet(Constants.PREF_SORTED_SECTIONS, sortedSections);
+            editor.apply();
+        }
+    }
+
+    public static LinkedHashSet<String> sortInDefaultOrder(Set<String> sections){
+        LinkedHashSet<String> sortedList = new LinkedHashSet<>();
+        if(sections.contains("politics"))
+            sortedList.add("politics");
+        if(sections.contains("world"))
+            sortedList.add("world");
+        if(sections.contains("business"))
+            sortedList.add("business");
+        if(sections.contains("technology"))
+            sortedList.add("technology");
+        if(sections.contains("science"))
+            sortedList.add("science");
+        if(sections.contains("sport"))
+            sortedList.add("sport");
+        if(sections.contains("football"))
+            sortedList.add("football");
+        if(sections.contains("music"))
+            sortedList.add("music");
+        if(sections.contains("culture"))
+            sortedList.add("culture");
+        if(sections.contains("travel"))
+            sortedList.add("travel");
+        if(sections.contains("fashion"))
+            sortedList.add("fashion");
+        return sortedList;
     }
 
     @Override
