@@ -22,6 +22,7 @@ import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.NotificationUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity{
@@ -40,7 +41,8 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         //Get the preferred sections or default ones from shared preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
+        ArrayList<String> sectionList = getSections();
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sectionList);
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity{
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         //Get the sorted list of sections from the adapter
-        ArrayList<String> sectionList = mSectionsPagerAdapter.getSections();
         //Add tabs dynamically according to user preferences
         tabLayout.removeAllTabs();
         for (int i = 0; i < sectionList.size(); i++) {
@@ -89,4 +90,25 @@ public class MainActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private ArrayList<String> getSections(){
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        ArrayList<String> preferredSections = new ArrayList<>();
+        int size = sharedPreferences.getInt("sections_size", 0);
+
+        for(int i=0;i<size;i++) {
+            preferredSections.add(sharedPreferences.getString("section_" + i, null));
+        }
+
+        for(int i = 0; i <size ; ++i){
+            Log.d("SortSections", "'after retrieving arraylist" + preferredSections.get(i));
+        }
+        if(preferredSections.isEmpty()){
+            ArrayList<String> default_sections = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
+            preferredSections.addAll(default_sections);
+        }
+        return preferredSections;
+    }
 }
+

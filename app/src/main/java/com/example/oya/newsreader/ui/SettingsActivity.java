@@ -12,9 +12,9 @@ import android.widget.ViewFlipper;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class SettingsActivity extends AppCompatPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -61,15 +61,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             sectionsChanged = true;
             Set<String> default_sections = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
             Set<String> sections = sharedPreferences.getStringSet(key, default_sections);
-            LinkedHashSet<String> sortedSections = sortInDefaultOrder(sections);
+            ArrayList<String> sortedSections = sortInDefaultOrder(sections);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putStringSet(Constants.PREF_SORTED_SECTIONS, sortedSections);
+            editor.putInt("sections_size", sortedSections.size());
+            for(int i=0;i<sortedSections.size();i++) {
+                editor.remove("section_" + i);
+                editor.putString("section_" + i, sortedSections.get(i));
+            }
             editor.apply();
         }
     }
 
-    public static LinkedHashSet<String> sortInDefaultOrder(Set<String> sections){
-        LinkedHashSet<String> sortedList = new LinkedHashSet<>();
+    public static ArrayList<String> sortInDefaultOrder(Set<String> sections){
+        ArrayList<String> sortedList = new ArrayList<>();
         if(sections.contains("politics"))
             sortedList.add("politics");
         if(sections.contains("world"))

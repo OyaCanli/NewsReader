@@ -18,10 +18,6 @@ import com.mobeta.android.dslv.DragSortListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class SortSectionsActivity extends AppCompatActivity {
 
@@ -64,33 +60,33 @@ public class SortSectionsActivity extends AppCompatActivity {
     }
 
     private void updatePreferences(){
-        for(int i=0; i< sectionList.size() ; i++){
-            Log.d("SortSectionsActivity", "before saving to prefs" + sectionList.get(i));
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("sections_size", sectionList.size());
+        for(int i=0;i<sectionList.size();i++) {
+            editor.remove("section_" + i);
+            editor.putString("section_" + i, sectionList.get(i));
         }
-        LinkedHashSet<String> sortedSectionSet = new LinkedHashSet<>(sectionList);
-        Iterator<String> iterator = sortedSectionSet.iterator();
-        while(iterator.hasNext()) {
-            Log.d("LinkedHashSet", "" + iterator.next());
-        }
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(Constants.PREF_SORTED_SECTIONS);
-        editor.putStringSet(Constants.PREF_SORTED_SECTIONS, sortedSectionSet);
         editor.apply();
-        /////This part is for testing///////
-        LinkedHashSet<String> default_sections = new LinkedHashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
-        Set<String> orderedSections = sharedPreferences.getStringSet(Constants.PREF_SORTED_SECTIONS, default_sections);
-        ArrayList<String> sections = new ArrayList<>(orderedSections);
-        for(int i=0; i< sections.size() ; i++){
-            Log.d("SortSectionsActivity", "retrieved back from preferences" + sections.get(i));
-        }
     }
 
     private ArrayList<String> getSections(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Set<String> default_sections = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
-        Set<String> orderedSections = sharedPreferences.getStringSet(Constants.PREF_SORTED_SECTIONS, default_sections);
-        return new ArrayList<>(orderedSections);
+        ArrayList<String> preferredSections = new ArrayList<>();
+        int size = sharedPreferences.getInt("sections_size", 0);
+
+        for(int i=0;i<size;i++) {
+            preferredSections.add(sharedPreferences.getString("section_" + i, null));
+        }
+
+        for(int i = 0; i <size ; ++i){
+            Log.d("SortSections", "'after retrieving arraylist" + preferredSections.get(i));
+        }
+        if(preferredSections.isEmpty()){
+            ArrayList<String> default_sections = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
+            preferredSections.addAll(default_sections);
+        }
+        return preferredSections;
     }
 
     @Override
