@@ -17,7 +17,7 @@ import android.view.MenuItem;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
-import com.example.oya.newsreader.data.DatabaseUtils;
+import com.example.oya.newsreader.utils.DatabaseUtils;
 import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.NotificationUtils;
 

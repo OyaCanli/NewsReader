@@ -35,7 +35,7 @@ public class SortSectionsActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.sort_sections);
         sectionList = getSections();
         DragSortListView dragSortListView = findViewById(R.id.list);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sectionList);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.dragsort_list_item, sectionList);
         dragSortListView.setAdapter(adapter);
         dragSortListView.setDropListener(new DragSortListView.DropListener() {
             @Override
@@ -45,7 +45,7 @@ public class SortSectionsActivity extends AppCompatActivity {
                 if (from > to) --from;
                 sectionList.add(to, movedItem);
                 adapter.notifyDataSetChanged();
-                for(int i=0; i< sectionList.size() ; i++){
+                for (int i = 0; i < sectionList.size(); i++) {
                     Log.d("DropListener", "" + sectionList.get(i));
                 }
             }
@@ -59,30 +59,30 @@ public class SortSectionsActivity extends AppCompatActivity {
         updatePreferences();
     }
 
-    private void updatePreferences(){
+    private void updatePreferences() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("sections_size", sectionList.size());
-        for(int i=0;i<sectionList.size();i++) {
+        for (int i = 0; i < sectionList.size(); i++) {
             editor.remove("section_" + i);
             editor.putString("section_" + i, sectionList.get(i));
         }
         editor.apply();
     }
 
-    private ArrayList<String> getSections(){
+    private ArrayList<String> getSections() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         ArrayList<String> preferredSections = new ArrayList<>();
         int size = sharedPreferences.getInt("sections_size", 0);
 
-        for(int i=0;i<size;i++) {
+        for (int i = 0; i < size; i++) {
             preferredSections.add(sharedPreferences.getString("section_" + i, null));
         }
 
-        for(int i = 0; i <size ; ++i){
+        for (int i = 0; i < size; ++i) {
             Log.d("SortSections", "'after retrieving arraylist" + preferredSections.get(i));
         }
-        if(preferredSections.isEmpty()){
+        if (preferredSections.isEmpty()) {
             ArrayList<String> default_sections = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
             preferredSections.addAll(default_sections);
         }

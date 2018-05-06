@@ -63,7 +63,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".data.NewsBackUpService"
+        <service android:name=".utils.NewsBackUpService"
             android:exported="false"
             android:description="@string/serviceDescription">
             <intent-filter>

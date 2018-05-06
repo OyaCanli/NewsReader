@@ -80,13 +80,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         refreshLayout = rootView.findViewById(R.id.swipe_to_refresh);
         refreshLayout.setOnRefreshListener(this);
         loadingIndicator = rootView.findViewById(R.id.loading_indicator);
-        retryButton = rootView.findViewById(R.id.retry);
-        retryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startLoader();
-            }
-        });
         sectionName = getArguments().getString(ARG_SECTION_NAME);
         startLoader();
         return rootView;
@@ -111,12 +104,16 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            int loaderId = getArguments().getInt(ARG_SECTION_NUMBER);
-            loaderManager.initLoader(loaderId, getArguments(), this);
+            Bundle args = getArguments();
+            if(args != null) {
+                Log.d("ListFragment", "args not null");
+                int loaderId = args.getInt(ARG_SECTION_NUMBER);
+                loaderManager.initLoader(loaderId, getArguments(), this);
+            }
         } else {
-            loadingIndicator.setVisibility(View.GONE);
             NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
             List<NewsArticle> backedArticles = dbHelper.readFromDatabase(sectionName);
+            loadingIndicator.setVisibility(View.GONE);
             Log.d("ListFragment", "" + backedArticles.size());
             if (!backedArticles.isEmpty()) {
                 articles.clear();
@@ -140,6 +137,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<List<NewsArticle>> loader, List<NewsArticle> list) {
+        Log.d("ListFragment", "onLoadFinished is called");
         loadingIndicator.setVisibility(View.GONE);
         refreshLayout.setRefreshing(false);
         if (list != null && !list.isEmpty()) {

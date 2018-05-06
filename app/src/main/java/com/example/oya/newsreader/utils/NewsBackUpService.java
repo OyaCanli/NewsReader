@@ -1,11 +1,11 @@
-package com.example.oya.newsreader.data;
+package com.example.oya.newsreader.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
-import com.example.oya.newsreader.utils.NetworkUtils;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class NewsBackUpService extends JobService {
 
-    private AsyncTask mBackgroundTask;
+    private static AsyncTask mBackgroundTask;
 
     @Override
     public boolean onStartJob(final JobParameters job) {

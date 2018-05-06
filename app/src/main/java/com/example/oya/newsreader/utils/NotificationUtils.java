@@ -11,6 +11,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.model.NewsArticle;
@@ -68,7 +69,7 @@ public final class NotificationUtils {
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle(list.get(0).getTitle())
-                .setContentText(list.get(0).getArticleTrail())
+                .setContentText(Html.fromHtml(list.get(0).getArticleTrail()))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(list.get(0).getArticleTrail()))
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentIntent(contentIntent(context, list))

@@ -2,6 +2,7 @@
 <resources>
     <dimen name="margin_standard">16dp</dimen>
     <dimen name="half_margin">8dp</dimen>
+    <dimen name="large_margin">32dp</dimen>
     <dimen name="paddding_standard">16dp</dimen>
     <dimen name="half_padding">8dp</dimen>
     <dimen name="thumbnail_width">120dp</dimen>

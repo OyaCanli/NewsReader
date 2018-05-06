@@ -1,4 +1,4 @@
-package com.example.oya.newsreader.data;
+package com.example.oya.newsreader.utils;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -65,6 +65,5 @@ public final class DatabaseUtils {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         }
         notificationManager.notify(4251, notificationBuilder.build());
-
     }
 }
