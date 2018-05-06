@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -83,6 +84,10 @@ public final class NotificationUtils {
     private static PendingIntent contentIntent(Context context, List<NewsArticle> list){
         Intent startActivity = new Intent(context, DetailsActivity.class);
         startActivity.putExtra(Constants.CHOSEN_ARTICLE, list.get(0));
-        return PendingIntent.getActivity(context, NEW_ARTICLE_PENDING_INTENT_ID, startActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent =
+                TaskStackBuilder.create(context)
+                        .addNextIntentWithParentStack(startActivity)
+                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendingIntent;
     }
 }

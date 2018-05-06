@@ -4,11 +4,9 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -148,11 +146,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
             articles.clear();
             articles.addAll(list);
             adapter.notifyDataSetChanged();
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            if(preferences.getBoolean(getString(R.string.pref_key_offline_reading), getResources().getBoolean(R.bool.pref_offline_reading_default))){
-                NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), sectionName);
-                dbHelper.backUpToDatabase(list);
-            }
         } else {
             if (thereIsConnection()) empty_tv.setText(R.string.no_news_found);
             else {
