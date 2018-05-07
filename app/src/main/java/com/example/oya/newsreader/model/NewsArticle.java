@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class NewsArticle implements Parcelable {
 
+    private long articleId;
     private String title;
     private String thumbnailUrl;
     private String author;
@@ -14,7 +15,8 @@ public class NewsArticle implements Parcelable {
     private String webUrl;
     private String section;
 
-    public NewsArticle(String title, String thumbnailUrl, String author, String date, String webURL, String section, String trail, String body) {
+    public NewsArticle(long id, String title, String thumbnailUrl, String author, String date, String webURL, String section, String trail, String body) {
+        articleId = id;
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
         this.author = author;
@@ -57,7 +59,12 @@ public class NewsArticle implements Parcelable {
         return articleBody;
     }
 
+    public long getArticleId() {
+        return articleId;
+    }
+
     protected NewsArticle(Parcel in) {
+        articleId = in.readLong();
         title = in.readString();
         thumbnailUrl = in.readString();
         author = in.readString();
@@ -75,6 +82,7 @@ public class NewsArticle implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(articleId);
         dest.writeString(title);
         dest.writeString(thumbnailUrl);
         dest.writeString(author);

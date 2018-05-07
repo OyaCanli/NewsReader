@@ -122,6 +122,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
                 null);                   // The sort order
 
         // Find the columns of news attributes that we're interested in
+        int idColumnIndex = cursor.getColumnIndex(NewsEntry._ID);
         int titleColumnIndex = cursor.getColumnIndex(NewsEntry.COLUMN_TITLE);
         int thumbnailColumnIndex = cursor.getColumnIndex(NewsEntry.COLUMN_THUMBNAIL_URL);
         int authorColumnIndex = cursor.getColumnIndex(NewsEntry.COLUMN_AUTHOR);
@@ -135,7 +136,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            newsList.add(new NewsArticle(cursor.getString(titleColumnIndex), cursor.getString(thumbnailColumnIndex),
+            newsList.add(new NewsArticle(cursor.getLong(idColumnIndex), cursor.getString(titleColumnIndex), cursor.getString(thumbnailColumnIndex),
                     cursor.getString(authorColumnIndex), cursor.getString(dateColumnIndex), cursor.getString(webUrlColumnIndex),
                     cursor.getString(sectionColumnIndex), cursor.getString(trailColumnIndex), cursor.getString(bodyColumnIndex)));
             cursor.moveToNext();
@@ -175,6 +176,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
                 null);                   // The sort order
 
         // Find the columns of news attributes that we're interested in
+        int idColumnIndex = cursor.getColumnIndex(NewsEntry._ID);
         int titleColumnIndex = cursor.getColumnIndex(BookmarkEntry.COLUMN_TITLE);
         int thumbnailColumnIndex = cursor.getColumnIndex(BookmarkEntry.COLUMN_THUMBNAIL_URL);
         int authorColumnIndex = cursor.getColumnIndex(BookmarkEntry.COLUMN_AUTHOR);
@@ -188,7 +190,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            list.add(new NewsArticle(cursor.getString(titleColumnIndex), cursor.getString(thumbnailColumnIndex),
+            list.add(new NewsArticle(cursor.getLong(idColumnIndex), cursor.getString(titleColumnIndex), cursor.getString(thumbnailColumnIndex),
                     cursor.getString(authorColumnIndex), cursor.getString(dateColumnIndex), cursor.getString(webUrlColumnIndex),
                     cursor.getString(sectionColumnIndex), cursor.getString(trailColumnIndex), cursor.getString(bodyColumnIndex)));
             cursor.moveToNext();

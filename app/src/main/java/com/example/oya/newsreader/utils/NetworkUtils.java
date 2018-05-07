@@ -300,7 +300,7 @@ public final class NetworkUtils {
                 String thumbnail = fields.optString(Constants.THUMBNAIL, "");
 
                 // Add the new {@link NewsArticle} to the list of articles.
-                articleList.add(new NewsArticle(title, thumbnail, author, date, articleUrl, section, trail, body));
+                articleList.add(new NewsArticle(0, title, thumbnail, author, date, articleUrl, section, trail, body));
             }
 
         } catch (JSONException e) {

@@ -1,15 +1,15 @@
 package com.example.oya.newsreader.ui;
 
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,7 +45,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private static final String ARG_SECTION_NAME = "sectionName";
     private static final String ARG_SECTION_NUMBER = "sectionNumber";
     private String sectionName;
-    //private static boolean newInstance = false;
 
     public ArticleListFragment() {
     }
@@ -62,7 +61,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putString(ARG_SECTION_NAME, sectionName);
         fragment.setArguments(args);
-        //newInstance = true;
         return fragment;
     }
 
@@ -100,7 +98,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         if (thereIsConnection()) {
             // Get a reference to the LoaderManager, in order to interact with loaders.
             loadingIndicator.setVisibility(View.VISIBLE);
-            LoaderManager loaderManager = getActivity().getLoaderManager();
+            LoaderManager loaderManager = getLoaderManager();
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
@@ -157,9 +155,9 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
-
     @Override
-    public void onLoaderReset(@NonNull android.content.Loader<List<NewsArticle>> loader) {
+    public void onLoaderReset(@NonNull Loader<List<NewsArticle>> loader) {
+
     }
 
     @Override

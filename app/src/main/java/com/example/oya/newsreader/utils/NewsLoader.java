@@ -1,10 +1,11 @@
 package com.example.oya.newsreader.utils;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
