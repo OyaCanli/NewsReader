@@ -1,47 +1,35 @@
 <resources>
     <string name="app_name">News Reader</string>
-    <string name="content_desc_thumbnail">Thumbnail image</string>
-    <string name="content_desc_share">Share button</string>
-    <string name="content_desc_bookmark">Bookmark button</string>
-    <string name="no_connection">No internet connection and no cached articles found for this section.</string>
+
+    <!-- warnings to user -->
+    <string name="no_connection">No internet connection and no cached articles found for this section. Check your connection and swipe down to refresh.</string>
     <string name="no_news_found">No news found</string>
+    <string name="warning_edittext_preference">Please select a number between 1 and 50</string>
+    <string name="article_bookmarked">Article is added in bookmarks. You can find your bookmarked articles from the menu</string>
+    <string name="toast_message_sort_sections">Sort sections by dragging them up or down</string>
+    <string name="sections_changed_info">Sections changed. Main activity will be restarted.</string>
+    <string name="no_bookmarks">You don\'t have any bookmarks yet.</string>
+
+    <!-- sections -->
     <string name="politics">Politics</string>
     <string name="world">World</string>
     <string name="business">Business</string>
     <string name="technology">Technology</string>
     <string name="science">Science</string>
-    <string name="content_desc_retry">Retry</string>
-    <string name="settings">Settings</string>
-    <string name="search">Search</string>
-    <string name="share">Share</string>
-    <string name="hidden">Hidden</string>
-    <string name="shown">Shown</string>
     <string name="culture">Culture</string>
     <string name="sport">Sport</string>
     <string name="football">Football</string>
     <string name="fashion">Fashion</string>
     <string name="music">Music</string>
     <string name="travel">Travel</string>
-    <string name="pref_order_by">Order articles by</string>
-    <string name="pref_key_orderBy">orderBy</string>
-    <string name="pref_key_itemsPerPage">itemsPerPages</string>
-    <string name="articles_per_page">Articles per pages</string>
-    <string name="pref_key_enableNotifications">enableNotifications</string>
-    <string name="disabled">Disabled</string>
-    <string name="enabled">Enabled</string>
+
+    <!-- preference keys, labels and values -->
     <string name="notifications">Notifications</string>
     <string name="personalize_sections">Personalize sections</string>
     <string name="pref_key_sections">choseSections</string>
     <string name="pref_orderby_default">newest</string>
     <string name="pref_itemPerPage_default">25</string>
-    <string name="warning_edittext_preference">Please select a number between 1 and 50</string>
-    <string name="newest">Newest</string>
-    <string name="oldest">Oldest</string>
-    <string name="relevance">Relevance</string>
-    <string name="serviceDescription">Notification service</string>
-    <string name="bookmark">Bookmarks</string>
-    <string name="no_bookmarks">You don\'t have any bookmarks yet.</string>
-    <string name="article_bookmarked">Article is added in bookmarks. You can find your bookmarked articles from the menu</string>
+    <string name="pref_key_personalize_sections">personalizeSections</string>
     <string name="sort_sections">Sort sections</string>
     <string name="pref_key_sort_sections">sortSections</string>
     <string name="pref_key_offline_reading">enableOfflineReading</string>
@@ -49,8 +37,46 @@
     <string name="background_services">Background Services</string>
     <string name="pref_key_background_services">backgroundServices</string>
     <string name="choose_sections">Choose sections</string>
-    <string name="pref_key_personalize_sections">personalizeSections</string>
-    <string name="toast_message_sort_sections">Sort sections by dragging them up or down</string>
-    <string name="sections_changed_info">Sections changed. Main activity will be restarted.</string>
+    <string name="pref_order_by">Order articles by</string>
+    <string name="pref_key_orderBy">orderBy</string>
+    <string name="pref_key_itemsPerPage">itemsPerPages</string>
+    <string name="articles_per_page">Articles per pages</string>
+    <string name="pref_key_enableNotifications">enableNotifications</string>
+    <string name="disabled">Disabled</string>
+    <string name="enabled">Enabled</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
+    <string name="relevance">Relevance</string>
+    <string name="only_on_wifi_title">Only on Wifi</string>
+    <string name="only_on_wifi_key">onlyOnWifi</string>
+    <string name="on_any_network">Back up on any network</string>
+    <string name="only_on_wifi">Back up only on wifi</string>
+    <string name="pref_backUpFrequency_default">8</string>
+    <string name="back_up_frequency">Back up frequency</string>
+    <string name="pref_key_backUpFrequency">backUpFrequency</string>
+    <string name="pref_key_clear_cache">clearCache</string>
+    <string name="pref_title_clear_cached">Clear cached articles</string>
+    <string name="pref_title_only_when_device_idle">Only when my device is idle</string>
+    <string name="pref_sum_only_when_my_device_idle">Back up only when my device is idle</string>
+    <string name="pref_sum_off_device_idle">Can back up when I use it as well</string>
+    <string name="pref_key_only_when_device_idle">onlyWhenDeviceIdle</string>
+    <string name="pref_title_only_when_charging">Only when device is charging</string>
+    <string name="pref_key_only_on_charge">onlyWhenCharging</string>
+    <string name="pref_sum_only_on_charge">Back up only when device is charging</string>
+    <string name="pref_sum_off_on_charging">Can back up when it is not charging</string>
+
+    <!-- content descriptions -->
+    <string name="content_desc_thumbnail">Thumbnail image</string>
+    <string name="content_desc_share">Share button</string>
+    <string name="content_desc_bookmark">Bookmark button</string>
+    <string name="enable_offline_reading_title">Enable/Disable offline reading</string>
+
+    <!-- others -->
+    <string name="settings">Settings</string>
+    <string name="share">Share</string>
+    <string name="search">Search</string>
+    <string name="notificationServiceDescription">Notification service</string>
+    <string name="backUpServiceDescription">News back-up service</string>
+    <string name="bookmark">Bookmarks</string>
 
 </resources>

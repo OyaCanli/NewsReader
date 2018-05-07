@@ -2,13 +2,7 @@
 <resources>
     <bool name="pref_notifications_default">true</bool>
     <bool name="pref_offline_reading_default">true</bool>
-    <bool name="pref_show_politics_default">true</bool>
-    <bool name="pref_show_world_default">true</bool>
-    <bool name="pref_show_business_default">true</bool>
-    <bool name="pref_show_technology_default">true</bool>
-    <bool name="pref_show_science_default">true</bool>
-    <bool name="pref_show_culture_default">false</bool>
-    <bool name="pref_show_sport_default">false</bool>
-    <bool name="pref_show_football_default">false</bool>
-    <bool name="pref_show_fashion_default">false</bool>
+    <bool name="pref_only_on_wifi_default">true</bool>
+    <bool name="pref_only_when_device_idle_default">true</bool>
+    <bool name="pref_only_on_charge_default">false</bool>
 </resources>

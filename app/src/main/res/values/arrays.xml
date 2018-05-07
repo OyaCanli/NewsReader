@@ -47,4 +47,20 @@
         <item>technology</item>
         <item>science</item>
     </string-array>
+    
+    <string-array name="pref_backUpFrequency_labels">
+        <item>Only when I launch the app</item>
+        <item>Once a day</item>
+        <item>Twice a day</item>
+        <item>Three times a day</item>
+        <item>Four times a day</item>
+    </string-array>
+
+    <string-array name="pref_backUpFrequency_values">
+        <item>0</item>
+        <item>24</item>
+        <item>12</item>
+        <item>8</item>
+        <item>6</item>
+    </string-array>
 </resources>

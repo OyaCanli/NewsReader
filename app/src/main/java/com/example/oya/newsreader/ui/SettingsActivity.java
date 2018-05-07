@@ -66,7 +66,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("sections_size", sortedSections.size());
             for(int i=0;i<sortedSections.size();i++) {
-                editor.remove("section_" + i);
+                editor.remove("section_" + i);//todo: check whether this is necessary
                 editor.putString("section_" + i, sortedSections.get(i));
             }
             editor.apply();
