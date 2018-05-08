@@ -44,6 +44,7 @@ public class BookmarksActivity extends AppCompatActivity implements NewsAdapter.
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle(R.string.bookmark);
         RecyclerView recycler = findViewById(R.id.recycler_bookmarks);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setItemAnimator(new DefaultItemAnimator());
@@ -67,13 +68,12 @@ public class BookmarksActivity extends AppCompatActivity implements NewsAdapter.
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getLayoutPosition();
-                Log.d("BookmarksActivity", "position is: " + position);
                 final NewsArticle articleToErase = bookmarkedArticles.get(position);
                 removeBookmarkFromAdapter(position);
                 tempListOfArticlesToErase.add(articleToErase);
                 Snackbar snackbar = Snackbar
-                        .make(coordinator, "Article is deleted from bookmarks.", Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", new View.OnClickListener() {
+                        .make(coordinator, R.string.snackbar_message_article_deleted, Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.undo), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 bookmarkedArticles.add(position, articleToErase);

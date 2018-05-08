@@ -29,7 +29,6 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
         ViewFlipper vf = findViewById(R.id.main_flipper);
         vf.setDisplayedChild(0);
-        Log.d("intent action is: ", "" + getIntent().getAction());
         //Set the toolbar and enable up button
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,6 +75,9 @@ public class DetailsActivity extends AppCompatActivity {
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             }
+        } else if (id == R.id.action_bookmarks){
+            Intent intent = new Intent(DetailsActivity.this, BookmarksActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

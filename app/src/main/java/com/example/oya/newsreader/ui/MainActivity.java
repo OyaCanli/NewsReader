@@ -27,7 +27,6 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity{
 
     SectionsPagerAdapter mSectionsPagerAdapter;
-    Set<String> default_sections;
     SharedPreferences preferences;
     TabLayout tabLayout;
 

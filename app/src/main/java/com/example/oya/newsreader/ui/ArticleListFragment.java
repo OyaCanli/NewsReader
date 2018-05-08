@@ -122,7 +122,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
                 empty_tv.setText(R.string.no_connection);
                 recycler.setVisibility(View.GONE);
                 empty_tv.setVisibility(View.VISIBLE);
-                retryButton.setVisibility(View.VISIBLE);
             }
         }
     }

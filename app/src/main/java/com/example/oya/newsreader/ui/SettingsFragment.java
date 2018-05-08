@@ -14,6 +14,7 @@ import android.preference.PreferenceScreen;
 import android.widget.Toast;
 
 import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.utils.DatabaseUtils;
 import com.example.oya.newsreader.utils.NotificationUtils;
 
@@ -45,7 +46,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         pref_onlyWhenIdle = findPreference(getString(R.string.pref_key_only_when_device_idle));
         pref_onlyOnCharge = findPreference(getString(R.string.pref_key_only_on_charge));
         boolean offlineEnabled = sharedPreferences.getBoolean(getActivity().getString(R.string.pref_key_offline_reading), getActivity().getResources().getBoolean(R.bool.pref_offline_reading_default));
-        if(!offlineEnabled){
+        if (!offlineEnabled) {
             pref_onlyOnWifi.setEnabled(false);
             pref_onlyWhenIdle.setEnabled(false);
             pref_onlyOnCharge.setEnabled(false);
@@ -71,8 +72,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         setPreferenceSummary(findPreference(key));
         String enableBackUpKey = getString(R.string.pref_key_offline_reading);
         String enableNotificationsKey = getString(R.string.pref_key_enableNotifications);
-        if(key.equals(enableBackUpKey)){
-            if(sharedPreferences.getBoolean(key, getActivity().getResources().getBoolean(R.bool.pref_offline_reading_default))){
+        if (key.equals(enableBackUpKey)) {
+            if (sharedPreferences.getBoolean(key, getActivity().getResources().getBoolean(R.bool.pref_offline_reading_default))) {
                 pref_onlyOnWifi.setEnabled(true);
                 pref_onlyWhenIdle.setEnabled(true);
                 pref_onlyOnCharge.setEnabled(true);
@@ -85,8 +86,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 pref_backUpFrequency.setEnabled(false);
                 DatabaseUtils.cancelBackingUps(getActivity());
             }
-        } else if(key.equals(enableNotificationsKey)){
-            if(sharedPreferences.getBoolean(key, getActivity().getResources().getBoolean(R.bool.pref_notifications_default))){
+        } else if (key.equals(enableNotificationsKey)) {
+            if (sharedPreferences.getBoolean(key, getActivity().getResources().getBoolean(R.bool.pref_notifications_default))) {
                 NotificationUtils.scheduleNotifications(getActivity());
             } else {
                 NotificationUtils.cancelNotifications(getActivity());
@@ -122,13 +123,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if(preference.getKey().equals(getString(R.string.pref_key_sort_sections))){
+        if (preference.getKey().equals(getString(R.string.pref_key_sort_sections))) {
             Intent intent = new Intent(getActivity(), SortSectionsActivity.class);
             startActivity(intent);
-        } else if(preference.getKey().equals(getString(R.string.pref_key_clear_cache))){
-            Toast.makeText(getActivity(), "clear cache clicked", Toast.LENGTH_SHORT).show();
-            //todo : clear all tables from the database
+        } else if (preference.getKey().equals(getString(R.string.pref_key_clear_cache))) {
+            NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), null);
+            dbHelper.clearCachedArticles(getActivity());
+            Toast.makeText(getActivity(), R.string.cached_articles_erased, Toast.LENGTH_SHORT).show();
         }
         return false;
     }
+
+
 }

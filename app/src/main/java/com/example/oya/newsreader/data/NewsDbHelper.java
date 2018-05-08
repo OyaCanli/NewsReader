@@ -11,6 +11,7 @@ import android.util.Log;
 import com.example.oya.newsreader.data.NewsContract.NewsEntry;
 import com.example.oya.newsreader.data.NewsContract.BookmarkEntry;
 import com.example.oya.newsreader.model.NewsArticle;
+import com.example.oya.newsreader.ui.SortSectionsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -198,6 +199,16 @@ public class NewsDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return list;
+    }
+
+    public void clearCachedArticles(Context context){
+        SQLiteDatabase db = getWritableDatabase();
+        ArrayList<String> sectionList = SortSectionsActivity.getSections(context);
+        for(int i = 0; i < sectionList.size(); ++i){
+           String sql_drop_table =   "drop table if exists " + sectionList.get(i);
+            db.execSQL(sql_drop_table);
+        }
+        db.close();
     }
 
 }
