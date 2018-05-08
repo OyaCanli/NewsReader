@@ -1,5 +1,6 @@
 package com.example.oya.newsreader.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class SortSectionsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle(R.string.sort_sections);
-        sectionList = getSections();
+        sectionList = getSections(this);
         DragSortListView dragSortListView = findViewById(R.id.list);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.dragsort_list_item, sectionList);
         dragSortListView.setAdapter(adapter);
@@ -70,8 +71,8 @@ public class SortSectionsActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private ArrayList<String> getSections() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    public static ArrayList<String> getSections(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         ArrayList<String> preferredSections = new ArrayList<>();
         int size = sharedPreferences.getInt("sections_size", 0);
 
@@ -79,11 +80,8 @@ public class SortSectionsActivity extends AppCompatActivity {
             preferredSections.add(sharedPreferences.getString("section_" + i, null));
         }
 
-        for (int i = 0; i < size; ++i) {
-            Log.d("SortSections", "'after retrieving arraylist" + preferredSections.get(i));
-        }
         if (preferredSections.isEmpty()) {
-            ArrayList<String> default_sections = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
+            ArrayList<String> default_sections = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.pref_section_default_values)));
             preferredSections.addAll(default_sections);
         }
         return preferredSections;

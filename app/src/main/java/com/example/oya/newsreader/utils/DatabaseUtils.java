@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public final class DatabaseUtils {
 
     private static final int SYNCH_FLEXTIME_SECONDS = (int) (TimeUnit.HOURS.toSeconds(1));
-    private static final String REMINDER_JOB_TAG = "news_backup_tag";
+    private static final String BACKUP_JOB_TAG = "news_backup_tag";
     private static boolean sInitialized;
 
     synchronized public static void scheduleNewsBackUp(@NonNull final Context context){
@@ -41,7 +41,7 @@ public final class DatabaseUtils {
             FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
             Job.Builder newsCheckerJobBuilder = dispatcher.newJobBuilder()
                     .setService(NewsBackUpService.class)
-                    .setTag(REMINDER_JOB_TAG)
+                    .setTag(BACKUP_JOB_TAG)
                     .setLifetime(Lifetime.FOREVER)
                     .setRecurring(true)
                     .setTrigger(Trigger.executionWindow(BACKUP_INTERVAL_SECONDS, BACKUP_INTERVAL_SECONDS + SYNCH_FLEXTIME_SECONDS))
@@ -62,6 +62,12 @@ public final class DatabaseUtils {
             dispatcher.schedule(newsCheckerJobBuilder.build());
             sInitialized = true;
         }
+    }
+
+    public static void cancelBackingUps(@NonNull final Context context){
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+        dispatcher.cancel(BACKUP_JOB_TAG);
     }
 
     public static void testNotification(Context context){

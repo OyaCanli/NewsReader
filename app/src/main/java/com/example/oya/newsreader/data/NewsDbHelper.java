@@ -200,5 +200,4 @@ public class NewsDbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    //public void deleteCachedArticles
 }

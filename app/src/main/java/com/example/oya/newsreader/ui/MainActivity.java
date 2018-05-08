@@ -22,7 +22,6 @@ import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.NotificationUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity{
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         //Get the preferred sections or default ones from shared preferences
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        ArrayList<String> sectionList = getSections();
+        ArrayList<String> sectionList = SortSectionsActivity.getSections(this);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sectionList);
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -58,13 +57,12 @@ public class MainActivity extends AppCompatActivity{
         }
         if(preferences.getBoolean(getString(R.string.pref_key_enableNotifications), getResources().getBoolean(R.bool.pref_notifications_default))){
             //Schedule a background service for checking for recent news
-            NotificationUtils.scheduleNewsChecker(this);
+            NotificationUtils.scheduleNotifications(this);
         }
         if(preferences.getBoolean(getString(R.string.pref_key_offline_reading), getResources().getBoolean(R.bool.pref_offline_reading_default))){
             //Schedule a background service for bakcing up new articles to database
             DatabaseUtils.scheduleNewsBackUp(this);
         }
-        //TODO : to ask : If user disables it previously scheduled jobs are automatically cancelled or do I need to do something extra here?
     }
 
     @Override
@@ -89,26 +87,6 @@ public class MainActivity extends AppCompatActivity{
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private ArrayList<String> getSections(){
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        ArrayList<String> preferredSections = new ArrayList<>();
-        int size = sharedPreferences.getInt("sections_size", 0);
-
-        for(int i=0;i<size;i++) {
-            preferredSections.add(sharedPreferences.getString("section_" + i, null));
-        }
-
-        for(int i = 0; i <size ; ++i){
-            Log.d("SortSections", "'after retrieving arraylist" + preferredSections.get(i));
-        }
-        if(preferredSections.isEmpty()){
-            ArrayList<String> default_sections = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
-            preferredSections.addAll(default_sections);
-        }
-        return preferredSections;
     }
 }
 

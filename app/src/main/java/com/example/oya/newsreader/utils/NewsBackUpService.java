@@ -6,9 +6,11 @@ import android.util.Log;
 
 import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
+import com.example.oya.newsreader.ui.SortSectionsActivity;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsBackUpService extends JobService {
@@ -21,10 +23,13 @@ public class NewsBackUpService extends JobService {
             @Override
             protected Object doInBackground(Object[] objects) {
                 Context context = NewsBackUpService.this;
-                List<NewsArticle> articlesToBeBacked = NetworkUtils.fetchArticles("politics", context);
-                        //TODO : replace hardcoded section. Perhaps replace the method?
-                NewsDbHelper dbHelper = new NewsDbHelper(context, "politics");
-                dbHelper.backUpToDatabase(articlesToBeBacked);
+                ArrayList<String> sections = SortSectionsActivity.getSections(context);
+                int size = sections.size();
+                for(int i = 0; i < size; ++i){
+                    List<NewsArticle> articlesToBeBacked = NetworkUtils.fetchArticles(sections.get(i), context);
+                    NewsDbHelper dbHelper = new NewsDbHelper(context, sections.get(i));
+                    dbHelper.backUpToDatabase(articlesToBeBacked);
+                }
                 DatabaseUtils.testNotification(context); //TODO. don't forget to erase this method later
                 Log.v("NewsBackUpService", "copied to database");
                 return null;

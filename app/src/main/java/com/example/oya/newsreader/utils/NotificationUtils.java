@@ -41,7 +41,7 @@ public final class NotificationUtils {
 
     private static boolean sInitialized;
 
-    synchronized public static void scheduleNewsChecker(@NonNull final Context context){
+    synchronized public static void scheduleNotifications(@NonNull final Context context){
         if(sInitialized) return;
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
@@ -56,7 +56,12 @@ public final class NotificationUtils {
                 .build();
         dispatcher.schedule(newsCheckerJob);
         sInitialized = true;
+    }
 
+    public static void cancelNotifications(@NonNull final Context context){
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+        dispatcher.cancel(REMINDER_JOB_TAG);
     }
 
     public static void informUserOfTheNewArticle(Context context, List<NewsArticle> list){

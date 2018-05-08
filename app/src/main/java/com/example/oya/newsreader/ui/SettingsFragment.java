@@ -1,5 +1,6 @@
 package com.example.oya.newsreader.ui;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.preference.PreferenceScreen;
 import android.widget.Toast;
 
 import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.utils.DatabaseUtils;
+import com.example.oya.newsreader.utils.NotificationUtils;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
         Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
@@ -67,17 +70,26 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         setPreferenceSummary(findPreference(key));
         String enableBackUpKey = getString(R.string.pref_key_offline_reading);
+        String enableNotificationsKey = getString(R.string.pref_key_enableNotifications);
         if(key.equals(enableBackUpKey)){
             if(sharedPreferences.getBoolean(key, getActivity().getResources().getBoolean(R.bool.pref_offline_reading_default))){
                 pref_onlyOnWifi.setEnabled(true);
                 pref_onlyWhenIdle.setEnabled(true);
                 pref_onlyOnCharge.setEnabled(true);
                 pref_backUpFrequency.setEnabled(true);
+                DatabaseUtils.scheduleNewsBackUp(getActivity());
             } else {
                 pref_onlyOnWifi.setEnabled(false);
                 pref_onlyWhenIdle.setEnabled(false);
                 pref_onlyOnCharge.setEnabled(false);
                 pref_backUpFrequency.setEnabled(false);
+                DatabaseUtils.cancelBackingUps(getActivity());
+            }
+        } else if(key.equals(enableNotificationsKey)){
+            if(sharedPreferences.getBoolean(key, getActivity().getResources().getBoolean(R.bool.pref_notifications_default))){
+                NotificationUtils.scheduleNotifications(getActivity());
+            } else {
+                NotificationUtils.cancelNotifications(getActivity());
             }
         }
     }

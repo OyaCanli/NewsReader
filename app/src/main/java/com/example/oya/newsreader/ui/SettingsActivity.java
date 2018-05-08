@@ -1,5 +1,6 @@
 package com.example.oya.newsreader.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -62,41 +63,40 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             sectionsChanged = true;
             Set<String> default_sections = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
             Set<String> sections = sharedPreferences.getStringSet(key, default_sections);
-            ArrayList<String> sortedSections = sortInDefaultOrder(sections);
+            ArrayList<String> sortedSections = sortInDefaultOrder(sections, this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("sections_size", sortedSections.size());
             for(int i=0;i<sortedSections.size();i++) {
-                editor.remove("section_" + i);//todo: check whether this is necessary
                 editor.putString("section_" + i, sortedSections.get(i));
             }
             editor.apply();
         }
     }
 
-    public static ArrayList<String> sortInDefaultOrder(Set<String> sections){
+    public static ArrayList<String> sortInDefaultOrder(Set<String> sections, Context context){
         ArrayList<String> sortedList = new ArrayList<>();
-        if(sections.contains("politics"))
-            sortedList.add("politics");
-        if(sections.contains("world"))
-            sortedList.add("world");
-        if(sections.contains("business"))
-            sortedList.add("business");
-        if(sections.contains("technology"))
-            sortedList.add("technology");
-        if(sections.contains("science"))
-            sortedList.add("science");
-        if(sections.contains("sport"))
-            sortedList.add("sport");
-        if(sections.contains("football"))
-            sortedList.add("football");
-        if(sections.contains("music"))
-            sortedList.add("music");
-        if(sections.contains("culture"))
-            sortedList.add("culture");
-        if(sections.contains("travel"))
-            sortedList.add("travel");
-        if(sections.contains("fashion"))
-            sortedList.add("fashion");
+        if(sections.contains(context.getString(R.string.politics).toLowerCase()))
+            sortedList.add(context.getString(R.string.politics).toLowerCase());
+        if(sections.contains(context.getString(R.string.world).toLowerCase()))
+            sortedList.add(context.getString(R.string.world).toLowerCase());
+        if(sections.contains(context.getString(R.string.business).toLowerCase()))
+            sortedList.add(context.getString(R.string.business).toLowerCase());
+        if(sections.contains(context.getString(R.string.technology).toLowerCase()))
+            sortedList.add(context.getString(R.string.technology).toLowerCase());
+        if(sections.contains(context.getString(R.string.science).toLowerCase()))
+            sortedList.add(context.getString(R.string.science).toLowerCase());
+        if(sections.contains(context.getString(R.string.sport).toLowerCase()))
+            sortedList.add(context.getString(R.string.sport).toLowerCase());
+        if(sections.contains(context.getString(R.string.football).toLowerCase()))
+            sortedList.add(context.getString(R.string.football).toLowerCase());
+        if(sections.contains(context.getString(R.string.music).toLowerCase()))
+            sortedList.add(context.getString(R.string.music).toLowerCase());
+        if(sections.contains(context.getString(R.string.culture).toLowerCase()));
+            sortedList.add(context.getString(R.string.culture).toLowerCase());
+        if(sections.contains(context.getString(R.string.travel).toLowerCase()))
+            sortedList.add(context.getString(R.string.travel).toLowerCase());
+        if(sections.contains(context.getString(R.string.fashion).toLowerCase()))
+            sortedList.add(context.getString(R.string.fashion).toLowerCase());
         return sortedList;
     }
 

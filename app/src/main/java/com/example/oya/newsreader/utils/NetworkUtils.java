@@ -8,7 +8,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
 import com.example.oya.newsreader.model.NewsArticle;
+import com.example.oya.newsreader.ui.SortSectionsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,9 +69,9 @@ public final class NetworkUtils {
         return articles;
     }
 
-    public static List<NewsArticle> searchOnline(String section) {
+    public static List<NewsArticle> searchOnline(String query) {
         // Create URL object
-        URL url = buildSearchUrl(section);
+        URL url = buildSearchUrl(query);
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
         try {
@@ -134,7 +136,7 @@ public final class NetworkUtils {
 
         Uri builtUri = Uri.parse(Constants.BASE_URL).buildUpon()
                 .encodedQuery(Constants.FROM_DATE + "=" + getFormattedDateTime())
-                .appendQueryParameter(Constants.SECTION_PARAM, context.getString(R.string.politics).toLowerCase())
+                .appendQueryParameter(Constants.SECTION_PARAM, buildSectionsParam(context))
                 .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
                 .appendQueryParameter(Constants.ORDER_BY_PARAM, context.getString(R.string.pref_orderby_default))
                 .appendQueryParameter(Constants.PAGE_SIZE_PARAM, "1")
@@ -168,17 +170,17 @@ public final class NetworkUtils {
         return dateFormat.format(now-1800000);
 }
 
-    /*private static String buildSectionsParam(){
+    private static String buildSectionsParam(Context context){
         StringBuilder sectionsParam = new StringBuilder();
-        ArrayList<String> sections = SectionsPagerAdapter.getSections();
+        ArrayList<String> sections = SortSectionsActivity.getSections(context);
         int size = sections.size();
         for(int i=0; i < size-1 ; i++){
             sectionsParam.append(sections.get(i));
-            sectionsParam.append(",");
+            sectionsParam.append("|");
         }
         sectionsParam.append(sections.get(size-1));
         return sectionsParam.toString();
-    }*/
+    }
 
     private static URL buildUrl(String section, Context context) throws UnsupportedEncodingException {
 

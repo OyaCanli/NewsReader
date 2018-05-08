@@ -3,7 +3,10 @@ package com.example.oya.newsreader.ui;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.NewsAdapter;
@@ -23,20 +27,24 @@ import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class BookmarksActivity extends AppCompatActivity implements NewsAdapter.ListItemClickListener{
 
     ArrayList<NewsArticle> bookmarkedArticles;
     NewsAdapter adapter;
+    LinkedList<NewsArticle> tempListOfArticlesToErase = new LinkedList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bookmarks);
-        Toolbar toolbar = findViewById(R.id.toolbar_search);
+        setContentView(R.layout.activity_base);
+        ViewFlipper vf = findViewById(R.id.main_flipper);
+        vf.setDisplayedChild(4);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        RecyclerView recycler = findViewById(R.id.recycler_search);
+        RecyclerView recycler = findViewById(R.id.recycler_bookmarks);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setItemAnimator(new DefaultItemAnimator());
         NewsDbHelper dbHelper = new NewsDbHelper(this, null);
@@ -49,6 +57,7 @@ public class BookmarksActivity extends AppCompatActivity implements NewsAdapter.
             adapter = new NewsAdapter(this, bookmarkedArticles, this);
             recycler.setAdapter(adapter);
         }
+        final CoordinatorLayout coordinator = findViewById(R.id.main_content);
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -57,9 +66,22 @@ public class BookmarksActivity extends AppCompatActivity implements NewsAdapter.
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getLayoutPosition();
-                Log.d("BookmarksActivity", "position is: "+ position);
-                removeBookmark(position);
+                final int position = viewHolder.getLayoutPosition();
+                Log.d("BookmarksActivity", "position is: " + position);
+                final NewsArticle articleToErase = bookmarkedArticles.get(position);
+                removeBookmarkFromAdapter(position);
+                tempListOfArticlesToErase.add(articleToErase);
+                Snackbar snackbar = Snackbar
+                        .make(coordinator, "Article is deleted from bookmarks.", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                bookmarkedArticles.add(position, articleToErase);
+                                adapter.notifyItemInserted(position);
+                                tempListOfArticlesToErase.removeLast();
+                            }
+                        });
+                snackbar.show();
             }
         }).attachToRecyclerView(recycler);
     }
@@ -97,13 +119,23 @@ public class BookmarksActivity extends AppCompatActivity implements NewsAdapter.
         }
     }
 
-    private void removeBookmark(int position){
-        NewsDbHelper dbHelper = new NewsDbHelper(this, null);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long id = bookmarkedArticles.get(position).getArticleId();
-        db.delete(NewsContract.BookmarkEntry.TABLE_NAME, NewsContract.BookmarkEntry._ID + "=" + id, null);
+    private void removeBookmarkFromAdapter(int position){
         bookmarkedArticles.remove(position);
         adapter.notifyItemRemoved(position);
+    }
 
+    private void removeDeletedBookmarksFromDatabase(){
+        NewsDbHelper dbHelper = new NewsDbHelper(this, null);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        for(int i = 0; i < tempListOfArticlesToErase.size(); ++i){
+            long id = tempListOfArticlesToErase.get(i).getArticleId();
+            db.delete(NewsContract.BookmarkEntry.TABLE_NAME, NewsContract.BookmarkEntry._ID + "=" + id, null);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        removeDeletedBookmarksFromDatabase();
     }
 }
