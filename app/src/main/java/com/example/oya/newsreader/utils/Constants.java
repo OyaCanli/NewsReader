@@ -28,4 +28,6 @@ public final class Constants {
     public static final String SEARCH_QUERY = "searchQuery";
     public static final String PREF_SORTED_SECTIONS = "sortedSections";
     public static final int SEARCH_LOADER_ID = 101;
+    public static final int SYNCH_AT_LAUNCH_LOADER_ID = 2498;
+    public static final int SYNCH_CHANGED_LOADER_ID = 9846;
 }

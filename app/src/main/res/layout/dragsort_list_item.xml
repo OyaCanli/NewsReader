@@ -7,7 +7,7 @@
     android:layout_marginStart="16dp"
     android:layout_marginTop="16dp"
     android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_18dp"
-    android:paddingTop="@dimen/paddding_standard"
-    android:paddingBottom="@dimen/paddding_standard"
+    android:paddingTop="@dimen/padding_standard"
+    android:paddingBottom="@dimen/padding_standard"
     android:textAllCaps="true"
     tools:text="politics" />

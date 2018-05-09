@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_dark">
+
+    <TextView
+        android:id="@+id/splash_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="monospace"
+        android:padding="@dimen/padding_standard"
+        android:text="NewsReader"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/splash_color"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_fromLeft"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        android:background="@color/splash_color"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/splash_title"
+        app:layout_constraintEnd_toEndOf="@id/splash_title"
+        app:layout_constraintStart_toStartOf="@id/splash_title" />
+
+    <View
+        android:id="@+id/view_fromRight"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        android:visibility="gone"
+        android:background="@color/splash_color"
+        app:layout_constraintEnd_toEndOf="@id/splash_title"
+        app:layout_constraintStart_toStartOf="@id/splash_title"
+        app:layout_constraintTop_toBottomOf="@id/splash_title" />
+
+    <View
+        android:id="@+id/view_fromBottom"
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:background="@color/splash_color"
+        app:layout_constraintBottom_toBottomOf="@id/splash_title"
+        app:layout_constraintStart_toStartOf="@id/splash_title"
+        app:layout_constraintTop_toTopOf="@id/splash_title" />
+
+    <View
+        android:id="@+id/view_fromTop"
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:background="@color/splash_color"
+        app:layout_constraintBottom_toBottomOf="@id/splash_title"
+        app:layout_constraintEnd_toEndOf="@id/splash_title"
+        app:layout_constraintTop_toTopOf="@id/splash_title" />
+</android.support.constraint.ConstraintLayout>

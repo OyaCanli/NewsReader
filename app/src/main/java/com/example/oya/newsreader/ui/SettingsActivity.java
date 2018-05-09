@@ -1,7 +1,9 @@
 package com.example.oya.newsreader.ui;
 
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,10 +15,12 @@ import android.widget.ViewFlipper;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.utils.Constants;
+import com.example.oya.newsreader.utils.NewsLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -63,13 +67,30 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             sectionsChanged = true;
             Set<String> default_sections = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
             Set<String> sections = sharedPreferences.getStringSet(key, default_sections);
-            ArrayList<String> sortedSections = sortInDefaultOrder(sections, this);
+            final List<String> sortedSections = sortInDefaultOrder(sections, this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("sections_size", sortedSections.size());
             for(int i=0;i<sortedSections.size();i++) {
                 editor.putString("section_" + i, sortedSections.get(i));
             }
             editor.apply();
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader(Constants.SYNCH_CHANGED_LOADER_ID, null, new LoaderManager.LoaderCallbacks<Object>() {
+                @Override
+                public Loader<Object> onCreateLoader(int id, Bundle args) {
+                    return new NewsLoader(SettingsActivity.this, sortedSections);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Object> loader, Object data) {
+
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Object> loader) {
+
+                }
+            });
         }
     }
 
