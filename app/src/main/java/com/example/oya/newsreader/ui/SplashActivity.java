@@ -1,12 +1,14 @@
 package com.example.oya.newsreader.ui;
 
-import android.app.LoaderManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,7 +17,7 @@ import android.widget.TextView;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.utils.Constants;
-import com.example.oya.newsreader.utils.NewsLoader;
+import com.example.oya.newsreader.utils.AllSectionsLoader;
 
 import java.util.ArrayList;
 
@@ -50,7 +52,7 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
 
         sectionList = SortSectionsActivity.getSections(this);
         if (thereIsConnection()) {
-            LoaderManager loaderManager = getLoaderManager();
+            LoaderManager loaderManager = getSupportLoaderManager();
             loaderManager.initLoader(Constants.SYNCH_AT_LAUNCH_LOADER_ID, null, this);
         }
     }
@@ -65,14 +67,18 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
-    public android.content.Loader<Object> onCreateLoader(int id, Bundle args) {
-        return new NewsLoader(this, sectionList);
+    public Loader<Object> onCreateLoader(int id, Bundle args) {
+        return new AllSectionsLoader(this, sectionList);
     }
 
     @Override
-    public void onLoadFinished(android.content.Loader<Object> loader, Object data) {
+    public void onLoadFinished(@NonNull Loader<Object> loader, Object data) {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Object> loader) {
     }
 
     @Override
@@ -86,15 +92,8 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
-    public void onLoaderReset(android.content.Loader<Object> loader) {
-
-    }
-
-    @Override
     public void onAnimationStart(Animation animation) {
-
     }
-
 
     @Override
     public void onAnimationRepeat(Animation animation) {

@@ -1,6 +1,6 @@
 package com.example.oya.newsreader.utils;
 
-import android.content.AsyncTaskLoader;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 
 import com.example.oya.newsreader.data.NewsDbHelper;
@@ -8,12 +8,12 @@ import com.example.oya.newsreader.model.NewsArticle;
 
 import java.util.List;
 
-public class NewsLoader extends AsyncTaskLoader<Object> {
+public class AllSectionsLoader extends AsyncTaskLoader<Object> {
 
     /**
      * Tag for log messages
      */
-    private static final String LOG_TAG = NewsLoader.class.getName();
+    private static final String LOG_TAG = AllSectionsLoader.class.getName();
 
     /**
      * Query URL
@@ -21,12 +21,12 @@ public class NewsLoader extends AsyncTaskLoader<Object> {
     private List<String> mSectionList;
 
     /**
-     * Constructs a new {@link NewsLoader}.
+     * Constructs a new {@link AllSectionsLoader}.
      *
      * @param context of the activity
      * @param sections to load data from
      */
-    public NewsLoader(Context context, List<String> sections) {
+    public AllSectionsLoader(Context context, List<String> sections) {
         super(context);
         mSectionList = sections;
     }

@@ -1,6 +1,8 @@
 package com.example.oya.newsreader.ui;
 
+import android.support.v4.app.LoaderManager;
 import android.content.Intent;
+import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,8 +22,11 @@ import com.example.oya.newsreader.adapters.NewsAdapter;
 import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
+import com.example.oya.newsreader.utils.AllSectionsLoader;
+import com.example.oya.newsreader.utils.SectionLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArticleListFragment extends Fragment implements NewsAdapter.ListItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
@@ -117,7 +122,27 @@ public class ArticleListFragment extends Fragment implements NewsAdapter.ListIte
 
     @Override
     public void onRefresh() {
-        //TODO:what to do in this case
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(Constants.SYNCH_CHANGED_LOADER_ID, null, new LoaderManager.LoaderCallbacks<List<NewsArticle>>() {
+            @Override
+            public Loader<List<NewsArticle>> onCreateLoader(int id, Bundle args) {
+                return new SectionLoader(getActivity(), mSection);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<List<NewsArticle>> loader, List<NewsArticle> list) {
+                NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), mSection);
+                articles = dbHelper.readFromDatabase(mSection);
+                refreshLayout.setRefreshing(false);
+                if (!articles.isEmpty()) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<List<NewsArticle>> loader) {
+            }
+        });
     }
 
 }

@@ -88,10 +88,6 @@
                 android:key="@string/pref_key_backUpFrequency"
                 android:title="@string/back_up_frequency" />
 
-            <Preference
-                android:key="@string/pref_key_clear_cache"
-                android:title="@string/pref_title_clear_cached"/>
-
         </PreferenceScreen>
 
     </PreferenceCategory>

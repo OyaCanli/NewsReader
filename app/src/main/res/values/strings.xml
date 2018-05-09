@@ -35,7 +35,7 @@
     <string name="sort_sections">Sort sections</string>
     <string name="pref_key_sort_sections">sortSections</string>
     <string name="pref_key_offline_reading">enableOfflineReading</string>
-    <string name="offline_reading">Offline reading</string>
+    <string name="offline_reading">News back-up options</string>
     <string name="background_services">Background Services</string>
     <string name="pref_key_background_services">backgroundServices</string>
     <string name="choose_sections">Choose sections</string>
@@ -66,12 +66,13 @@
     <string name="pref_key_only_on_charge">onlyWhenCharging</string>
     <string name="pref_sum_only_on_charge">Back up only when device is charging</string>
     <string name="pref_sum_off_on_charging">Can back up when it is not charging</string>
+    <string name="enable_offline_reading_title">Enable/Disable news back-up</string>
 
     <!-- content descriptions -->
     <string name="content_desc_thumbnail">Thumbnail image</string>
     <string name="content_desc_share">Share button</string>
     <string name="content_desc_bookmark">Bookmark button</string>
-    <string name="enable_offline_reading_title">Enable/Disable offline reading</string>
+
 
     <!-- others -->
     <string name="settings">Settings</string>

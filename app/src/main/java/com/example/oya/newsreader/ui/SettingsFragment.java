@@ -36,8 +36,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         setPreferenceSummary(pref_itemPerPage);
         Preference pref_sortSections = findPreference(getString(R.string.pref_key_sort_sections));
         pref_sortSections.setOnPreferenceClickListener(this);
-        Preference pref_clearCache = findPreference(getString(R.string.pref_key_clear_cache));
-        pref_clearCache.setOnPreferenceClickListener(this);
         Preference pref_orderBy = findPreference(getString(R.string.pref_key_orderBy));
         setPreferenceSummary(pref_orderBy);
         pref_backUpFrequency = findPreference(getString(R.string.pref_key_backUpFrequency));
@@ -52,7 +50,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             pref_onlyOnCharge.setEnabled(false);
             pref_backUpFrequency.setEnabled(false);
         }
-
     }
 
     private void setPreferenceSummary(Preference p) {
@@ -126,10 +123,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if (preference.getKey().equals(getString(R.string.pref_key_sort_sections))) {
             Intent intent = new Intent(getActivity(), SortSectionsActivity.class);
             startActivity(intent);
-        } else if (preference.getKey().equals(getString(R.string.pref_key_clear_cache))) {
-            NewsDbHelper dbHelper = new NewsDbHelper(getActivity(), null);
-            dbHelper.clearCachedArticles(getActivity());
-            Toast.makeText(getActivity(), R.string.cached_articles_erased, Toast.LENGTH_SHORT).show();
         }
         return false;
     }

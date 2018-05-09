@@ -1,9 +1,9 @@
 package com.example.oya.newsreader.ui;
 
-import android.app.LoaderManager;
+import android.support.v4.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
+import android.support.v4.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,7 +15,7 @@ import android.widget.ViewFlipper;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.utils.Constants;
-import com.example.oya.newsreader.utils.NewsLoader;
+import com.example.oya.newsreader.utils.AllSectionsLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,23 +74,22 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 editor.putString("section_" + i, sortedSections.get(i));
             }
             editor.apply();
-            LoaderManager loaderManager = getLoaderManager();
+            LoaderManager loaderManager = getSupportLoaderManager();
             loaderManager.initLoader(Constants.SYNCH_CHANGED_LOADER_ID, null, new LoaderManager.LoaderCallbacks<Object>() {
                 @Override
                 public Loader<Object> onCreateLoader(int id, Bundle args) {
-                    return new NewsLoader(SettingsActivity.this, sortedSections);
+                    return new AllSectionsLoader(SettingsActivity.this, sortedSections);
                 }
 
                 @Override
                 public void onLoadFinished(Loader<Object> loader, Object data) {
-
                 }
 
                 @Override
                 public void onLoaderReset(Loader<Object> loader) {
-
                 }
             });
+            //todo: clear unused tables
         }
     }
 

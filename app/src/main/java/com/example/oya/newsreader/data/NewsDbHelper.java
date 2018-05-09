@@ -202,6 +202,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
     }
 
     public void clearCachedArticles(Context context){
+        //Todo: change this method. Clean only unused tables.
         SQLiteDatabase db = getWritableDatabase();
         ArrayList<String> sectionList = SortSectionsActivity.getSections(context);
         for(int i = 0; i < sectionList.size(); ++i){

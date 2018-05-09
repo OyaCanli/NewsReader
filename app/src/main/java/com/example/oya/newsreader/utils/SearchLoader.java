@@ -16,7 +16,7 @@ public class SearchLoader extends AsyncTaskLoader<List<NewsArticle>> {
     private String mQuery;
 
     /**
-     * Constructs a new {@link NewsLoader}.
+     * Constructs a new {@link AllSectionsLoader}.
      *
      * @param section to load data from
      */
