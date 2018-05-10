@@ -25,10 +25,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private SharedPreferences preferences;
-    private TabLayout tabLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +33,13 @@ public class MainActivity extends AppCompatActivity{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //Get the preferred sections or default ones from shared preferences
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         ArrayList<String> sectionList = SortSectionsActivity.getSections(this);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sectionList);
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sectionList);
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        tabLayout = findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         //Get the sorted list of sections from the adapter

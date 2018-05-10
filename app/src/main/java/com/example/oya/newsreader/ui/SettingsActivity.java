@@ -27,7 +27,6 @@ import java.util.Set;
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private String intentComingFrom = MainActivity.class.getSimpleName(); //default case
-    private boolean sectionsChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +48,10 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if ((intentComingFrom.equals(MainActivity.class.getSimpleName()) && sectionsChanged)
+            if (intentComingFrom.equals(MainActivity.class.getSimpleName())
                     || intentComingFrom.equals(SortSectionsActivity.class.getSimpleName())) {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
-                Toast.makeText(this, R.string.sections_changed_info, Toast.LENGTH_SHORT).show();
             } else {
                 onBackPressed();
             }
@@ -64,36 +62,40 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         String sectionChoicesKey = getString(R.string.pref_key_sections);
+        final List<String> sortedSections;
         if (key.equals(sectionChoicesKey)) {
-            sectionsChanged = true;
+            //If sections are changed, sort and save them in sharedPreferences
             Set<String> default_sections = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.pref_section_default_values)));
             Set<String> sections = sharedPreferences.getStringSet(key, default_sections);
-            final List<String> sortedSections = sortInDefaultOrder(sections, this);
+            sortedSections = sortInDefaultOrder(sections, this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("sections_size", sortedSections.size());
             for(int i=0;i<sortedSections.size();i++) {
                 editor.putString("section_" + i, sortedSections.get(i));
             }
             editor.apply();
-            LoaderManager loaderManager = getSupportLoaderManager();
-            loaderManager.initLoader(Constants.SYNCH_CHANGED_LOADER_ID, null, new LoaderManager.LoaderCallbacks<Object>() {
-                @Override
-                public Loader<Object> onCreateLoader(int id, Bundle args) {
-                    return new AllSectionsLoader(SettingsActivity.this, sortedSections);
-                }
-
-                @Override
-                public void onLoadFinished(Loader<Object> loader, Object data) {
-                }
-
-                @Override
-                public void onLoaderReset(Loader<Object> loader) {
-                }
-            });
             //Clear cached articles of the sections user doesn't want anymore
             NewsDbHelper dbHelper = new NewsDbHelper(this, null);
             dbHelper.clearCachedArticles(this);
+        } else{
+            sortedSections = SortSectionsActivity.getSections(this);
         }
+        //Restart loadingwhen preferences are changed
+        LoaderManager loaderManager = getSupportLoaderManager();
+        loaderManager.initLoader(Constants.SYNCH_CHANGED_LOADER_ID, null, new LoaderManager.LoaderCallbacks<Object>() {
+            @Override
+            public Loader<Object> onCreateLoader(int id, Bundle args) {
+                return new AllSectionsLoader(SettingsActivity.this, sortedSections);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Object> loader, Object data) {
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Object> loader) {
+            }
+        });
     }
 
     private static ArrayList<String> sortInDefaultOrder(Set<String> sections, Context context){

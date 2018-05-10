@@ -7,7 +7,6 @@
     <string name="warning_edittext_preference">Please select a number between 1 and 50</string>
     <string name="article_bookmarked">Article is added in bookmarks. You can find your bookmarked articles from the menu</string>
     <string name="toast_message_sort_sections">Sort sections by dragging them up or down</string>
-    <string name="sections_changed_info">Sections changed. Main activity will be restarted.</string>
     <string name="no_bookmarks">You don\'t have any bookmarks yet.</string>
     <string name="snackbar_message_article_deleted">Article is deleted from bookmarks.</string>
     <string name="cached_articles_erased">All cached articles are erased, except your bookmarks</string>

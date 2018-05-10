@@ -74,12 +74,12 @@ public final class NotificationUtils {
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle(list.get(0).getTitle())
                 .setContentText(Html.fromHtml(list.get(0).getArticleTrail()))
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(list.get(0).getArticleTrail()))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(Html.fromHtml(list.get(0).getArticleTrail())))
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentIntent(contentIntent(context, list))
                 .setAutoCancel(true);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         }
         notificationManager.notify(NEWS_NOTIFICATION_ID, notificationBuilder.build());
