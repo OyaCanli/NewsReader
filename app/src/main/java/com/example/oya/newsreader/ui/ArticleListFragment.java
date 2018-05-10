@@ -1,12 +1,12 @@
 package com.example.oya.newsreader.ui;
 
-import android.support.v4.app.LoaderManager;
 import android.content.Intent;
-import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +22,6 @@ import com.example.oya.newsreader.adapters.NewsAdapter;
 import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
-import com.example.oya.newsreader.utils.AllSectionsLoader;
 import com.example.oya.newsreader.utils.SectionLoader;
 
 import java.util.ArrayList;
@@ -32,12 +31,8 @@ public class ArticleListFragment extends Fragment implements NewsAdapter.ListIte
 
     private NewsAdapter adapter;
     private ArrayList<NewsArticle> articles;
-    private static final String LOG_TAG = MainActivity.class.getName();
-    private TextView empty_tv;
-    private RecyclerView recycler;
     private SwipeRefreshLayout refreshLayout;
     private static final String ARG_SECTION_NAME = "sectionName";
-    private static final String ARG_SECTION_NUMBER = "sectionNumber";
     private String mSection;
 
     public ArticleListFragment() {
@@ -49,7 +44,7 @@ public class ArticleListFragment extends Fragment implements NewsAdapter.ListIte
         setRetainInstance(true);
     }
 
-    public static ArticleListFragment newInstance(int sectionNumber, String sectionName) {
+    public static ArticleListFragment newInstance(String sectionName) {
         ArticleListFragment fragment = new ArticleListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_SECTION_NAME, sectionName);
@@ -61,10 +56,10 @@ public class ArticleListFragment extends Fragment implements NewsAdapter.ListIte
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
-        recycler = rootView.findViewById(R.id.recycler);
+        RecyclerView recycler = rootView.findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler.setItemAnimator(new DefaultItemAnimator());
-        empty_tv = rootView.findViewById(R.id.empty_view);
+        TextView empty_tv = rootView.findViewById(R.id.empty_view);
         refreshLayout = rootView.findViewById(R.id.swipe_to_refresh);
         refreshLayout.setOnRefreshListener(this);
         mSection = getArguments().getString(ARG_SECTION_NAME);

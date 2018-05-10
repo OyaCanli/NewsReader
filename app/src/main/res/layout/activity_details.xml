@@ -13,11 +13,12 @@
             android:id="@+id/details_image"
             android:layout_width="0dp"
             android:layout_height="@dimen/details_image_height"
-            android:layout_marginTop="@dimen/margin_standard"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:srcCompat="@mipmap/ic_launcher"
+            android:contentDescription="@string/content_desc_details"/>
 
         <TextView
             android:id="@+id/details_title"
@@ -48,6 +49,17 @@
             tools:text="John Doe" />
 
         <TextView
+            android:id="@+id/details_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/half_margin"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/half_margin"
+            tools:text="01.05.2018"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_author" />
+
+        <TextView
             android:id="@+id/details_section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,12 +78,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_standard"
             android:layout_marginStart="@dimen/margin_standard"
-            android:layout_marginTop="@dimen/half_margin"
+            android:layout_marginTop="8dp"
             android:textSize="@dimen/trail_textSize"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/details_section"
+            app:layout_constraintTop_toBottomOf="@+id/details_time"
             tools:text="trail text" />
 
         <TextView

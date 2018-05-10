@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SectionLoader extends AsyncTaskLoader<List<NewsArticle>> {
 
-    private String mSection;
+    private final String mSection;
     private List<NewsArticle> mArticles;
 
     /**

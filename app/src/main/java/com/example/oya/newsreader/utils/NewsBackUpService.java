@@ -2,7 +2,6 @@ package com.example.oya.newsreader.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
@@ -24,14 +23,11 @@ public class NewsBackUpService extends JobService {
             protected Object doInBackground(Object[] objects) {
                 Context context = NewsBackUpService.this;
                 ArrayList<String> sections = SortSectionsActivity.getSections(context);
-                int size = sections.size();
-                for(int i = 0; i < size; ++i){
-                    List<NewsArticle> articlesToBeBacked = NetworkUtils.fetchArticles(sections.get(i), context);
-                    NewsDbHelper dbHelper = new NewsDbHelper(context, sections.get(i));
+                for(String section : sections){
+                    List<NewsArticle> articlesToBeBacked = NetworkUtils.fetchArticles(section, context);
+                    NewsDbHelper dbHelper = new NewsDbHelper(context, section);
                     dbHelper.backUpToDatabase(articlesToBeBacked);
                 }
-                DatabaseUtils.testNotification(context); //TODO. don't forget to erase this method later
-                Log.v("NewsBackUpService", "copied to database");
                 return null;
             }
 
@@ -39,7 +35,6 @@ public class NewsBackUpService extends JobService {
             protected void onPostExecute(Object o) {
                 jobFinished(job, false);
                 super.onPostExecute(o);
-
             }
         };
         mBackgroundTask.execute();

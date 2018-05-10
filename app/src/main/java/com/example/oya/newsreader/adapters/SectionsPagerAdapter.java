@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     private static ArrayList<String> mSections;
-    private Fragment[] mFragments;
+    private final Fragment[] mFragments;
 
     public SectionsPagerAdapter(FragmentManager fm, ArrayList<String> sections) {
         super(fm);
@@ -33,7 +33,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         Fragment frag = mFragments[position];
         if (frag == null) {
             Log.d("SectionsAdapter", "frag is null");
-            frag = ArticleListFragment.newInstance(position, mSections.get(position));
+            frag = ArticleListFragment.newInstance(mSections.get(position));
             mFragments[position] = frag;
         }
         return frag;

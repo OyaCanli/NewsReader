@@ -9,11 +9,7 @@ import java.util.List;
 
 public class SearchLoader extends AsyncTaskLoader<List<NewsArticle>> {
 
-    /** Tag for log messages */
-    private static final String LOG_TAG = SearchLoader.class.getName();
-
-    /** Query URL */
-    private String mQuery;
+    private final String mQuery;
 
     /**
      * Constructs a new {@link AllSectionsLoader}.
@@ -39,8 +35,7 @@ public class SearchLoader extends AsyncTaskLoader<List<NewsArticle>> {
             return null;
         }
         // Perform the network request, parse the response, and extract a list of earthquakes.
-        List<NewsArticle> articles = NetworkUtils.searchOnline(mQuery);
-        return articles;
+        return NetworkUtils.searchOnline(mQuery);
     }
 
 }

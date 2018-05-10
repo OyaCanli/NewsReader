@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.oya.newsreader.R;
-import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.ui.SortSectionsActivity;
 
@@ -20,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,7 +34,7 @@ public final class NetworkUtils {
 
     private static final String LOG_TAG = NetworkUtils.class.getSimpleName();
 
-    private NetworkUtils(){
+    private NetworkUtils() {
         //Make it impossible to instantiate
         throw new AssertionError();
     }
@@ -44,11 +42,7 @@ public final class NetworkUtils {
     public static List<NewsArticle> fetchArticles(String section, Context context) {
         // Create URL object
         URL url = null;
-        try {
-            url = buildUrl(section, context);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        url = buildUrl(section, context);
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
@@ -58,15 +52,7 @@ public final class NetworkUtils {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
-        List<NewsArticle> articles = extractFeatureFromJson(jsonResponse);
-        /*if(articles != null){
-            // Return the list of {@link Earthquake}s
-            for(int i = 0; i<articles.size(); ++i){
-                Log.v(LOG_TAG, "" + articles.get(i).toString());
-            }
-        }*/
-        return articles;
+        return extractFeatureFromJson(jsonResponse);
     }
 
     public static List<NewsArticle> searchOnline(String query) {
@@ -79,15 +65,7 @@ public final class NetworkUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
-        // Extract relevant fields from the JSON response and create a list of {@link NewsArticle}s
-        List<NewsArticle> articles = extractFeatureFromJson(jsonResponse);
-        if(articles != null){
-            // Return the list of {@link Earthquake}s
-            for(int i = 0; i<articles.size(); ++i){
-                Log.v(LOG_TAG, "" + articles.get(i).toString());
-            }
-        }
-        return articles;
+        return extractFeatureFromJson(jsonResponse);
     }
 
     public static List<NewsArticle> checkForNewArticle(Context context) {
@@ -102,25 +80,16 @@ public final class NetworkUtils {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
-        List<NewsArticle> articles = extractFeatureFromJson(jsonResponse);
-        if(articles != null){
-            // Return the list of {@link Earthquake}s
-            for(int i = 0; i<articles.size(); ++i){
-                Log.v(LOG_TAG, "article is" + articles.get(i).toString());
-            }
-            Log.v(LOG_TAG, "articles size" + articles.size());
-        }
-        return articles;
+        return extractFeatureFromJson(jsonResponse);
     }
 
-    private static URL buildSearchUrl(String query){
+    private static URL buildSearchUrl(String query) {
         Uri uri = Uri.parse(Constants.BASE_URL).buildUpon()
                 .appendQueryParameter("q", query)
                 .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
                 .appendQueryParameter(Constants.ORDER_BY_PARAM, "relevance")
                 .appendQueryParameter(Constants.PAGE_SIZE_PARAM, "25")
-                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
+                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE)
                 .build();
 
         URL url = null;
@@ -132,7 +101,7 @@ public final class NetworkUtils {
         return url;
     }
 
-    private static URL buildUrlForNotification(Context context){
+    private static URL buildUrlForNotification(Context context) {
 
         Uri builtUri = Uri.parse(Constants.BASE_URL).buildUpon()
                 .encodedQuery(Constants.FROM_DATE + "=" + getFormattedDateTime())
@@ -140,7 +109,7 @@ public final class NetworkUtils {
                 .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
                 .appendQueryParameter(Constants.ORDER_BY_PARAM, context.getString(R.string.pref_orderby_default))
                 .appendQueryParameter(Constants.PAGE_SIZE_PARAM, "1")
-                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
+                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE)
                 .build();
 
         URL url = null;
@@ -152,13 +121,12 @@ public final class NetworkUtils {
         return url;
     }
 
-    private static String getFormattedDateTime(){
-        String currentDateTime = getFormattedSystemDate() + "T" + getFormattedSystemTime() + "Z";
-        return currentDateTime;
+    private static String getFormattedDateTime() {
+        return getFormattedSystemDate() + "T" + getFormattedSystemTime() + "Z";
     }
 
     private static String getFormattedSystemDate() {
-        Date currentDate= Calendar.getInstance().getTime();
+        Date currentDate = Calendar.getInstance().getTime();
         return new SimpleDateFormat("yyyy-MM-dd").format(currentDate);
     }
 
@@ -167,22 +135,22 @@ public final class NetworkUtils {
         TimeZone timeZone = TimeZone.getTimeZone("GMT");
         dateFormat.setTimeZone(timeZone);
         long now = Calendar.getInstance().getTimeInMillis();
-        return dateFormat.format(now-1800000);
-}
+        return dateFormat.format(now - 1800000);
+    }
 
-    private static String buildSectionsParam(Context context){
+    private static String buildSectionsParam(Context context) {
         StringBuilder sectionsParam = new StringBuilder();
         ArrayList<String> sections = SortSectionsActivity.getSections(context);
         int size = sections.size();
-        for(int i=0; i < size-1 ; i++){
+        for (int i = 0; i < size - 1; i++) {
             sectionsParam.append(sections.get(i));
             sectionsParam.append("|");
         }
-        sectionsParam.append(sections.get(size-1));
+        sectionsParam.append(sections.get(size - 1));
         return sectionsParam.toString();
     }
 
-    private static URL buildUrl(String section, Context context) throws UnsupportedEncodingException {
+    private static URL buildUrl(String section, Context context) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -191,7 +159,7 @@ public final class NetworkUtils {
                 .appendQueryParameter(Constants.SHOW_FIELDS_KEY, Constants.SHOW_FIELDS_VALUE)
                 .appendQueryParameter(Constants.ORDER_BY_PARAM, sharedPreferences.getString(context.getString(R.string.pref_key_orderBy), context.getString(R.string.pref_orderby_default)))
                 .appendQueryParameter(Constants.PAGE_SIZE_PARAM, sharedPreferences.getString(context.getString(R.string.pref_key_itemsPerPage), context.getString(R.string.pref_itemPerPage_default)))
-                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE )
+                .appendQueryParameter(Constants.GUARDIAN_API_KEY, Constants.GUARDIAN_API_VALUE)
                 .build();
 
         URL url = null;
@@ -202,6 +170,7 @@ public final class NetworkUtils {
         }
         return url;
     }
+
     /**
      * Make an HTTP request to the given URL and return a String as the response.
      */
@@ -297,7 +266,7 @@ public final class NetworkUtils {
                 String section = currentArticle.getString(Constants.SECTION);
                 JSONObject fields = currentArticle.getJSONObject(Constants.FIELDS);
                 String author = fields.optString(Constants.AUTHOR_NAME, " ");
-                String trail = fields.optString(Constants.TRAIL,"");
+                String trail = fields.optString(Constants.TRAIL, "");
                 String body = fields.optString(Constants.BODY, " ");
                 String thumbnail = fields.optString(Constants.THUMBNAIL, "");
 

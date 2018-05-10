@@ -6,7 +6,7 @@
     <dimen name="padding_standard">16dp</dimen>
     <dimen name="half_padding">8dp</dimen>
     <dimen name="thumbnail_width">120dp</dimen>
-    <dimen name="thumbnail_heigth">100dp</dimen>
+    <dimen name="thumbnail_height">100dp</dimen>
     <dimen name="icon_dimension">36dp</dimen>
     <dimen name="trail_textSize">16sp</dimen>
     <dimen name="detailsTitle_textSize">20sp</dimen>

@@ -8,29 +8,26 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.data.NewsContract.NewsEntry;
 import com.example.oya.newsreader.data.NewsContract.BookmarkEntry;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.ui.SortSectionsActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NewsDbHelper extends SQLiteOpenHelper {
 
-    public static final String LOG_TAG = NewsDbHelper.class.getSimpleName();
-
-    /**
-     * Name of the database file
-     */
     private static final String DATABASE_NAME = "newsreader.db";
 
     private static final int DATABASE_VERSION = 1;
 
-    private String mSection;
+    private final String mSection;
 
-    String SQL_CREATE_NEWS_TABLE;
-    String SQL_CREATE_BOOKMARKS_TABLE = "CREATE TABLE IF NOT EXISTS " + BookmarkEntry.TABLE_NAME + " ("
+    private final String SQL_CREATE_NEWS_TABLE;
+    private final String SQL_CREATE_BOOKMARKS_TABLE = "CREATE TABLE IF NOT EXISTS " + BookmarkEntry.TABLE_NAME + " ("
             + BookmarkEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + BookmarkEntry.COLUMN_TITLE + " TEXT NOT NULL, "
             + BookmarkEntry.COLUMN_THUMBNAIL_URL + " TEXT, "
@@ -77,16 +74,16 @@ public class NewsDbHelper extends SQLiteOpenHelper {
                 SQLiteDatabase db = getWritableDatabase();
                 db.execSQL(SQL_CREATE_NEWS_TABLE);
                 db.delete(mSection, null, null);
-                for (int i = 0; i < list.size(); i++) {
+                for(NewsArticle article : list){
                     ContentValues values = new ContentValues();
-                    values.put(NewsEntry.COLUMN_TITLE, list.get(i).getTitle());
-                    values.put(NewsEntry.COLUMN_THUMBNAIL_URL, list.get(i).getThumbnailUrl());
-                    values.put(NewsEntry.COLUMN_AUTHOR, list.get(i).getAuthor());
-                    values.put(NewsEntry.COLUMN_DATE, list.get(i).getDate());
-                    values.put(NewsEntry.COLUMN_WEB_URL, list.get(i).getWebUrl());
-                    values.put(NewsEntry.COLUMN_SECTION, list.get(i).getSection());
-                    values.put(NewsEntry.COLUMN_TRAIL, list.get(i).getArticleTrail());
-                    values.put(NewsEntry.COLUMN_BODY, list.get(i).getArticleBody());
+                    values.put(NewsEntry.COLUMN_TITLE, article.getTitle());
+                    values.put(NewsEntry.COLUMN_THUMBNAIL_URL, article.getThumbnailUrl());
+                    values.put(NewsEntry.COLUMN_AUTHOR, article.getAuthor());
+                    values.put(NewsEntry.COLUMN_DATE, article.getDate());
+                    values.put(NewsEntry.COLUMN_WEB_URL, article.getWebUrl());
+                    values.put(NewsEntry.COLUMN_SECTION, article.getSection());
+                    values.put(NewsEntry.COLUMN_TRAIL, article.getArticleTrail());
+                    values.put(NewsEntry.COLUMN_BODY, article.getArticleBody());
                     long newRowId = db.insert(mSection, null, values);
                     Log.d("NewsDbHelper", "newRowId" + newRowId);
                 }
@@ -96,19 +93,6 @@ public class NewsDbHelper extends SQLiteOpenHelper {
         };
         mTask.execute();
     }
-
-    /*private boolean tableEmpty(String tableName) {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(tableName, null, null, null, null, null, null);
-            if (cursor != null) {
-                if (cursor.getCount() > 0) {
-                    cursor.close();
-                    return false;
-                }
-                cursor.close();
-            }
-        return true;
-    }*/
 
     public ArrayList<NewsArticle> readFromDatabase(String section) {
         SQLiteDatabase db = getReadableDatabase();
@@ -202,14 +186,14 @@ public class NewsDbHelper extends SQLiteOpenHelper {
     }
 
     public void clearCachedArticles(Context context){
-        //Todo: change this method. Clean only unused tables.
         SQLiteDatabase db = getWritableDatabase();
-        ArrayList<String> sectionList = SortSectionsActivity.getSections(context);
-        for(int i = 0; i < sectionList.size(); ++i){
-           String sql_drop_table =   "drop table if exists " + sectionList.get(i);
+        ArrayList<String> allSectionsAvailable = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(R.array.pref_section_values)));
+        ArrayList<String> sectionUsed = SortSectionsActivity.getSections(context);
+        allSectionsAvailable.removeAll(sectionUsed); //Now it contains only unused sections
+        for(int i = 0; i < allSectionsAvailable.size(); ++i){
+           String sql_drop_table =   "drop table if exists " + allSectionsAvailable.get(i);
             db.execSQL(sql_drop_table);
         }
         db.close();
     }
-
 }

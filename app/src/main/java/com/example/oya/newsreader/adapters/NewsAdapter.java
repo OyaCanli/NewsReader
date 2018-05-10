@@ -26,7 +26,7 @@ import java.util.TimeZone;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
 
     private final ArrayList<NewsArticle> articleList;
-    private Context mContext;
+    private final Context mContext;
     private final ListItemClickListener itemClickListener;
 
     public NewsAdapter(Context context, ArrayList<NewsArticle> articleList, ListItemClickListener listener) {
@@ -47,7 +47,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
         NewsArticle currentArticle = articleList.get(position);
         holder.title_tv.setText(currentArticle.getTitle());
         if(!TextUtils.isEmpty(currentArticle.getAuthor())){
-            holder.author_tv.setText("By " + currentArticle.getAuthor());
+            holder.author_tv.setText(mContext.getString(R.string.byline, currentArticle.getAuthor()));
         }
         holder.section_tv.setText(currentArticle.getSection());
         String[] dateAndTime = formatDateTime(currentArticle.getDate()).split("T");
@@ -69,15 +69,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
 
     public class NewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView title_tv;
-        private ImageView thumbnail_iv;
-        private TextView author_tv;
-        private ImageButton bookmark_btn;
-        private ImageButton share_btn;
-        private TextView date_tv;
-        private TextView section_tv;
-        private TextView trail_tv;
-        private View container;
+        private final TextView title_tv;
+        private final ImageView thumbnail_iv;
+        private final TextView author_tv;
+        private final ImageButton bookmark_btn;
+        private final ImageButton share_btn;
+        private final TextView date_tv;
+        private final TextView section_tv;
+        private final TextView trail_tv;
+        private final View container;
 
         NewsHolder(View viewItem){
             super(viewItem);

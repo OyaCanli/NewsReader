@@ -1,15 +1,9 @@
 package com.example.oya.newsreader.utils;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 
 import com.example.oya.newsreader.R;
 import com.firebase.jobdispatcher.Constraint;
@@ -68,25 +62,5 @@ public final class DatabaseUtils {
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
         dispatcher.cancel(BACKUP_JOB_TAG);
-    }
-
-    public static void testNotification(Context context){
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel mChannel = new NotificationChannel("channel", "New Article Notification", NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(mChannel);
-        }
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "channel")
-                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("test")
-                .setContentText("database is backed up")
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setAutoCancel(true);
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-            notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
-        }
-        notificationManager.notify(4251, notificationBuilder.build());
     }
 }

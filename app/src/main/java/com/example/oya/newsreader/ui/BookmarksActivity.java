@@ -3,7 +3,6 @@ package com.example.oya.newsreader.ui;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -13,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,9 +29,9 @@ import java.util.LinkedList;
 
 public class BookmarksActivity extends AppCompatActivity implements NewsAdapter.ListItemClickListener{
 
-    ArrayList<NewsArticle> bookmarkedArticles;
-    NewsAdapter adapter;
-    LinkedList<NewsArticle> tempListOfArticlesToErase = new LinkedList<>();
+    private ArrayList<NewsArticle> bookmarkedArticles;
+    private NewsAdapter adapter;
+    private final LinkedList<NewsArticle> tempListOfArticlesToErase = new LinkedList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,8 +125,8 @@ public class BookmarksActivity extends AppCompatActivity implements NewsAdapter.
     private void removeDeletedBookmarksFromDatabase(){
         NewsDbHelper dbHelper = new NewsDbHelper(this, null);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        for(int i = 0; i < tempListOfArticlesToErase.size(); ++i){
-            long id = tempListOfArticlesToErase.get(i).getArticleId();
+        for(NewsArticle articleToErase : tempListOfArticlesToErase){
+            long id = articleToErase.getArticleId();
             db.delete(NewsContract.BookmarkEntry.TABLE_NAME, NewsContract.BookmarkEntry._ID + "=" + id, null);
         }
     }

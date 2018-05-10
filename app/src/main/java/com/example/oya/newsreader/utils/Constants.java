@@ -2,6 +2,7 @@ package com.example.oya.newsreader.utils;
 
 public final class Constants {
 
+    //Constants related to API
     public static final String BASE_URL = "http://content.guardianapis.com/search?";
     public static final String SECTION_PARAM = "section";
     public static final String SHOW_FIELDS_KEY = "show-fields";
@@ -23,10 +24,12 @@ public final class Constants {
     public static final String FIELDS = "fields";
     public static final String THUMBNAIL = "thumbnail";
 
+    //Constants used in intent extras
     public static final String CHOSEN_ARTICLE = "chosenArticle";
     public static final String USER_CLICKED_SETTINGS_FROM = "userClickedSettingsFrom";
     public static final String SEARCH_QUERY = "searchQuery";
-    public static final String PREF_SORTED_SECTIONS = "sortedSections";
+
+    //Constants for ids
     public static final int SEARCH_LOADER_ID = 101;
     public static final int SYNCH_AT_LAUNCH_LOADER_ID = 2498;
     public static final int SYNCH_CHANGED_LOADER_ID = 9846;

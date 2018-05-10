@@ -64,7 +64,7 @@
             android:exported="false"
             android:description="@string/notificationServiceDescription">
             <intent-filter>
-                <action android:name='com.firebase.jobdispatcher.ACTION_EXECUTE'/>"
+                <action android:name='com.firebase.jobdispatcher.ACTION_EXECUTE'/>
             </intent-filter>
         </service>
 

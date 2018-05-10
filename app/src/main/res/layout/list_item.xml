@@ -23,7 +23,7 @@
     <ImageView
         android:id="@+id/thumbnail"
         android:layout_width="@dimen/thumbnail_width"
-        android:layout_height="@dimen/thumbnail_heigth"
+        android:layout_height="@dimen/thumbnail_height"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/half_margin"
         app:layout_constraintEnd_toEndOf="parent"

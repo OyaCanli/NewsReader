@@ -23,10 +23,10 @@ import java.util.ArrayList;
 
 public class SplashActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Object>, Animation.AnimationListener {
 
-    ArrayList<String> sectionList;
-    int viewCount;
-    View v1, v2, v3, v4;
-    Animation translate_1, translate_2, translate_3, translate_4;
+    private ArrayList<String> sectionList;
+    private int viewCount;
+    private View v1, v2, v3, v4;
+    private Animation translate_1, translate_2, translate_3, translate_4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

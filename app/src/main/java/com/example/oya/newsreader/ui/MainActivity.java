@@ -17,18 +17,17 @@ import android.view.MenuItem;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
-import com.example.oya.newsreader.utils.DatabaseUtils;
 import com.example.oya.newsreader.utils.Constants;
+import com.example.oya.newsreader.utils.DatabaseUtils;
 import com.example.oya.newsreader.utils.NotificationUtils;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity{
 
-    SectionsPagerAdapter mSectionsPagerAdapter;
-    SharedPreferences preferences;
-    TabLayout tabLayout;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private SharedPreferences preferences;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +49,16 @@ public class MainActivity extends AppCompatActivity{
         //Get the sorted list of sections from the adapter
         //Add tabs dynamically according to user preferences
         tabLayout.removeAllTabs();
-        for (int i = 0; i < sectionList.size(); i++) {
+        for(String section : sectionList){
             tabLayout.addTab(
-                    tabLayout.newTab().setText(sectionList.get(i)));
+                    tabLayout.newTab().setText(section));
         }
         if(preferences.getBoolean(getString(R.string.pref_key_enableNotifications), getResources().getBoolean(R.bool.pref_notifications_default))){
             //Schedule a background service for checking for recent news
             NotificationUtils.scheduleNotifications(this);
         }
         if(preferences.getBoolean(getString(R.string.pref_key_offline_reading), getResources().getBoolean(R.bool.pref_offline_reading_default))){
-            //Schedule a background service for bakcing up new articles to database
+            //Schedule a background service for backing up new articles to database
             DatabaseUtils.scheduleNewsBackUp(this);
         }
     }

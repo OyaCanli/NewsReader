@@ -10,15 +10,7 @@ import java.util.List;
 
 public class AllSectionsLoader extends AsyncTaskLoader<Object> {
 
-    /**
-     * Tag for log messages
-     */
-    private static final String LOG_TAG = AllSectionsLoader.class.getName();
-
-    /**
-     * Query URL
-     */
-    private List<String> mSectionList;
+    private final List<String> mSectionList;
 
     /**
      * Constructs a new {@link AllSectionsLoader}.

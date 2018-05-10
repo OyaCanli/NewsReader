@@ -14,6 +14,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.AllSectionsLoader;
 
@@ -25,8 +26,8 @@ import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    String intentComingFrom = MainActivity.class.getSimpleName(); //default case
-    boolean sectionsChanged = false;
+    private String intentComingFrom = MainActivity.class.getSimpleName(); //default case
+    private boolean sectionsChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +90,13 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 public void onLoaderReset(Loader<Object> loader) {
                 }
             });
-            //todo: clear unused tables
+            //Clear cached articles of the sections user doesn't want anymore
+            NewsDbHelper dbHelper = new NewsDbHelper(this, null);
+            dbHelper.clearCachedArticles(this);
         }
     }
 
-    public static ArrayList<String> sortInDefaultOrder(Set<String> sections, Context context){
+    private static ArrayList<String> sortInDefaultOrder(Set<String> sections, Context context){
         ArrayList<String> sortedList = new ArrayList<>();
         if(sections.contains(context.getString(R.string.politics).toLowerCase()))
             sortedList.add(context.getString(R.string.politics).toLowerCase());
@@ -111,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             sortedList.add(context.getString(R.string.football).toLowerCase());
         if(sections.contains(context.getString(R.string.music).toLowerCase()))
             sortedList.add(context.getString(R.string.music).toLowerCase());
-        if(sections.contains(context.getString(R.string.culture).toLowerCase()));
+        if(sections.contains(context.getString(R.string.culture).toLowerCase()))
             sortedList.add(context.getString(R.string.culture).toLowerCase());
         if(sections.contains(context.getString(R.string.travel).toLowerCase()))
             sortedList.add(context.getString(R.string.travel).toLowerCase());

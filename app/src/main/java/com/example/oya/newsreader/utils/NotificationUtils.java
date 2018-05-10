@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 
 public final class NotificationUtils {
 
-    private static final int NEW_ARTICLE_PENDING_INTENT_ID = 1234;
     private static final int NEWS_NOTIFICATION_ID = 4567;
     private static final String NOTIFICATION_CHANNEL_ID = "news_notification_channel";
 
@@ -72,7 +71,7 @@ public final class NotificationUtils {
         }
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle(list.get(0).getTitle())
                 .setContentText(Html.fromHtml(list.get(0).getArticleTrail()))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(list.get(0).getArticleTrail()))
@@ -90,10 +89,9 @@ public final class NotificationUtils {
     private static PendingIntent contentIntent(Context context, List<NewsArticle> list){
         Intent startActivity = new Intent(context, DetailsActivity.class);
         startActivity.putExtra(Constants.CHOSEN_ARTICLE, list.get(0));
-        PendingIntent pendingIntent =
-                TaskStackBuilder.create(context)
-                        .addNextIntentWithParentStack(startActivity)
-                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        return pendingIntent;
+
+        return TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(startActivity)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 public class SortSectionsActivity extends AppCompatActivity {
 
-    ArrayList<String> sectionList;
+    private ArrayList<String> sectionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class SortSectionsActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.sort_sections);
         sectionList = getSections(this);
         DragSortListView dragSortListView = findViewById(R.id.list);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.dragsort_list_item, sectionList);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dragsort_list_item, sectionList);
         dragSortListView.setAdapter(adapter);
         dragSortListView.setDropListener(new DragSortListView.DropListener() {
             @Override

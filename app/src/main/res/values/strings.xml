@@ -67,12 +67,16 @@
     <string name="pref_sum_only_on_charge">Back up only when device is charging</string>
     <string name="pref_sum_off_on_charging">Can back up when it is not charging</string>
     <string name="enable_offline_reading_title">Enable/Disable news back-up</string>
+    <string name="pref_backUp_only">Back-up only in these conditions:</string>
+    <string name="pref_cat_key_backup_only">backUpConstraints</string>
+    <string name="pref_cat_key_backUp">categoryBackUp</string>
+    <string name="category_title_backUp">Back-up regularly for offline reading</string>
 
     <!-- content descriptions -->
     <string name="content_desc_thumbnail">Thumbnail image</string>
     <string name="content_desc_share">Share button</string>
     <string name="content_desc_bookmark">Bookmark button</string>
-
+    <string name="content_desc_details">Image of the article</string>
 
     <!-- others -->
     <string name="settings">Settings</string>
@@ -82,5 +86,7 @@
     <string name="notificationServiceDescription">Notification service</string>
     <string name="backUpServiceDescription">News back-up service</string>
     <string name="undo">UNDO</string>
+    <string name="byline">By %1$s</string>
+    <string name="newsreader">NewsReader</string>
 
 </resources>

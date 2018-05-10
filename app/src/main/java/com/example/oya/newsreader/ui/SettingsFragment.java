@@ -1,28 +1,24 @@
 package com.example.oya.newsreader.ui;
 
-import android.app.Notification;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.widget.Toast;
 
 import com.example.oya.newsreader.R;
-import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.utils.DatabaseUtils;
 import com.example.oya.newsreader.utils.NotificationUtils;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
         Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
-    SharedPreferences sharedPreferences;
-    Preference pref_onlyOnWifi, pref_onlyWhenIdle, pref_onlyOnCharge, pref_backUpFrequency;
+    private SharedPreferences sharedPreferences;
+    private Preference pref_onlyOnWifi, pref_onlyWhenIdle, pref_onlyOnCharge, pref_backUpFrequency;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

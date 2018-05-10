@@ -31,11 +31,11 @@ import java.util.List;
 
 public class SearchableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<NewsArticle>>, NewsAdapter.ListItemClickListener{
 
-    View loadingIndicator;
-    ArrayList<NewsArticle> searchResults;
-    NewsAdapter adapter;
-    RecyclerView recycler;
-    TextView empty_tv;
+    private View loadingIndicator;
+    private ArrayList<NewsArticle> searchResults;
+    private NewsAdapter adapter;
+    private RecyclerView recycler;
+    private TextView empty_tv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
