@@ -45,7 +45,7 @@ public final class NotificationUtils {
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
         Job newsCheckerJob = dispatcher.newJobBuilder()
-                .setService(NewsReminderService.class)
+                .setService(NotificationService.class)
                 .setTag(REMINDER_JOB_TAG)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setLifetime(Lifetime.FOREVER)

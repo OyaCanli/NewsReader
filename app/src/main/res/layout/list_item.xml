@@ -79,6 +79,16 @@
         android:textColor="@android:color/white"
         android:padding="@dimen/half_padding"/>
 
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="author,section"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/author"/>
+
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
@@ -86,7 +96,7 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginTop="@dimen/half_margin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/section"
+        app:layout_constraintTop_toBottomOf="@id/barrier1"
         tools:text="April 19th, 2018" />
 
     <View
@@ -105,7 +115,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/half_margin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/section"
+        app:layout_constraintTop_toBottomOf="@+id/barrier1"
         app:srcCompat="@drawable/ic_share_black_36dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/content_desc_share"/>
@@ -117,7 +127,7 @@
         android:layout_marginEnd="@dimen/half_margin"
         android:layout_marginTop="@dimen/half_margin"
         app:layout_constraintEnd_toStartOf="@id/share"
-        app:layout_constraintTop_toBottomOf="@id/section"
+        app:layout_constraintTop_toBottomOf="@id/barrier1"
         app:srcCompat="@drawable/ic_bookmark_border_black_36dp"
         android:contentDescription="@string/content_desc_bookmark"
         android:background="@android:color/transparent"/>

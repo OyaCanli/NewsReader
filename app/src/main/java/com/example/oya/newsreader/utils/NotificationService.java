@@ -10,7 +10,7 @@ import com.firebase.jobdispatcher.JobService;
 
 import java.util.List;
 
-public class NewsReminderService extends JobService{
+public class NotificationService extends JobService{
 
     private AsyncTask mBackgroundTask;
 
@@ -19,10 +19,10 @@ public class NewsReminderService extends JobService{
         mBackgroundTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
-                Context context = NewsReminderService.this;
+                Context context = NotificationService.this;
                 List<NewsArticle> newArticle = NetworkUtils.checkForNewArticle(context);
                 if(!newArticle.isEmpty()) NotificationUtils.informUserOfTheNewArticle(context, newArticle);
-                Log.v("NewsReminderService", "doInBackGround is called");
+                Log.v("NotificationService", "doInBackGround is called");
                 return null;
             }
 

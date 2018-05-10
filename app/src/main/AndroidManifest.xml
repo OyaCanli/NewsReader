@@ -60,7 +60,7 @@
             android:label="@string/bookmark"
             android:parentActivityName=".ui.MainActivity"/>
 
-        <service android:name=".utils.NewsReminderService"
+        <service android:name=".utils.NotificationService"
             android:exported="false"
             android:description="@string/notificationServiceDescription">
             <intent-filter>
