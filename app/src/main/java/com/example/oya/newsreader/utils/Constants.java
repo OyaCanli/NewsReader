@@ -28,9 +28,9 @@ public final class Constants {
     public static final String CHOSEN_ARTICLE = "chosenArticle";
     public static final String USER_CLICKED_SETTINGS_FROM = "userClickedSettingsFrom";
     public static final String SEARCH_QUERY = "searchQuery";
+    public static final String IS_PREFERENCES_CHANGED = "isPreferencesChanged";
 
     //Constants for ids
-    public static final int SEARCH_LOADER_ID = 101;
-    public static final int SYNCH_AT_LAUNCH_LOADER_ID = 2498;
-    public static final int SYNCH_CHANGED_LOADER_ID = 9846;
+    public static final int SEARCH_LOADER_ID = 1013;
+    public static final int CURSOR_LOADER_ID = 207;
 }

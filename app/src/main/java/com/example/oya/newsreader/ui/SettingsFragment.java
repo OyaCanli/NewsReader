@@ -11,7 +11,7 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.example.oya.newsreader.R;
-import com.example.oya.newsreader.utils.DatabaseUtils;
+import com.example.oya.newsreader.synch.ScheduleSyncUtils;
 import com.example.oya.newsreader.utils.NotificationUtils;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
@@ -71,13 +71,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 pref_onlyWhenIdle.setEnabled(true);
                 pref_onlyOnCharge.setEnabled(true);
                 pref_backUpFrequency.setEnabled(true);
-                DatabaseUtils.scheduleNewsBackUp(getActivity());
+                ScheduleSyncUtils.scheduleNewsBackUp(getActivity());
             } else {
                 pref_onlyOnWifi.setEnabled(false);
                 pref_onlyWhenIdle.setEnabled(false);
                 pref_onlyOnCharge.setEnabled(false);
                 pref_backUpFrequency.setEnabled(false);
-                DatabaseUtils.cancelBackingUps(getActivity());
+                ScheduleSyncUtils.cancelBackingUps(getActivity());
             }
         } else if (key.equals(enableNotificationsKey)) {
             if (sharedPreferences.getBoolean(key, getActivity().getResources().getBoolean(R.bool.pref_notifications_default))) {

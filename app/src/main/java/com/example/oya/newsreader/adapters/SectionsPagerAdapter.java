@@ -33,7 +33,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         Fragment frag = mFragments[position];
         if (frag == null) {
             Log.d("SectionsAdapter", "frag is null");
-            frag = ArticleListFragment.newInstance(mSections.get(position));
+            frag = ArticleListFragment.newInstance(position, mSections.get(position));
             mFragments[position] = frag;
         }
         return frag;

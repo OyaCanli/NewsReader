@@ -2,9 +2,7 @@ package com.example.oya.newsreader.ui;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +15,14 @@ import android.view.MenuItem;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
+import com.example.oya.newsreader.synch.SyncTask;
 import com.example.oya.newsreader.utils.Constants;
-import com.example.oya.newsreader.utils.DatabaseUtils;
-import com.example.oya.newsreader.utils.NotificationUtils;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
+
+    private ArrayList<String> sectionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,29 +32,24 @@ public class MainActivity extends AppCompatActivity{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //Get the preferred sections or default ones from shared preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        ArrayList<String> sectionList = SortSectionsActivity.getSections(this);
+        Intent intent = getIntent();
+        if(intent != null && intent.hasExtra(Constants.IS_PREFERENCES_CHANGED)) {
+            SyncTask.startImmediateSync(this);
+            Log.d("MainActivity", "received an intent extra which says preferences are changed");
+        }
+        //Get the sorted list of sections
+        sectionList = SortSectionsActivity.getSections(this);
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sectionList);
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        //Get the sorted list of sections from the adapter
         //Add tabs dynamically according to user preferences
         tabLayout.removeAllTabs();
         for(String section : sectionList){
             tabLayout.addTab(
                     tabLayout.newTab().setText(section));
-        }
-        if(preferences.getBoolean(getString(R.string.pref_key_enableNotifications), getResources().getBoolean(R.bool.pref_notifications_default))){
-            //Schedule a background service for checking for recent news
-            NotificationUtils.scheduleNotifications(this);
-        }
-        if(preferences.getBoolean(getString(R.string.pref_key_offline_reading), getResources().getBoolean(R.bool.pref_offline_reading_default))){
-            //Schedule a background service for backing up new articles to database
-            DatabaseUtils.scheduleNewsBackUp(this);
         }
     }
 
@@ -82,5 +76,6 @@ public class MainActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
 

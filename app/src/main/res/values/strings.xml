@@ -3,13 +3,12 @@
 
     <!-- warnings to user -->
     <string name="no_connection">No internet connection and no cached articles found for this section. Check your connection and swipe down to refresh.</string>
-    <string name="no_news_found">No news found</string>
+    <string name="no_results">No results found. Check your connection, otherwise try a different query</string>
     <string name="warning_edittext_preference">Please select a number between 1 and 50</string>
     <string name="article_bookmarked">Article is added in bookmarks. You can find your bookmarked articles from the menu</string>
     <string name="toast_message_sort_sections">Sort sections by dragging them up or down</string>
     <string name="no_bookmarks">You don\'t have any bookmarks yet.</string>
     <string name="snackbar_message_article_deleted">Article is deleted from bookmarks.</string>
-    <string name="cached_articles_erased">All cached articles are erased, except your bookmarks</string>
 
     <!-- sections -->
     <string name="politics">Politics</string>
@@ -23,6 +22,11 @@
     <string name="fashion">Fashion</string>
     <string name="music">Music</string>
     <string name="travel">Travel</string>
+    <string name="art_and_design">Art and Design</string>
+    <string name="books">Books</string>
+    <string name="environment">Environment</string>
+    <string name="film">Film</string>
+    <string name="education">Education</string>
 
     <!-- preference keys, labels and values -->
     <string name="notifications">Notifications</string>
@@ -55,8 +59,6 @@
     <string name="pref_backUpFrequency_default">8</string>
     <string name="back_up_frequency">Back up frequency</string>
     <string name="pref_key_backUpFrequency">backUpFrequency</string>
-    <string name="pref_key_clear_cache">clearCache</string>
-    <string name="pref_title_clear_cached">Clear cached articles</string>
     <string name="pref_title_only_when_device_idle">Only when my device is idle</string>
     <string name="pref_sum_only_when_my_device_idle">Back up only when my device is idle</string>
     <string name="pref_sum_off_device_idle">Can back up when I use it as well</string>
@@ -84,6 +86,7 @@
     <string name="bookmark">Bookmarks</string>
     <string name="notificationServiceDescription">Notification service</string>
     <string name="backUpServiceDescription">News back-up service</string>
+    <string name="SyncServiceDescription">News synchronization</string>
     <string name="undo">UNDO</string>
     <string name="byline">By %1$s</string>
     <string name="newsreader">NewsReader</string>

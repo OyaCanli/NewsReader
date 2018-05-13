@@ -68,13 +68,22 @@
             </intent-filter>
         </service>
 
-        <service android:name=".utils.NewsBackUpService"
+        <service android:name=".synch.NewsFirebaseJobService"
             android:exported="false"
             android:description="@string/backUpServiceDescription">
             <intent-filter>
-                <action android:name='com.firebase.jobdispatcher.ACTION_EXECUTE'/>"
+                <action android:name='com.firebase.jobdispatcher.ACTION_EXECUTE'/>
             </intent-filter>
         </service>
+
+        <service android:name=".synch.SyncIntentService"
+            android:exported="false"
+            android:description="@string/SyncServiceDescription"/>
+
+        <provider
+            android:name=".data.NewsProvider"
+            android:authorities="com.example.oya.newsreader"
+            android:exported="false" />
 
     </application>
 

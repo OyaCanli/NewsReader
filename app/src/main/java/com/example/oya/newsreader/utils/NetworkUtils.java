@@ -1,5 +1,6 @@
 package com.example.oya.newsreader.utils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.data.NewsContract.NewsEntry;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.ui.SortSectionsActivity;
 
@@ -39,7 +41,7 @@ public final class NetworkUtils {
         throw new AssertionError();
     }
 
-    public static List<NewsArticle> fetchArticles(String section, Context context) {
+    public static ContentValues[] fetchArticles(String section, Context context) {
         // Create URL object
         URL url = null;
         url = buildUrl(section, context);
@@ -52,7 +54,7 @@ public final class NetworkUtils {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        return extractFeatureFromJson(jsonResponse);
+        return createContentValuesFromJson(jsonResponse);
     }
 
     public static List<NewsArticle> searchOnline(String query) {
@@ -65,7 +67,7 @@ public final class NetworkUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
-        return extractFeatureFromJson(jsonResponse);
+        return createListFromJson(jsonResponse);
     }
 
     public static List<NewsArticle> checkForNewArticle(Context context) {
@@ -80,7 +82,7 @@ public final class NetworkUtils {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        return extractFeatureFromJson(jsonResponse);
+        return createListFromJson(jsonResponse);
     }
 
     private static URL buildSearchUrl(String query) {
@@ -233,14 +235,72 @@ public final class NetworkUtils {
         return output.toString();
     }
 
-    private static List<NewsArticle> extractFeatureFromJson(String newsJSON) {
+    private static ContentValues[] createContentValuesFromJson(String newsJSON) {
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(newsJSON)) {
             return null;
         }
 
-        // Create an empty ArrayList that we can start adding earthquakes to
-        List<NewsArticle> articleList = new ArrayList<>();
+        ContentValues[] contentValues = null;
+        // Try to parse the JSON response string. If there's a problem with the way the JSON
+        // is formatted, a JSONException exception object will be thrown.
+        // Catch the exception so the app doesn't crash, and print the error message to the logs.
+        try {
+
+            // Create a JSONObject from the JSON response string
+            JSONObject baseJsonResponse = new JSONObject(newsJSON);
+
+            JSONObject response = baseJsonResponse.getJSONObject(Constants.RESPONSE);
+
+            JSONArray resultsArray = response.getJSONArray(Constants.RESULTS);
+
+            contentValues = new ContentValues[resultsArray.length()];
+
+            // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
+            for (int i = 0; i < resultsArray.length(); i++) {
+
+                // Get a single earthquake at position i within the list of earthquakes
+                JSONObject currentArticle = resultsArray.getJSONObject(i);
+
+                String title = currentArticle.getString(Constants.WEB_TITLE);
+                String webUrl = currentArticle.getString(Constants.WEB_URL);
+                String date = currentArticle.optString(Constants.DATE_AND_TIME, "");
+                String section = currentArticle.getString(Constants.SECTION);
+                JSONObject fields = currentArticle.getJSONObject(Constants.FIELDS);
+                String author = fields.optString(Constants.AUTHOR_NAME, " ");
+                String trail = fields.optString(Constants.TRAIL, "");
+                String body = fields.optString(Constants.BODY, " ");
+                String thumbnail = fields.optString(Constants.THUMBNAIL, "");
+
+                ContentValues values = new ContentValues();
+                values.put(NewsEntry.COLUMN_TITLE, title);
+                values.put(NewsEntry.COLUMN_THUMBNAIL_URL, thumbnail);
+                values.put(NewsEntry.COLUMN_AUTHOR, author);
+                values.put(NewsEntry.COLUMN_DATE, date);
+                values.put(NewsEntry.COLUMN_WEB_URL, webUrl);
+                values.put(NewsEntry.COLUMN_SECTION, section);
+                values.put(NewsEntry.COLUMN_TRAIL, trail);
+                values.put(NewsEntry.COLUMN_BODY, body);
+
+                contentValues[i] = values;
+            }
+
+        } catch (JSONException e) {
+            // If an error is thrown when executing any of the above statements in the "try" block,
+            // catch the exception here, so the app doesn't crash. Print a log message
+            // with the message from the exception.
+            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+        }
+        return contentValues;
+    }
+
+    private static List<NewsArticle> createListFromJson(String newsJSON) {
+        // If the JSON string is empty or null, then return early.
+        if (TextUtils.isEmpty(newsJSON)) {
+            return null;
+        }
+
+        ArrayList<NewsArticle> articles = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
@@ -261,7 +321,7 @@ public final class NetworkUtils {
                 JSONObject currentArticle = resultsArray.getJSONObject(i);
 
                 String title = currentArticle.getString(Constants.WEB_TITLE);
-                String articleUrl = currentArticle.getString(Constants.WEB_URL);
+                String webUrl = currentArticle.getString(Constants.WEB_URL);
                 String date = currentArticle.optString(Constants.DATE_AND_TIME, "");
                 String section = currentArticle.getString(Constants.SECTION);
                 JSONObject fields = currentArticle.getJSONObject(Constants.FIELDS);
@@ -270,8 +330,7 @@ public final class NetworkUtils {
                 String body = fields.optString(Constants.BODY, " ");
                 String thumbnail = fields.optString(Constants.THUMBNAIL, "");
 
-                // Add the new {@link NewsArticle} to the list of articles.
-                articleList.add(new NewsArticle(0, title, thumbnail, author, date, articleUrl, section, trail, body));
+               articles.add(new NewsArticle(0, title, thumbnail, author, date, webUrl, section, trail, body));
             }
 
         } catch (JSONException e) {
@@ -280,7 +339,7 @@ public final class NetworkUtils {
             // with the message from the exception.
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
         }
-        return articleList;
+        return articles;
     }
 
 }

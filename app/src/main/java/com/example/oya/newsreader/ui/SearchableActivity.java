@@ -2,6 +2,7 @@ package com.example.oya.newsreader.ui;
 
 import android.app.LoaderManager;
 import android.app.SearchManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -13,7 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +30,12 @@ import com.example.oya.newsreader.data.NewsDbHelper;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.SearchLoader;
+import com.example.oya.newsreader.data.NewsContract.BookmarkEntry;
 
 import java.util.ArrayList;
 import java.util.List;
+
+// Search results are not saved in the database. It reads directly from internet using a loading (@link SearchLoader)
 
 public class SearchableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<NewsArticle>>, NewsAdapter.ListItemClickListener{
 
@@ -76,7 +84,7 @@ public class SearchableActivity extends AppCompatActivity implements LoaderManag
             // First, hide loading indicator so error message will be visible
             loadingIndicator.setVisibility(View.GONE);
             // Update empty state with no connection error message
-            empty_tv.setText(R.string.no_connection);
+            empty_tv.setText(R.string.no_results);
             recycler.setVisibility(View.GONE);
             empty_tv.setVisibility(View.VISIBLE);
         }
@@ -147,9 +155,39 @@ public class SearchableActivity extends AppCompatActivity implements LoaderManag
     }
 
     private void saveToBookmarks(int position){
-        NewsDbHelper dbHelper = new NewsDbHelper(this, null);
-        dbHelper.addToBookmarks(searchResults.get(position));
+        ContentValues values = new ContentValues();
+        values.put(BookmarkEntry.COLUMN_TITLE, searchResults.get(position).getTitle());
+        values.put(BookmarkEntry.COLUMN_THUMBNAIL_URL, searchResults.get(position).getThumbnailUrl());
+        values.put(BookmarkEntry.COLUMN_AUTHOR,searchResults.get(position).getAuthor());
+        values.put(BookmarkEntry.COLUMN_DATE, searchResults.get(position).getDate());
+        values.put(BookmarkEntry.COLUMN_WEB_URL, searchResults.get(position).getWebUrl());
+        values.put(BookmarkEntry.COLUMN_SECTION, searchResults.get(position).getSection());
+        values.put(BookmarkEntry.COLUMN_TRAIL, searchResults.get(position).getArticleTrail());
+        values.put(BookmarkEntry.COLUMN_BODY, searchResults.get(position).getArticleBody());
+        //Then save it to bookmarks table
+        getContentResolver().insert(BookmarkEntry.CONTENT_URI, values);
         Toast.makeText(this, R.string.article_bookmarked, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(SearchableActivity.this, SettingsActivity.class);
+            intent.putExtra(Constants.USER_CLICKED_SETTINGS_FROM, SettingsActivity.class.getSimpleName());
+            startActivity(intent);
+        } else if (id == R.id.action_bookmarks){
+            Intent intent = new Intent(SearchableActivity.this, BookmarksActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

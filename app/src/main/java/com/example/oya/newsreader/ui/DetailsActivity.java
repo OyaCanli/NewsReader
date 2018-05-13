@@ -1,6 +1,9 @@
 package com.example.oya.newsreader.ui;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +15,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.example.oya.newsreader.R;
+import com.example.oya.newsreader.data.NewsContract;
+import com.example.oya.newsreader.data.NewsContract.BookmarkEntry;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
 
@@ -24,9 +30,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity{
 
-    private NewsArticle chosenArticle;
+    private String webUrl = null;
+    private String title = null;
+    private String trail = null;
+    private String body = null;
+    private String imageUrl = null;
+    private String author = null;
+    private String section = null;
+    private String time = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,21 +60,63 @@ public class DetailsActivity extends AppCompatActivity {
         TextView section_tv = findViewById(R.id.details_section);
         TextView time_tv = findViewById(R.id.details_time);
         //Get the chosen article info from the bundle
-        Bundle bundle = getIntent().getExtras();
-        chosenArticle = bundle.getParcelable(Constants.CHOSEN_ARTICLE);
-        //Set the appropriate texts and image
-        title_tv.setText(chosenArticle.getTitle());
-        trail_tv.setText(Html.fromHtml(chosenArticle.getArticleTrail()));
-        body_tv.setText(Html.fromHtml(chosenArticle.getArticleBody()));
-        Glide.with(this)
-                .load(chosenArticle.getThumbnailUrl())
-                .into(details_iv);
-        if(!TextUtils.isEmpty(chosenArticle.getAuthor())){
-            author_tv.setText(getString(R.string.byline, chosenArticle.getAuthor()));
+        Intent intent = getIntent();
+        //If user clicked an article from the lists in the mainActivity or from the bookmarks screen, There will be a url in the intent extra.
+        Uri uri = intent.getData();
+        if(uri != null){
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            cursor.moveToFirst();
+            title = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_TITLE));
+            trail = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_TRAIL));
+            body = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_BODY));
+            imageUrl = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_THUMBNAIL_URL));
+            author = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_AUTHOR));
+            section = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_SECTION));
+            time = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_DATE));
+            webUrl = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_WEB_URL));
+            cursor.close();
+        } else{
+            /*If user clicked an article from the search results, that article is not on the database.
+            Similarly, if user clicked on a notification, that article is not on database.
+            In that cases intent contains a parcelable NewsArticle object*/
+            NewsArticle chosenArticle = intent.getParcelableExtra(Constants.CHOSEN_ARTICLE);
+            title = chosenArticle.getTitle();
+            trail = chosenArticle.getArticleTrail();
+            body = chosenArticle.getArticleBody();
+            imageUrl = chosenArticle.getThumbnailUrl();
+            author = chosenArticle.getAuthor();
+            section = chosenArticle.getSection();
+            time = chosenArticle.getDate();
+            webUrl = chosenArticle.getWebUrl();
         }
-        section_tv.setText(chosenArticle.getSection());
-        String[] dateAndTime = formatDateTime(chosenArticle.getDate()).split("T");
+
+        //Set the appropriate texts and image
+        title_tv.setText(title);
+        trail_tv.setText(Html.fromHtml(trail));
+        body_tv.setText(Html.fromHtml(body));
+        Glide.with(this)
+                .load(imageUrl)
+                .into(details_iv);
+        if(!TextUtils.isEmpty(author)){
+            author_tv.setText(getString(R.string.byline, author));
+        }
+        section_tv.setText(section);
+        String[] dateAndTime = formatDateTime(time).split("T");
         time_tv.setText(dateAndTime[0] + "\n" + dateAndTime[1]);
+    }
+
+    private void saveToBookmarks() {
+        ContentValues values = new ContentValues();
+        values.put(BookmarkEntry.COLUMN_TITLE, title);
+        values.put(BookmarkEntry.COLUMN_THUMBNAIL_URL, imageUrl);
+        values.put(BookmarkEntry.COLUMN_AUTHOR, author);
+        values.put(BookmarkEntry.COLUMN_DATE, time);
+        values.put(BookmarkEntry.COLUMN_WEB_URL, webUrl);
+        values.put(BookmarkEntry.COLUMN_SECTION, section);
+        values.put(BookmarkEntry.COLUMN_TRAIL, trail);
+        values.put(BookmarkEntry.COLUMN_BODY, body);
+        getContentResolver().insert(BookmarkEntry.CONTENT_URI, values);
+        Toast.makeText(this, R.string.article_bookmarked, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -81,10 +136,14 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             }
+            case R.id.action_bookmark:{
+                saveToBookmarks();
+                break;
+            }
             case R.id.action_share: {
                 Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, chosenArticle.getWebUrl());
+                intent.putExtra(Intent.EXTRA_TEXT, webUrl);
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 }

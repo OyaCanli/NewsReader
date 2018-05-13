@@ -24,6 +24,11 @@
         <item>@string/culture</item>
         <item>@string/travel</item>
         <item>@string/fashion</item>
+        <item>@string/art_and_design</item>
+        <item>@string/books</item>
+        <item>@string/environment</item>
+        <item>@string/film</item>
+        <item>@string/education</item>
     </string-array>
 
     <string-array name="pref_section_values">
@@ -38,6 +43,11 @@
         <item>culture</item>
         <item>travel</item>
         <item>fashion</item>
+        <item>artanddesign</item>
+        <item>books</item>
+        <item>environment</item>
+        <item>film</item>
+        <item>education</item>
     </string-array>
 
     <string-array name="pref_section_default_values">

@@ -1,4 +1,4 @@
-package com.example.oya.newsreader.utils;
+package com.example.oya.newsreader.synch;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,25 +16,24 @@ import com.firebase.jobdispatcher.Trigger;
 
 import java.util.concurrent.TimeUnit;
 
-public final class DatabaseUtils {
+public final class ScheduleSyncUtils {
 
     private static final int SYNCH_FLEXTIME_SECONDS = (int) (TimeUnit.HOURS.toSeconds(1));
     private static final String BACKUP_JOB_TAG = "news_backup_tag";
     private static boolean sInitialized;
 
-    synchronized public static void scheduleNewsBackUp(@NonNull final Context context){
-        if(sInitialized) return;
+    public static void scheduleNewsBackUp(@NonNull final Context context) {
         //Check users preferred back up frequency from sharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String preferredBackUpFrequency = sharedPreferences.getString(context.getString(R.string.pref_key_backUpFrequency), context.getString(R.string.pref_backUpFrequency_default));
         final int BACKUP_INTERVAL_HOURS = Integer.valueOf(preferredBackUpFrequency);
-        if(BACKUP_INTERVAL_HOURS == 0) return;
+        if (BACKUP_INTERVAL_HOURS == 0) return;
         else {
             final int BACKUP_INTERVAL_SECONDS = (int) (TimeUnit.HOURS.toSeconds(BACKUP_INTERVAL_HOURS));
             Driver driver = new GooglePlayDriver(context);
             FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
             Job.Builder newsCheckerJobBuilder = dispatcher.newJobBuilder()
-                    .setService(NewsBackUpService.class)
+                    .setService(NewsFirebaseJobService.class)
                     .setTag(BACKUP_JOB_TAG)
                     .setLifetime(Lifetime.FOREVER)
                     .setRecurring(true)
@@ -46,21 +45,36 @@ public final class DatabaseUtils {
             boolean onlyWhenDeviceIdle = sharedPreferences.getBoolean(context.getString(R.string.pref_key_only_when_device_idle), context.getResources().getBoolean(R.bool.pref_only_when_device_idle_default));
             boolean onlyWhenCharging = sharedPreferences.getBoolean(context.getString(R.string.pref_key_only_on_charge), context.getResources().getBoolean(R.bool.pref_only_on_charge_default));
 
-            if(onlyOnWifi) newsCheckerJobBuilder.setConstraints(Constraint.ON_UNMETERED_NETWORK);
+            if (onlyOnWifi) newsCheckerJobBuilder.setConstraints(Constraint.ON_UNMETERED_NETWORK);
             else newsCheckerJobBuilder.setConstraints(Constraint.ON_ANY_NETWORK);
 
-            if(onlyWhenDeviceIdle) newsCheckerJobBuilder.setConstraints(Constraint.DEVICE_IDLE);
+            if (onlyWhenDeviceIdle) newsCheckerJobBuilder.setConstraints(Constraint.DEVICE_IDLE);
 
-            if(onlyWhenCharging) newsCheckerJobBuilder.setConstraints(Constraint.DEVICE_CHARGING);
+            if (onlyWhenCharging) newsCheckerJobBuilder.setConstraints(Constraint.DEVICE_CHARGING);
 
             dispatcher.schedule(newsCheckerJobBuilder.build());
-            sInitialized = true;
+
         }
     }
 
-    public static void cancelBackingUps(@NonNull final Context context){
+    public static void cancelBackingUps(@NonNull final Context context) {
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
         dispatcher.cancel(BACKUP_JOB_TAG);
     }
+
+    synchronized public static void initialize(@NonNull final Context context) {
+
+        /*
+         * Only perform initialization once per app lifetime. If initialization has already been
+         * performed, we have nothing to do in this method.
+         */
+        if (sInitialized) return;
+
+        sInitialized = true;
+
+        scheduleNewsBackUp(context);
+
+    }
+
 }

@@ -1,14 +1,14 @@
 package com.example.oya.newsreader.ui;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -16,14 +16,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.example.oya.newsreader.R;
-import com.example.oya.newsreader.utils.Constants;
-import com.example.oya.newsreader.utils.AllSectionsLoader;
+import com.example.oya.newsreader.synch.ScheduleSyncUtils;
+import com.example.oya.newsreader.synch.SyncTask;
+import com.example.oya.newsreader.utils.NotificationUtils;
 
-import java.util.ArrayList;
+public class SplashActivity extends AppCompatActivity implements Animation.AnimationListener {
 
-public class SplashActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Object>, Animation.AnimationListener {
-
-    private ArrayList<String> sectionList;
     private int viewCount;
     private View v1, v2, v3, v4;
     private Animation translate_1, translate_2, translate_3, translate_4;
@@ -33,7 +31,8 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         TextView tv = findViewById(R.id.splash_title);
-        Animation fade_animation= AnimationUtils.loadAnimation(SplashActivity.this, R.anim.fade_anim);
+        //Prepare animation with views
+        Animation fade_animation = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.fade_anim);
         tv.startAnimation(fade_animation);
         v1 = findViewById(R.id.view_fromLeft);
         v2 = findViewById(R.id.view_fromBottom);
@@ -50,11 +49,28 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
         v1.startAnimation(translate_1);
         v1.setVisibility(View.VISIBLE);
 
-        sectionList = SortSectionsActivity.getSections(this);
         if (thereIsConnection()) {
-            LoaderManager loaderManager = getSupportLoaderManager();
-            loaderManager.initLoader(Constants.SYNCH_AT_LAUNCH_LOADER_ID, null, this);
+            SyncTask.startImmediateSync(this);
         }
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.getBoolean(getString(R.string.pref_key_enableNotifications), getResources().getBoolean(R.bool.pref_notifications_default))) {
+            //Schedule a background service for checking for recent news
+            NotificationUtils.scheduleNotifications(this);
+        }
+        if (preferences.getBoolean(getString(R.string.pref_key_offline_reading), getResources().getBoolean(R.bool.pref_offline_reading_default))) {
+            //Schedule a background service for backing up new articles to database
+            ScheduleSyncUtils.initialize(this);
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, 2000);
     }
 
     private boolean thereIsConnection() {
@@ -67,26 +83,11 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
-    public Loader<Object> onCreateLoader(int id, Bundle args) {
-        return new AllSectionsLoader(this, sectionList);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Object> loader, Object data) {
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Object> loader) {
-    }
-
-    @Override
     public void onAnimationEnd(Animation animation) {
         View[] viewsToAnimate = {v1, v2, v3, v4};
         Animation[] animations = {translate_1, translate_2, translate_3, translate_4};
         viewCount++;
-        if(viewCount >=4) return;
+        if (viewCount >= 4) return;
         viewsToAnimate[viewCount].startAnimation(animations[viewCount]);
         viewsToAnimate[viewCount].setVisibility(View.VISIBLE);
     }
