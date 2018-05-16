@@ -24,6 +24,7 @@ import com.example.oya.newsreader.data.NewsContract;
 import com.example.oya.newsreader.data.NewsContract.BookmarkEntry;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
+import com.example.oya.newsreader.utils.GlideApp;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -94,8 +95,10 @@ public class DetailsActivity extends AppCompatActivity{
         title_tv.setText(title);
         trail_tv.setText(Html.fromHtml(trail));
         body_tv.setText(Html.fromHtml(body));
-        Glide.with(this)
+        GlideApp.with(this)
                 .load(imageUrl)
+                .detailImage()
+                .centerCrop()
                 .into(details_iv);
         if(!TextUtils.isEmpty(author)){
             author_tv.setText(getString(R.string.byline, author));

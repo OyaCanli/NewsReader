@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.data.NewsContract.NewsEntry;
+import com.example.oya.newsreader.utils.GlideApp;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,8 +61,9 @@ public class NewsCursorAdapter extends RecyclerView.Adapter<NewsCursorAdapter.Ne
         } else {
             holder.trail_tv.setVisibility(View.GONE);
         }
-        Glide.with(mContext)
+        GlideApp.with(mContext)
                 .load(mCursor.getString(mCursor.getColumnIndex(NewsEntry.COLUMN_THUMBNAIL_URL)))
+                .listImage()
                 .into(holder.thumbnail_iv);
         long id = mCursor.getLong(mCursor.getColumnIndex(NewsEntry._ID));
         holder.itemView.setTag(id);

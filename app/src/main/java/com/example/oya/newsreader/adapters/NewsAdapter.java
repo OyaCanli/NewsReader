@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.model.NewsArticle;
+import com.example.oya.newsreader.utils.GlideApp;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,7 +50,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
         if(!TextUtils.isEmpty(currentArticle.getAuthor())){
             holder.author_tv.setText(mContext.getString(R.string.byline, currentArticle.getAuthor()));
         }
-        holder.section_tv.setText(currentArticle.getSection());
+        String temp = new String(currentArticle.getSection());
+        holder.section_tv.setText(temp);
         String[] dateAndTime = formatDateTime(currentArticle.getDate()).split("T");
         holder.date_tv.setText(dateAndTime[0] + "\n" + dateAndTime[1]);
         if(!TextUtils.isEmpty(currentArticle.getArticleTrail())){
@@ -57,8 +59,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
         } else {
             holder.trail_tv.setVisibility(View.GONE);
         }
-        Glide.with(mContext)
+        GlideApp.with(mContext)
               .load(currentArticle.getThumbnailUrl())
+                .listImage()
+                .centerCrop()
               .into(holder.thumbnail_iv);
     }
 
