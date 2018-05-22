@@ -141,4 +141,15 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        if(preferencesChanged && (intentComingFrom.equals(MainActivity.class.getSimpleName())
+                || intentComingFrom.equals(SortSectionsActivity.class.getSimpleName()))){
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(Constants.IS_PREFERENCES_CHANGED, preferencesChanged);
+            startActivity(intent);
+        }
+        super.onBackPressed();
+    }
 }

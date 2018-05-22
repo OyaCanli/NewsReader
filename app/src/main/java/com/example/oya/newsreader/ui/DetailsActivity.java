@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -95,6 +96,7 @@ public class DetailsActivity extends AppCompatActivity{
         title_tv.setText(title);
         trail_tv.setText(Html.fromHtml(trail));
         body_tv.setText(Html.fromHtml(body));
+        body_tv.setMovementMethod(LinkMovementMethod.getInstance());
         GlideApp.with(this)
                 .load(imageUrl)
                 .detailImage()
