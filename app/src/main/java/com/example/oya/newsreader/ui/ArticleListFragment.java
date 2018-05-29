@@ -212,6 +212,6 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
+        Log.d("ListFragment", "onLoaderReset is called");
     }
 }

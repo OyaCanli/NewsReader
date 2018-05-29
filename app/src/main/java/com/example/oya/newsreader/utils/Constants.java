@@ -1,5 +1,7 @@
 package com.example.oya.newsreader.utils;
 
+import com.example.oya.newsreader.BuildConfig;
+
 public final class Constants {
 
     //Constants related to API
@@ -11,7 +13,7 @@ public final class Constants {
     public static final String PAGE_SIZE_PARAM = "page-size";
     public static final String FROM_DATE = "from-date";
     public static final String GUARDIAN_API_KEY = "api-key";
-    public static final String GUARDIAN_API_VALUE = "test";
+    public static final String GUARDIAN_API_VALUE = BuildConfig.ApiKey;
     public static final String RESPONSE = "response";
     public static final String RESULTS = "results";
     public static final String WEB_TITLE = "webTitle";
