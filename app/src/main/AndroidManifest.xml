@@ -85,6 +85,9 @@
             android:name=".data.NewsProvider"
             android:authorities="com.example.oya.newsreader"
             android:exported="false" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
     </application>
 
