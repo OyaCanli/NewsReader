@@ -81,7 +81,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
         private final TextView date_tv;
         private final TextView section_tv;
         private final TextView trail_tv;
-        private final View container;
 
         NewsHolder(View viewItem){
             super(viewItem);
@@ -95,8 +94,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
             this.share_btn = viewItem.findViewById(R.id.share);
             this.share_btn.setOnClickListener(this);
             this.trail_tv = viewItem.findViewById(R.id.trail);
-            this.container = viewItem.findViewById(R.id.container);
-            this.container.setOnClickListener(this);
+            viewItem.setOnClickListener(this);
         }
 
         @Override

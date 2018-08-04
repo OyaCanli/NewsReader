@@ -37,21 +37,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="title,thumbnail"
+        app:constraint_referenced_ids="title,thumbnail,author"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"/>
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <TextView
         android:id="@+id/trail"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/half_margin"
         android:layout_marginStart="@dimen/margin_standard"
         android:textSize="@dimen/trail_textSize"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/thumbnail"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier2" />
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="Trailer text" />
 
     <TextView
         android:id="@+id/author"
@@ -62,7 +63,7 @@
         android:layout_marginTop="@dimen/half_margin"
         android:textStyle="italic"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintEnd_toStartOf="@+id/section"
+        app:layout_constraintEnd_toStartOf="@id/thumbnail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/trail"
         tools:text="John Doe" />
@@ -71,14 +72,14 @@
         android:id="@+id/section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/half_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/trail"
-        tools:text="Politics"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
+        android:padding="@dimen/half_padding"
         android:textColor="@android:color/white"
-        android:padding="@dimen/half_padding"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/author"
+        tools:text="Politics" />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier1"
@@ -93,12 +94,15 @@
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/half_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier1"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/section"
+        app:layout_constraintStart_toEndOf="@+id/section"
+        app:layout_constraintTop_toBottomOf="@+id/author"
         tools:text="April 19th, 2018" />
+
 
     <ImageButton
         android:id="@+id/share"
@@ -107,9 +111,10 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/half_margin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrier1"
+        app:layout_constraintTop_toBottomOf="@+id/barrier2"
         app:srcCompat="@drawable/ic_share_black_36dp"
         android:background="@android:color/transparent"
+        android:focusable="false"
         android:contentDescription="@string/content_desc_share"/>
 
     <ImageButton
@@ -119,7 +124,8 @@
         android:layout_marginEnd="@dimen/half_margin"
         android:layout_marginTop="@dimen/half_margin"
         app:layout_constraintEnd_toStartOf="@id/share"
-        app:layout_constraintTop_toBottomOf="@id/barrier1"
+        app:layout_constraintTop_toBottomOf="@id/barrier2"
+        android:focusable="false"
         app:srcCompat="@drawable/ic_bookmark_border_black_36dp"
         android:contentDescription="@string/content_desc_bookmark"
         android:background="@android:color/transparent"/>

@@ -104,7 +104,7 @@ public class BookmarksActivity extends AppCompatActivity implements LoaderManage
     @Override
     public void onListItemClick(View view, long id) {
         switch (view.getId()) {
-            case R.id.container: {
+            case R.id.article_item_root: {
                 openDetails(id);
                 break;
             }

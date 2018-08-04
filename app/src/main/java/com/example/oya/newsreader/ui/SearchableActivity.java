@@ -124,7 +124,7 @@ public class SearchableActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onListItemClick(View view, int position) {
         switch (view.getId()) {
-            case R.id.container: {
+            case R.id.article_item_root: {
                 openDetails(position);
                 break;
             }

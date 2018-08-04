@@ -90,7 +90,6 @@ public class NewsCursorAdapter extends RecyclerView.Adapter<NewsCursorAdapter.Ne
         private final TextView date_tv;
         private final TextView section_tv;
         private final TextView trail_tv;
-        private final View container;
 
         NewsCursorHolder(View viewItem){
             super(viewItem);
@@ -104,8 +103,7 @@ public class NewsCursorAdapter extends RecyclerView.Adapter<NewsCursorAdapter.Ne
             this.share_btn = viewItem.findViewById(R.id.share);
             this.share_btn.setOnClickListener(this);
             this.trail_tv = viewItem.findViewById(R.id.trail);
-            this.container = viewItem.findViewById(R.id.container);
-            this.container.setOnClickListener(this);
+            viewItem.setOnClickListener(this);
         }
 
         @Override
