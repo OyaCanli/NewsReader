@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -42,6 +43,7 @@ public class DetailsActivity extends AppCompatActivity{
     private String author = null;
     private String section = null;
     private String time = null;
+    private NestedScrollView scrollView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class DetailsActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //Initialize views
+        scrollView = findViewById(R.id.details_root_scroll);
         TextView title_tv = findViewById(R.id.details_title);
         TextView trail_tv = findViewById(R.id.details_trail);
         TextView body_tv = findViewById(R.id.details_body);
@@ -108,6 +111,16 @@ public class DetailsActivity extends AppCompatActivity{
         section_tv.setText(section);
         String[] dateAndTime = formatDateTime(time).split("T");
         time_tv.setText(dateAndTime[0] + "\n" + dateAndTime[1]);
+
+        if(savedInstanceState != null){
+            final int x = savedInstanceState.getInt(Constants.SCROLL_X);
+            final int y = savedInstanceState.getInt(Constants.SCROLL_Y);
+            scrollView.post(new Runnable(){
+                public void run(){
+                    scrollView.scrollTo(x, y);
+                }
+            });
+        }
     }
 
     private void saveToBookmarks() {
@@ -178,5 +191,12 @@ public class DetailsActivity extends AppCompatActivity{
         SimpleDateFormat destFormat = new SimpleDateFormat("LLL dd, yyyy'T'HH:mm");
         destFormat.setTimeZone(tz);
         return destFormat.format(parsedTime);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Constants.SCROLL_X, scrollView.getScrollX());
+        outState.putInt(Constants.SCROLL_Y, scrollView.getScrollY());
     }
 }

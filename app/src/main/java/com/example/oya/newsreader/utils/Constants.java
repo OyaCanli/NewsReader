@@ -35,4 +35,7 @@ public final class Constants {
     //Constants for ids
     public static final int SEARCH_LOADER_ID = 1013;
     public static final int CURSOR_LOADER_ID = 207;
+
+    public final static String SCROLL_X = "scrollX";
+    public final static String SCROLL_Y = "scrollY";
 }
