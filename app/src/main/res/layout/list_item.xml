@@ -106,9 +106,11 @@
         android:layout_height="@dimen/icon_dimension"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginTop="@dimen/half_margin"
+        android:layout_marginBottom="@dimen/half_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/barrier1"
         app:srcCompat="@drawable/ic_share_black_36dp"
+        android:focusable="false"
         android:background="@android:color/transparent"
         android:contentDescription="@string/content_desc_share"/>
 
@@ -118,9 +120,11 @@
         android:layout_height="@dimen/icon_dimension"
         android:layout_marginEnd="@dimen/half_margin"
         android:layout_marginTop="@dimen/half_margin"
+        android:layout_marginBottom="@dimen/half_margin"
         app:layout_constraintEnd_toStartOf="@id/share"
         app:layout_constraintTop_toBottomOf="@id/barrier1"
         app:srcCompat="@drawable/ic_bookmark_border_black_36dp"
+        android:focusable="false"
         android:contentDescription="@string/content_desc_bookmark"
         android:background="@android:color/transparent"/>
 
@@ -129,6 +133,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/half_margin"
+        android:layout_marginStart="@dimen/half_margin"
         android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -140,6 +146,8 @@
         android:layout_height="@dimen/line_height"
         android:layout_marginBottom="@dimen/margin_standard"
         android:layout_marginTop="@dimen/line_gap"
+        android:layout_marginEnd="@dimen/half_margin"
+        android:layout_marginStart="@dimen/half_margin"
         android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

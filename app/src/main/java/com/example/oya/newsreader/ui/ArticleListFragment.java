@@ -15,6 +15,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -69,7 +70,12 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         recycler = rootView.findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        boolean isTablet = getActivity().getResources().getBoolean(R.bool.isTablet);
+        if(isTablet){
+            recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        } else{
+            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
         recycler.setItemAnimator(new DefaultItemAnimator());
         refreshLayout = rootView.findViewById(R.id.swipe_to_refresh);
         refreshLayout.setOnRefreshListener(this);

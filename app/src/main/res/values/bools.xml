@@ -5,4 +5,5 @@
     <bool name="pref_only_on_wifi_default">true</bool>
     <bool name="pref_only_when_device_idle_default">true</bool>
     <bool name="pref_only_on_charge_default">false</bool>
+    <bool name="isTablet">false</bool>
 </resources>

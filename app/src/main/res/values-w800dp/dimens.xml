@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="details_image_height">400dp</dimen>
+    <dimen name="splash_header_textsize">100sp</dimen>
+</resources>
