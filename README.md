@@ -3,7 +3,7 @@ Udacity Android Basics Nanodegree Project 7 News App:
 
 Here is a video that demonstrates the app in action: https://www.youtube.com/watch?v=e50ZY0AXcxQ
 
-###### The app contains:
+##### The app contains:
 - An animated splash screen. Fetching from internet begins at this activity.
 - MainActivity with a ViewPager where each tab shows the articles of a section. Articles are shown with a recyclerview
 - Each list item has a button for sharing article on social media, and another for adding it to bookmarks. When you click on the rest of the list item it opens DetailsActivity
@@ -11,7 +11,7 @@ Here is a video that demonstrates the app in action: https://www.youtube.com/wat
 - SettingsActivity where user can chose which sections to display in the MainActivity, in which order the sections should be displayed, how many articles per page should be shown and sort order. User can also choose whether to have regular notifications and regular backups for offline reading.
 - A search wigdet in the toolbar which shows the results in another activity.
 - A bookmarks activity where bookmarked articles are shown. Bookmarked articles can be deleted by swiping left or right. A snackbar makes it possible to undo delete.
-###### Behind the scenes:
+##### Behind the scenes:
 - Fetched articles are cached in the database. These are replaced at each synchronization. 
 - Bookmarks are saved permanently, unless user deletes them by swiping. A snackbar makes it possible to undo delete.
 - Database operations are done by the intermediance of a content provider. ListFragments in the main screen and bookmarks activity use cursorloaders for loading data from the content provider
@@ -19,7 +19,7 @@ Here is a video that demonstrates the app in action: https://www.youtube.com/wat
 - News are backed at each launch. But they are also refreshed regularly in the background according to the choices of user
 
  ##### Credits : 
- Besides my Android Basics Nanodegree courses, I also covered the Developing Android Apps free course before making this app and inspired by the Sunshine app used at that course.
+ Besides my Udacity Android Basics Nanodegree courses, I also covered Udacity's Developing Android Apps free course before making this app and inspired by the Sunshine app used at that course, for persisting and synchronising app data with the help of background services. 
 
 ![screenshot_2018-05-14-00-27-02](https://user-images.githubusercontent.com/33556367/39972367-00ae6240-570e-11e8-80d1-b2ea09d47802.png)
 
