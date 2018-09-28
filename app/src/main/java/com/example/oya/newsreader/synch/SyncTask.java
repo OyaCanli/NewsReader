@@ -16,7 +16,9 @@ import static com.example.oya.newsreader.data.NewsContract.BASE_CONTENT_URI;
 
 public class SyncTask {
 
-    synchronized public static void syncNewsDatabase(Context context) {
+    /* This method fetches new articles from the Guardian API,
+    deletes previously cached data, and saves new articles to database */
+    synchronized static void syncNewsDatabase(Context context) {
 
         try{
             ArrayList<String> sectionList = SortSectionsActivity.getSections(context);
@@ -35,6 +37,7 @@ public class SyncTask {
         }
     }
 
+    //This method starts the IntentService which will in turn execute the method above.
     public static void startImmediateSync(@NonNull final Context context) {
         Intent intentToSyncImmediately = new Intent(context, SyncIntentService.class);
         context.startService(intentToSyncImmediately);

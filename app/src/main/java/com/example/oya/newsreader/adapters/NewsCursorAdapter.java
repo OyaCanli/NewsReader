@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +12,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.data.NewsContract.NewsEntry;
 import com.example.oya.newsreader.utils.GlideApp;
+import com.example.oya.newsreader.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,7 +56,7 @@ public class NewsCursorAdapter extends RecyclerView.Adapter<NewsCursorAdapter.Ne
         holder.date_tv.setText(dateAndTime[0] + "\n" + dateAndTime[1]);
         String trail = mCursor.getString(mCursor.getColumnIndex(NewsEntry.COLUMN_TRAIL));
         if(!TextUtils.isEmpty(trail)){
-            holder.trail_tv.setText(Html.fromHtml(trail));
+            holder.trail_tv.setText(Utils.processHtml(trail));
         } else {
             holder.trail_tv.setVisibility(View.GONE);
         }

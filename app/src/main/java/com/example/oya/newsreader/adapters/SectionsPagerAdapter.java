@@ -21,6 +21,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         mFragments = new Fragment[mSections.size()];
     }
 
+    @Override
     public Object instantiateItem(ViewGroup container, int position) {
         Object ret = super.instantiateItem(container, position);
         mFragments[position] = (Fragment) ret;
@@ -42,11 +43,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return mSections.size();
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return mSections.get(position);
     }
 
 }

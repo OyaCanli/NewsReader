@@ -1,7 +1,8 @@
 package com.example.oya.newsreader.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.synch.ScheduleSyncUtils;
 import com.example.oya.newsreader.synch.SyncTask;
+import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.NotificationUtils;
 
 public class SplashActivity extends AppCompatActivity implements Animation.AnimationListener {
@@ -25,13 +28,18 @@ public class SplashActivity extends AppCompatActivity implements Animation.Anima
     private int viewCount;
     private View v1, v2, v3, v4;
     private Animation translate_1, translate_2, translate_3, translate_4;
+    private boolean animsEnded;
+    private boolean syncEnded;
+    private SplashBroadcastReceiver myBroadCastReceiver;
+    private static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        TextView tv = findViewById(R.id.splash_title);
+
         //Prepare animation with views
+        TextView tv = findViewById(R.id.splash_title);
         Animation fade_animation = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.fade_anim);
         tv.startAnimation(fade_animation);
         v1 = findViewById(R.id.view_fromLeft);
@@ -49,6 +57,12 @@ public class SplashActivity extends AppCompatActivity implements Animation.Anima
         v1.startAnimation(translate_1);
         v1.setVisibility(View.VISIBLE);
 
+        //Register broadcast receiver for the synchronization task
+        myBroadCastReceiver = new SplashBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.BROADCAST_ACTION);
+        registerReceiver(myBroadCastReceiver, intentFilter);
+
         if (thereIsConnection()) {
             SyncTask.startImmediateSync(this);
         }
@@ -62,15 +76,12 @@ public class SplashActivity extends AppCompatActivity implements Animation.Anima
             //Schedule a background service for backing up new articles to database
             ScheduleSyncUtils.initialize(this);
         }
+    }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, 2000);
+    private void startMainActivity() {
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private boolean thereIsConnection() {
@@ -87,7 +98,11 @@ public class SplashActivity extends AppCompatActivity implements Animation.Anima
         View[] viewsToAnimate = {v1, v2, v3, v4};
         Animation[] animations = {translate_1, translate_2, translate_3, translate_4};
         viewCount++;
-        if (viewCount >= 4) return;
+        if (viewCount >= 4) {
+            animsEnded = true;
+            if(syncEnded) startMainActivity();
+            return;
+        }
         viewsToAnimate[viewCount].startAnimation(animations[viewCount]);
         viewsToAnimate[viewCount].setVisibility(View.VISIBLE);
     }
@@ -99,5 +114,21 @@ public class SplashActivity extends AppCompatActivity implements Animation.Anima
     @Override
     public void onAnimationRepeat(Animation animation) {
 
+    }
+
+    public class SplashBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            syncEnded = true;
+            Log.d(TAG, "Broadcast received. syncEnded = " + syncEnded + " animsEnded" + animsEnded);
+            if(animsEnded) startMainActivity();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(myBroadCastReceiver);
     }
 }

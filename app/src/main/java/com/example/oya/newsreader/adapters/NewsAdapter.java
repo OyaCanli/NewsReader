@@ -3,7 +3,6 @@ package com.example.oya.newsreader.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.GlideApp;
+import com.example.oya.newsreader.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,7 +54,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
         String[] dateAndTime = formatDateTime(currentArticle.getDate()).split("T");
         holder.date_tv.setText(dateAndTime[0] + "\n" + dateAndTime[1]);
         if(!TextUtils.isEmpty(currentArticle.getArticleTrail())){
-            holder.trail_tv.setText(Html.fromHtml(currentArticle.getArticleTrail()));
+            holder.trail_tv.setText(Utils.processHtml(currentArticle.getArticleTrail()));
         } else {
             holder.trail_tv.setVisibility(View.GONE);
         }

@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
@@ -20,13 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.bumptech.glide.Glide;
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.data.NewsContract;
 import com.example.oya.newsreader.data.NewsContract.BookmarkEntry;
 import com.example.oya.newsreader.model.NewsArticle;
 import com.example.oya.newsreader.utils.Constants;
 import com.example.oya.newsreader.utils.GlideApp;
+import com.example.oya.newsreader.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -97,8 +96,8 @@ public class DetailsActivity extends AppCompatActivity{
 
         //Set the appropriate texts and image
         title_tv.setText(title);
-        trail_tv.setText(Html.fromHtml(trail));
-        body_tv.setText(Html.fromHtml(body));
+        trail_tv.setText(Utils.processHtml(trail));
+        body_tv.setText(Utils.processHtml(body));
         body_tv.setMovementMethod(LinkMovementMethod.getInstance());
         GlideApp.with(this)
                 .load(imageUrl)

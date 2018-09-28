@@ -9,21 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.oya.newsreader.R;
 import com.example.oya.newsreader.adapters.SectionsPagerAdapter;
-import com.example.oya.newsreader.synch.SyncTask;
 import com.example.oya.newsreader.utils.Constants;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
 
-    private ArrayList<String> sectionList;
     private String mSearchQuery;
 
     @Override
@@ -33,16 +30,11 @@ public class MainActivity extends AppCompatActivity{
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //Get the preferred sections or default ones from shared preferences
-
-        Intent intent = getIntent();
-        if(intent != null && intent.hasExtra(Constants.IS_PREFERENCES_CHANGED)) {
-            SyncTask.startImmediateSync(this);
-            Log.d("MainActivity", "received an intent extra which says preferences are changed");
-        }
 
         //Get the sorted list of sections
-        sectionList = SortSectionsActivity.getSections(this);
+        ArrayList<String> sectionList = SortSectionsActivity.getSections(this);
+
+        //Set ViewPager and TabLayout
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), sectionList);
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);

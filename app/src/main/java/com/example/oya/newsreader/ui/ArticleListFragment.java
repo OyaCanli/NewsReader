@@ -1,12 +1,14 @@
 package com.example.oya.newsreader.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,6 +33,7 @@ import com.example.oya.newsreader.adapters.NewsCursorAdapter;
 import com.example.oya.newsreader.data.NewsContract;
 import com.example.oya.newsreader.data.NewsContract.NewsEntry;
 import com.example.oya.newsreader.synch.SyncTask;
+import com.example.oya.newsreader.utils.Constants;
 
 import static com.example.oya.newsreader.data.NewsContract.BASE_CONTENT_URI;
 
@@ -46,6 +49,8 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private TextView empty_tv;
     private int loader_id;
     private LoaderManager.LoaderCallbacks<Cursor> mCallBack;
+    private MainBroadcastReceiver myBroadCastReceiver;
+    private static final String TAG = "ArticleListFragment";
 
     public ArticleListFragment() {
     }
@@ -54,6 +59,12 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        //Register broadcast receiver for the synchronization task
+        myBroadCastReceiver = new MainBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.BROADCAST_ACTION);
+        getActivity().registerReceiver(myBroadCastReceiver, intentFilter);
     }
 
     public static ArticleListFragment newInstance(int position, String sectionName) {
@@ -71,9 +82,9 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         recycler = rootView.findViewById(R.id.recycler);
         boolean isTablet = getActivity().getResources().getBoolean(R.bool.isTablet);
-        if(isTablet){
+        if (isTablet) {
             recycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        } else{
+        } else {
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
         recycler.setItemAnimator(new DefaultItemAnimator());
@@ -83,7 +94,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         empty_tv = rootView.findViewById(R.id.empty_view);
         mSection = getArguments().getString(ARG_SECTION_NAME);
         loader_id = getArguments().getInt(ARG_SECTION_NUMBER);
-        adapter = new NewsCursorAdapter(getActivity(),this);
+        adapter = new NewsCursorAdapter(getActivity(), this);
         recycler.setAdapter(adapter);
         mCallBack = this;
         showLoading();
@@ -121,7 +132,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
-    private Uri getUriById(long id){
+    private Uri getUriById(long id) {
         Uri content_uri = BASE_CONTENT_URI.buildUpon().appendPath(mSection).build();
         return ContentUris.withAppendedId(content_uri, id);
     }
@@ -136,7 +147,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private void shareTheLink(long id) {
         //Using the id at hand, find the webUrl of the article
         Uri uri = getUriById(id);
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null );
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
         String webUrl = cursor.getString(cursor.getColumnIndex(NewsContract.NewsEntry.COLUMN_WEB_URL));
         cursor.close();
@@ -151,7 +162,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     private void saveToBookmarks(long id) {
         //First get the info related to the article from the corresponding table and put them in a ContentValues object
         Uri uri = getUriById(id);
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null );
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
         ContentValues values = new ContentValues();
         values.put(NewsEntry.COLUMN_TITLE, cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_TITLE)));
@@ -170,14 +181,8 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onRefresh() {
-        //Start fetching new data, wait two seconds and restart loading from database
+        //Start synchronization
         SyncTask.startImmediateSync(getActivity());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getLoaderManager().restartLoader(loader_id, null, mCallBack);
-            }
-        }, 2000);
     }
 
     @NonNull
@@ -199,7 +204,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
         mLoadingIndicator.setVisibility(View.GONE);
         refreshLayout.setRefreshing(false);
         Log.d("ListFragment", "onLoadFinish is called");
-        if(data != null){
+        if (data != null) {
             if (data.getCount() != 0) {
                 adapter.swapCursor(data);
                 showData();
@@ -208,8 +213,7 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
                 recycler.setVisibility(View.GONE);
                 empty_tv.setVisibility(View.VISIBLE);
             }
-        }
-        else {
+        } else {
             empty_tv.setText(R.string.no_connection);
             recycler.setVisibility(View.GONE);
             empty_tv.setVisibility(View.VISIBLE);
@@ -219,5 +223,21 @@ public class ArticleListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         Log.d("ListFragment", "onLoaderReset is called");
+    }
+
+    public class MainBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Broadcast received.");
+            getLoaderManager().restartLoader(loader_id, null, mCallBack);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(myBroadCastReceiver);
+
     }
 }
