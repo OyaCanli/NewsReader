@@ -3,7 +3,8 @@ package com.example.oya.newsreader.synch;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.example.oya.newsreader.R;
 import com.firebase.jobdispatcher.Constraint;

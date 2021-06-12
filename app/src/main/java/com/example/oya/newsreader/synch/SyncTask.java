@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
 import com.example.oya.newsreader.ui.SortSectionsActivity;
 import com.example.oya.newsreader.utils.NetworkUtils;
@@ -13,6 +12,8 @@ import com.example.oya.newsreader.utils.NetworkUtils;
 import java.util.ArrayList;
 
 import static com.example.oya.newsreader.data.NewsContract.BASE_CONTENT_URI;
+
+import androidx.annotation.NonNull;
 
 public class SyncTask {
 
