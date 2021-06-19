@@ -5,7 +5,7 @@ import com.canlioya.local.database.BookmarkEntity
 
 
 fun BookmarkEntity.toNewsArticle(): NewsArticle {
-    val formattedDate = " " //todo
+    val formattedDate = convertLongToFormattedDate(this.date)
     return NewsArticle(
         this.articleId,
         this.title,
@@ -21,7 +21,7 @@ fun BookmarkEntity.toNewsArticle(): NewsArticle {
 }
 
 fun NewsArticle.toBookmarkEntity(): BookmarkEntity {
-    val longDate = 0L //todo
+    val longDate = convertStringDateToLong(this.date)
     return BookmarkEntity(
         this.articleId,
         this.title,

@@ -1,10 +1,12 @@
 package com.canlioya.remote
 
 import com.canlioya.core.model.NewsArticle
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 fun ArticleDTO.toNewsArticle(): NewsArticle {
-    //todo : should date be formatted?
     return NewsArticle(
         this.id,
         this.webTitle,

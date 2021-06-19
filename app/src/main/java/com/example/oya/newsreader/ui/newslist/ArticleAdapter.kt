@@ -26,9 +26,14 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
             binding.title.text = currentArticle.title
             binding.trail.text = currentArticle.articleTrail
             binding.author.text = currentArticle.author
-            binding.date.text = currentArticle.date //todo format this
+            binding.date.text = splitDateAndTime(currentArticle.date)
             binding.thumbnail.bindImage(currentArticle.thumbnailUrl)
             binding.section.text = currentArticle.section
+        }
+
+        private fun splitDateAndTime(dateTime : String) : String{
+            val parts = dateTime.split("T")
+            return "${parts[0]}\n${parts[1]}"
         }
 
         companion object {

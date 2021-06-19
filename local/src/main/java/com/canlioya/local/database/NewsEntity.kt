@@ -11,7 +11,7 @@ data class NewsEntity(
     val author: String?,
     val articleTrail: String?,
     val articleBody: String?,
-    val date: Long,
+    val date: Long?,
     val webUrl: String,
     val section: String,
     val isBookmarked: Boolean

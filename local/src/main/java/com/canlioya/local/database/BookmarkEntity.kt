@@ -10,6 +10,6 @@ data class BookmarkEntity (@PrimaryKey val articleId : String,
                        val author : String?,
                        val articleTrail : String?,
                        val articleBody : String?,
-                       val date : Long,
+                       val date : Long?,
                        val webUrl : String,
                        val section : String)
