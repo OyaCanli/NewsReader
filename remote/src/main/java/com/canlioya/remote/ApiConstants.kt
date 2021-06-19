@@ -1,0 +1,23 @@
+package com.canlioya.remote
+
+//Constants related to API
+const val BASE_URL = "http://content.guardianapis.com/search?"
+const val SECTION_PARAM = "section"
+const val SHOW_FIELDS_KEY = "show-fields"
+const val SHOW_FIELDS_VALUE = "byline,trailText,thumbnail,body"
+const val ORDER_BY_PARAM = "order-by"
+const val PAGE_SIZE_PARAM = "page-size"
+const val FROM_DATE = "from-date"
+const val GUARDIAN_API_KEY = "api-key"
+val GUARDIAN_API_VALUE: String = "test"
+const val RESPONSE = "response"
+const val RESULTS = "results"
+const val WEB_TITLE = "webTitle"
+const val AUTHOR_NAME = "byline"
+const val TRAIL = "trailText"
+const val BODY = "body"
+const val SECTION = "sectionName"
+const val DATE_AND_TIME = "webPublicationDate"
+const val WEB_URL = "webUrl"
+const val FIELDS = "fields"
+const val THUMBNAIL = "thumbnail"
