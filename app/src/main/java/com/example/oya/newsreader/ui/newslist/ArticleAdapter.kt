@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.canlioya.core.model.NewsArticle
 import com.example.oya.newsreader.common.bindImage
+import com.example.oya.newsreader.common.fromHtml
 import com.example.oya.newsreader.databinding.ItemArticleBinding
 
 class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<NewsArticle, ArticleAdapter.ViewHolder>(NewsDiffCallback()){
@@ -24,7 +25,7 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
 
         fun bind(currentArticle: NewsArticle){
             binding.title.text = currentArticle.title
-            binding.trail.text = currentArticle.articleTrail
+            binding.trail.text = fromHtml(currentArticle.articleTrail)
             binding.author.text = currentArticle.author
             binding.date.text = splitDateAndTime(currentArticle.date)
             binding.thumbnail.bindImage(currentArticle.thumbnailUrl)
