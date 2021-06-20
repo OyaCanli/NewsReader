@@ -6,6 +6,7 @@ data class Interactors(
     val getNewsForSection: GetNewsForSection,
     val getBookmarks: GetBookmarks,
     val bookmarkArticle: BookmarkArticle,
-    val refreshData: RefreshData,
+    val refreshAllData: RefreshAllData,
+    val refreshDataForSection: RefreshDataForSection,
     val searchInNews: SearchInNews
 )

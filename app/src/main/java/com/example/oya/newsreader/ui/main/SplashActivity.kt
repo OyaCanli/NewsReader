@@ -8,8 +8,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.annotation.AnimRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.canlioya.core.repository.INewsRepository
 import com.example.oya.newsreader.R
 import com.example.oya.newsreader.data.Interactors
 import com.example.oya.newsreader.databinding.ActivitySplashBinding
@@ -49,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
         animateView(firstAnim.first, firstAnim.second)
 
         GlobalScope.launch {
-            interactors.refreshData()
+            interactors.refreshAllData()
         }
     }
 

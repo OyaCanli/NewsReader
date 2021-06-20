@@ -31,6 +31,12 @@ interface NewsDao {
         }
     }
 
+    @Transaction
+    open suspend fun refreshDataForSection(section: String, list : List<NewsEntity>){
+        deleteArticlesFromSection(section)
+        insertAll(list)
+    }
+
     @Query("UPDATE news SET isBookmarked = :isBookmarked WHERE articleId = :articleId")
     suspend fun setAsBookmark(articleId : String, isBookmarked : Boolean)
 

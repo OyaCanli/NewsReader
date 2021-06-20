@@ -112,8 +112,6 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
     }
 
     override fun onRefresh() {
-        GlobalScope.launch {
-            interactors.refreshData
-        }
+       viewModel.refreshDataForSection()
     }
 }

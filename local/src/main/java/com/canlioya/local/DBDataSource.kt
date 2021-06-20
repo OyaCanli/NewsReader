@@ -10,9 +10,8 @@ import kotlinx.coroutines.flow.map
 
 class DBDataSource(val database: NewsDatabase) : ILocalDataSource {
 
-    override suspend fun saveFreshNews(list : List<NewsArticle>) {
-        database.newsDao().deleteAll()
-        database.newsDao().insertAll(list.domainToDatabase())
+    override suspend fun refreshDataForSection(section : String, list: List<NewsArticle>) {
+        database.newsDao().refreshDataForSection(section, list.domainToDatabase())
     }
 
     override suspend fun saveToBookmarks(article : NewsArticle) {
@@ -33,9 +32,5 @@ class DBDataSource(val database: NewsDatabase) : ILocalDataSource {
 
     override suspend fun getArticleDetails(articleId : String) : NewsArticle {
         return database.newsDao().getChosenArticle(articleId).toNewsArticle()
-    }
-
-    override suspend fun deleteArticlesFromSection(section: String) {
-        database.newsDao().deleteArticlesFromSection(section)
     }
 }

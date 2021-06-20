@@ -4,7 +4,8 @@ import com.canlioya.core.model.NewsArticle
 import kotlinx.coroutines.flow.Flow
 
 interface ILocalDataSource {
-    suspend fun saveFreshNews(list: List<NewsArticle>)
+
+    suspend fun refreshDataForSection(section : String, list: List<NewsArticle>)
 
     suspend fun saveToBookmarks(article: NewsArticle)
 
@@ -13,6 +14,4 @@ interface ILocalDataSource {
     fun getBookmarks(): Flow<List<NewsArticle>>
 
     suspend fun getArticleDetails(articleId: String): NewsArticle
-
-    suspend fun deleteArticlesFromSection(section: String)
 }

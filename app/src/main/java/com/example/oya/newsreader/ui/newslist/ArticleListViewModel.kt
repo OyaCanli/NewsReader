@@ -51,5 +51,11 @@ class ArticleListViewModel @Inject constructor(private val interactors: Interact
         }
     }
 
+    fun refreshDataForSection(){
+        viewModelScope.launch {
+            interactors.refreshDataForSection(section!!)
+        }
+    }
+
 
 }

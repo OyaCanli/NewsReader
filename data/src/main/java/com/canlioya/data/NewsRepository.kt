@@ -25,6 +25,7 @@ class NewsRepository(
     override suspend fun refreshData(){
         println("refreshdata is called")
         val sections = userPreferences.getSectionListPreference()
+        println("sections: $sections")
         withContext(Dispatchers.IO){
             sections.forEach {
                 async { refreshDataForSection(it) }
@@ -34,9 +35,8 @@ class NewsRepository(
 
     override suspend fun refreshDataForSection(section: String) {
         val newArticlesForSection = remoteDataSource.getArticlesForSection(section)
-        println("result list size: ${newArticlesForSection.size}")
-        localDataSource.deleteArticlesFromSection(section)
-        localDataSource.saveFreshNews(newArticlesForSection)
+        println("result list size for section $section : ${newArticlesForSection.size}")
+        localDataSource.refreshDataForSection(section, newArticlesForSection)
     }
 
     override suspend fun searchInNews(keyword: String) {

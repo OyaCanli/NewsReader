@@ -39,5 +39,6 @@ class AppModule {
     fun provideRepository(localDS: ILocalDataSource, remoteDS: INetworkDataSource, prefs: IUserPreferences) : INewsRepository = NewsRepository(localDS, remoteDS, prefs)
 
     @Provides
-    fun provideInteractors(repo : INewsRepository) : Interactors = Interactors(GetNewsForSection(repo), GetBookmarks(repo), BookmarkArticle(repo), RefreshData(repo), SearchInNews(repo))
+    fun provideInteractors(repo : INewsRepository) : Interactors = Interactors(GetNewsForSection(repo), GetBookmarks(repo), BookmarkArticle(repo),
+        RefreshAllData(repo), RefreshDataForSection(repo),SearchInNews(repo))
 }
