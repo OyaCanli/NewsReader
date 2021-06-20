@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.canlioya.core.repository.INewsRepository
 import com.example.oya.newsreader.R
+import com.example.oya.newsreader.data.Interactors
 import com.example.oya.newsreader.databinding.ActivitySplashBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
@@ -22,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySplashBinding
 
-    @Inject lateinit var repository: INewsRepository
+    @Inject lateinit var interactors : Interactors
 
     private var animatingViewCount = 0
 
@@ -48,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
         animateView(firstAnim.first, firstAnim.second)
 
         GlobalScope.launch {
-            repository.refreshData()
+            interactors.refreshData()
         }
     }
 
