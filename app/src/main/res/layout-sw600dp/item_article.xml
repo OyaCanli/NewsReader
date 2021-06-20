@@ -107,7 +107,7 @@
         android:layout_marginBottom="@dimen/half_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/barrier2"
-        app:srcCompat="@drawable/ic_share_black_36dp"
+        app:srcCompat="@drawable/ic_share_dark"
         android:background="@android:color/transparent"
         android:focusable="false"
         android:contentDescription="@string/content_desc_share"/>
@@ -122,7 +122,7 @@
         app:layout_constraintEnd_toStartOf="@id/share"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
         android:focusable="false"
-        app:srcCompat="@drawable/ic_bookmark_border_black_36dp"
+        app:srcCompat="@drawable/ic_bookmark_outlined"
         android:contentDescription="@string/content_desc_bookmark"
         android:background="@android:color/transparent"/>
 

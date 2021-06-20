@@ -49,8 +49,12 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
 
         binding.swipeToRefresh.setOnRefreshListener(this)
 
+        val itemDecoration = DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+        itemDecoration.setDrawable(getDrawable(requireContext(), R.drawable.item_divider)!!)
+
         binding.recycler.apply {
             adapter = articleAdapter
+            addItemDecoration(itemDecoration)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
