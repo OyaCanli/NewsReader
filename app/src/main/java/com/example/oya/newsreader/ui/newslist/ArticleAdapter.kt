@@ -1,4 +1,4 @@
-package com.example.oya.newsreader.ui.main
+package com.example.oya.newsreader.ui.newslist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +11,12 @@ import com.example.oya.newsreader.common.bindImage
 import com.example.oya.newsreader.common.fromHtml
 import com.example.oya.newsreader.databinding.ItemArticleBinding
 
-class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<NewsArticle, ArticleAdapter.ViewHolder>(NewsDiffCallback()){
+class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<NewsArticle, ArticleAdapter.ViewHolder>(
+    NewsDiffCallback()
+){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder.from(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+        ViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentArticle = getItem(position)

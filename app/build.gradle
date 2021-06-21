@@ -160,8 +160,8 @@ dependencies {
     // Coil
     implementation "io.coil-kt:coil:1.1.1"
 
-    implementation 'androidx.preference:preference:1.1.1'
-    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+
     implementation 'com.jmedeisis:draglinearlayout:1.1.0'
     implementation 'asia.ivity.android:drag-sort-listview:1.0'
 

@@ -1,25 +1,28 @@
 package com.example.oya.newsreader.data
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.canlioya.data.IUserPreferences
 import com.example.oya.newsreader.R
 import dagger.hilt.android.qualifiers.ApplicationContext
+import timber.log.Timber
+import java.lang.NumberFormatException
+import java.util.*
 import javax.inject.Inject
 
 
-const val PREFERENCE_FILE_NAME = "NewsReaderPrefs"
 const val KEY_ORDER_BY = "order_by"
 const val ORDER_BY_DEFAULT = "newest"
 const val KEY_ARTICLE_PER_PAGE = "article_per_page"
 const val ARTICLE_PER_PAGE_DEFAULT = 25
-const val SECTION_LIST_KEY = "section_list_key"
-const val DEFAULT_SYNC_FREQUENCY = 8
+const val SORTED_SECTIONS_KEY = "sorted_section_key"
+const val DEFAULT_SYNC_FREQUENCY = 8L
 
-class UserPreferences @Inject constructor(@ApplicationContext val context: Context) :
-    IUserPreferences {
+class UserPreferences @Inject constructor(@ApplicationContext private val context: Context,
+                                          private val preferences : SharedPreferences)
+    : IUserPreferences {
 
-    private val preferences = context.getSharedPreferences(PREFERENCE_FILE_NAME, 0)
-    private val DEFAULT_SECTION_LIST : List<String> = listOf("politics", "world", "business", "technology", "science")
+    private val defaultSections : List<String> = context.resources.getStringArray(R.array.pref_section_default_values).toCollection(ArrayList())
 
     override fun getOrderByPreference(): String {
         return preferences.getString(KEY_ORDER_BY, ORDER_BY_DEFAULT) ?: ORDER_BY_DEFAULT
@@ -30,19 +33,24 @@ class UserPreferences @Inject constructor(@ApplicationContext val context: Conte
     }
 
     override fun getSectionListPreference(): List<String> {
-        val listPrefs = preferences.getString(SECTION_LIST_KEY, null)
-        return if (listPrefs == null) DEFAULT_SECTION_LIST else convertSectionStringToList(listPrefs)
+        val listPrefs = preferences.getString(SORTED_SECTIONS_KEY, null)
+        return if (listPrefs == null) defaultSections else convertSectionStringToList(listPrefs)
+    }
+
+    override fun setSectionListPreference(list : Set<String>) {
+        val stringVersion = list.joinToString(",")
+        saveToPrefs(stringVersion)
     }
 
     override fun setSectionListPreference(list : List<String>) {
-        val stringVersion = convertListToString(list)
-        val editor = preferences.edit()
-        editor.putString(SECTION_LIST_KEY, stringVersion)
-        editor.apply()
+        val stringVersion = list.joinToString(",")
+        saveToPrefs(stringVersion)
     }
 
-    private fun convertListToString(list: List<String>): String {
-        return list.joinToString(",")
+    private fun saveToPrefs(stringVersion: String) {
+        val editor = preferences.edit()
+        editor.putString(SORTED_SECTIONS_KEY, stringVersion)
+        editor.apply()
     }
 
     private fun convertSectionStringToList(sections: String): List<String> {
@@ -50,7 +58,15 @@ class UserPreferences @Inject constructor(@ApplicationContext val context: Conte
     }
 
     override fun getBackUpFrequency() : Long {
-        return preferences.getLong(context.getString(R.string.pref_key_backUpFrequency), 8) //todo : make sure to save it as long
+        val backUpPref = preferences.getString(context.getString(R.string.pref_key_backUpFrequency), "8")
+        var intVersion = DEFAULT_SYNC_FREQUENCY
+        try {
+            //In fact this is already validated before being saved. This is a double check.
+            intVersion = backUpPref?.toLong() ?: DEFAULT_SYNC_FREQUENCY
+        } catch (e : NumberFormatException){
+            Timber.e(e)
+        }
+        return intVersion
     }
 
     override fun shouldSyncOnlyOnWifi(): Boolean {

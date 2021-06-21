@@ -1,6 +1,8 @@
 package com.example.oya.newsreader.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import com.canlioya.core.repository.INewsRepository
 import com.canlioya.core.usecases.*
 import com.canlioya.data.ILocalDataSource
@@ -24,13 +26,13 @@ import dagger.hilt.components.SingletonComponent
 class AppModule {
 
     @Provides
-    fun provideUserPreferences(@ApplicationContext context : Context) : IUserPreferences = UserPreferences(context)
+    fun provideUserPreferences(@ApplicationContext context : Context, preferences : SharedPreferences) : IUserPreferences = UserPreferences(context, preferences)
 
     @Provides
     fun provideDatabase(@ApplicationContext context: Context) : NewsDatabase = NewsDatabase.getInstance(context)
 
     @Provides
-    fun provideLocalDataSource(database : NewsDatabase) : ILocalDataSource = DBDataSource(database)
+    fun provideLocalDataSource(database : NewsDatabase, prefs: IUserPreferences) : ILocalDataSource = DBDataSource(database, prefs)
 
     @Provides
     fun provideNetworkDataSource(preferences: IUserPreferences, apiService: NewsApiService) : INetworkDataSource = NetworkDataSource(preferences, apiService)
@@ -40,5 +42,8 @@ class AppModule {
 
     @Provides
     fun provideInteractors(repo : INewsRepository) : Interactors = Interactors(GetNewsForSection(repo), GetBookmarks(repo), BookmarkArticle(repo),
-        RefreshAllData(repo), RefreshDataForSection(repo),SearchInNews(repo))
+        RefreshAllData(repo), RefreshDataForSection(repo),SearchInNews(repo), CleanUnusedData(repo))
+
+    @Provides
+    fun getSharedPreferences(@ApplicationContext context : Context) : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 }

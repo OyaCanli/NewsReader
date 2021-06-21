@@ -16,4 +16,6 @@ interface INewsRepository {
     suspend fun searchInNews(keyword: String)
 
     suspend fun saveToBookmarks(article: NewsArticle)
+
+    suspend fun clearUnusedData()
 }

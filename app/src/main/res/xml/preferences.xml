@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,12 +9,14 @@
         android:inputType="number"
         android:key="@string/pref_key_itemsPerPage"
         android:singleLine="true"
+        app:useSimpleSummaryProvider="true"
         android:title="@string/articles_per_page" />
 
     <ListPreference
         android:defaultValue="@string/pref_orderby_default"
         android:entries="@array/pref_orderby_labels"
         android:entryValues="@array/pref_orderby_values"
+        app:useSimpleSummaryProvider="true"
         android:key="@string/pref_key_orderBy"
         android:title="@string/pref_order_by" />
 
@@ -67,6 +70,7 @@
                     android:defaultValue="@string/pref_backUpFrequency_default"
                     android:entries="@array/pref_backUpFrequency_labels"
                     android:entryValues="@array/pref_backUpFrequency_values"
+                    app:useSimpleSummaryProvider="true"
                     android:key="@string/pref_key_backUpFrequency"
                     android:title="@string/back_up_frequency" />
 

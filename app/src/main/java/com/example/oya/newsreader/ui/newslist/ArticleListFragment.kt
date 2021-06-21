@@ -19,10 +19,7 @@ import com.example.oya.newsreader.common.showList
 import com.example.oya.newsreader.common.showLoading
 import com.example.oya.newsreader.data.Interactors
 import com.example.oya.newsreader.databinding.FragmentListBinding
-import com.example.oya.newsreader.ui.main.ArticleAdapter
-import com.example.oya.newsreader.ui.main.ListItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber

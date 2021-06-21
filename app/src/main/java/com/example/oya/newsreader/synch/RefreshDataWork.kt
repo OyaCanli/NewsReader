@@ -9,6 +9,9 @@ import com.canlioya.core.repository.INewsRepository
 import com.canlioya.data.NewsRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import retrofit2.HttpException
+import timber.log.Timber
+import java.io.IOException
 
 @HiltWorker
 class RefreshDataWork @AssistedInject constructor(
@@ -21,7 +24,17 @@ class RefreshDataWork @AssistedInject constructor(
         return try {
             repository.refreshData()
             Result.success()
+        } catch (e: HttpException) {
+            Timber.e(e)
+            Result.failure()
+        } catch (e: IOException) {
+            Timber.e(e)
+            Result.failure()
         } catch (e: SQLException) {
+            Timber.e(e)
+            Result.failure()
+        } catch(e : Throwable) {
+            Timber.e(e)
             Result.failure()
         }
     }

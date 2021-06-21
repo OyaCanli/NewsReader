@@ -8,6 +8,8 @@ interface IUserPreferences {
 
     fun getSectionListPreference() : List<String>
 
+    fun setSectionListPreference(list : Set<String>)
+
     fun setSectionListPreference(list : List<String>)
 
     fun getBackUpFrequency(): Long

@@ -8,5 +8,6 @@ data class Interactors(
     val bookmarkArticle: BookmarkArticle,
     val refreshAllData: RefreshAllData,
     val refreshDataForSection: RefreshDataForSection,
-    val searchInNews: SearchInNews
+    val searchInNews: SearchInNews,
+    val cleanUnusedData: CleanUnusedData
 )

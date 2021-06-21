@@ -1,6 +1,7 @@
 package com.canlioya.local.database
 
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -51,5 +52,11 @@ interface NewsDao {
 
     @Query("DELETE FROM bookmarks WHERE articleId = :articleId")
     suspend fun deleteBookmark(articleId : String)
+
+    @Query("DELETE FROM news WHERE section NOT IN (:sectionList)")
+    suspend fun deleteUnusedArticles(sectionList : String)
+
+    @RawQuery
+    suspend fun deleteUnusedArticles(query: SupportSQLiteQuery) : Int
 
 }

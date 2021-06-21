@@ -46,4 +46,8 @@ class NewsRepository(
     override suspend fun saveToBookmarks(article: NewsArticle) {
         localDataSource.saveToBookmarks(article)
     }
+
+    override suspend fun clearUnusedData() {
+        localDataSource.clearUnusedData()
+    }
 }

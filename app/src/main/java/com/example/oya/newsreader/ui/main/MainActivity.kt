@@ -12,6 +12,7 @@ import com.example.oya.newsreader.R
 import com.canlioya.data.IUserPreferences
 import com.example.oya.newsreader.databinding.ActivityMainBinding
 import com.example.oya.newsreader.common.Constants
+import com.example.oya.newsreader.ui.settings.SettingsActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -50,9 +51,8 @@ class MainActivity : AppCompatActivity() {
             mSearchQuery = savedInstanceState.getString("searchQuery")
         }
     }
-}
 
-    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
@@ -71,10 +71,11 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        *//*If there is search query saved during rotation,
-        set the query again and expand the view*//*if (!TextUtils.isEmpty(mSearchQuery)) {
-            *//*Back up saved query before expanding the view,
-            because as soon as view is expanded search query is set to ""*//*
+        /*If there is search query saved during rotation,
+        set the query again and expand the view*/
+        if (!TextUtils.isEmpty(mSearchQuery)) {
+            /* Back up saved query before expanding the view,
+             because as soon as view is expanded search query is set to ""*/
             val backupQuery = mSearchQuery
             searchItem.expandActionView()
             searchView.setQuery(backupQuery, false)
@@ -84,7 +85,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        *//*when (item.itemId) {
+        when (item.itemId) {
             R.id.action_settings -> {
                 val intent = Intent(this@MainActivity, SettingsActivity::class.java)
                 intent.putExtra(
@@ -94,15 +95,15 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.action_bookmarks -> {
-                val intent = Intent(this@MainActivity, BookmarksActivity::class.java)
-                startActivity(intent)
+                /*val intent = Intent(this@MainActivity, BookmarksActivity::class.java)
+                startActivity(intent)*/
             }
-        }*//*
+        }
         return super.onOptionsItemSelected(item)
-        }
+    }
 
-        override fun onSaveInstanceState(outState: Bundle) {
-            super.onSaveInstanceState(outState)
-            outState.putString(Constants.SEARCH_QUERY, mSearchQuery)
-        }
-    }*/
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(Constants.SEARCH_QUERY, mSearchQuery)
+    }
+}
