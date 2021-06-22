@@ -1,6 +1,7 @@
 package com.canlioya.data
 
 import com.canlioya.core.model.NewsArticle
+import com.canlioya.core.model.Result
 import kotlinx.coroutines.flow.Flow
 
 interface ILocalDataSource {

@@ -4,6 +4,7 @@ package com.canlioya.local
 import android.util.Log
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.canlioya.core.model.NewsArticle
+import com.canlioya.core.model.Result
 import com.canlioya.data.ILocalDataSource
 import com.canlioya.data.IUserPreferences
 import com.canlioya.local.database.NewsDatabase
@@ -48,10 +49,5 @@ class DBDataSource(val database: NewsDatabase, val userPreferences: IUserPrefere
         val joinedString =  sections.joinToString(separator = ","){ "\"$it\"" }
         return "DELETE FROM news WHERE section NOT IN($joinedString);"
     }
-
-    private fun testMethod() : String {
-        return "DELETE FROM news WHERE section IN(\"business\", \"science\", \"technology\");"
-    }
-
 
 }

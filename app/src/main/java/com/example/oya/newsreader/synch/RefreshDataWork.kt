@@ -6,7 +6,6 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.canlioya.core.repository.INewsRepository
-import com.canlioya.data.NewsRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import retrofit2.HttpException
@@ -22,7 +21,7 @@ class RefreshDataWork @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            repository.refreshData()
+            repository.refreshAllData()
             Result.success()
         } catch (e: HttpException) {
             Timber.e(e)

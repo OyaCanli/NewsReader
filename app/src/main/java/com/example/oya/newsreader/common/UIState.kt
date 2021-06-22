@@ -7,5 +7,5 @@ package com.example.oya.newsreader.common
 enum class UIState {
     LOADING,
     SUCCESS,
-    ERROR
+    ERROR,
 }

@@ -91,4 +91,7 @@
     <string name="byline">By %1$s</string>
     <string name="newsreader">NewsReader</string>
 
+    <string name="no_internet_warning">We have trouble connecting to the internet</string>
+    <string name="internet_is_back">Internet is back. Loading your content.</string>
+
 </resources>

@@ -9,6 +9,7 @@ import android.text.Spanned
 
 fun fromHtml(text: String?): Spanned? {
     return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+        @Suppress("DEPRECATION")
         Html.fromHtml(text)
     } else {
         Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)

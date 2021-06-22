@@ -1,11 +1,15 @@
 package com.canlioya.data
 
 import com.canlioya.core.model.NewsArticle
+import com.canlioya.core.model.Result
 import com.canlioya.core.repository.INewsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.io.IOException
 
 class NewsRepository(
     private val localDataSource: ILocalDataSource,
@@ -13,16 +17,34 @@ class NewsRepository(
     private val userPreferences: IUserPreferences
 ) : INewsRepository {
 
-    override fun getArticlesForSection(section: String): Flow<List<NewsArticle>> {
+    override fun getArticlesForSection(section: String): Flow<Result<List<NewsArticle>>> = flow {
+        emit(Result.Loading)
         println("Getting articles for section")
-        return localDataSource.getArticlesForSection(section)
+        try {
+            localDataSource.getArticlesForSection(section).map {
+                emit(Result.Success(it))
+            }
+        } catch (e: IOException) {
+            println(e)
+            emit(Result.Error(e))
+        }
     }
 
-    override fun getBookmarks(): Flow<List<NewsArticle>> {
-        return localDataSource.getBookmarks()
+    override fun getBookmarks(): Flow<Result<List<NewsArticle>>> = flow {
+        emit(Result.Loading)
+        println("Getting bookmarks")
+        try {
+            localDataSource.getBookmarks().map {
+                emit(Result.Success(it))
+            }
+        } catch (e: IOException) {
+            println(e)
+            emit(Result.Error(e))
+        }
     }
 
-    override suspend fun refreshData(){
+    override suspend fun refreshAllData(): Flow<Result<Nothing?>> = flow {
+        emit(Result.Loading)
         println("refreshdata is called")
         val sections = userPreferences.getSectionListPreference()
         println("sections: $sections")
@@ -33,14 +55,29 @@ class NewsRepository(
         }
     }
 
-    override suspend fun refreshDataForSection(section: String) {
-        val newArticlesForSection = remoteDataSource.getArticlesForSection(section)
-        println("result list size for section $section : ${newArticlesForSection.size}")
-        localDataSource.refreshDataForSection(section, newArticlesForSection)
+    override suspend fun refreshDataForSection(section: String): Flow<Result<Nothing?>> = flow {
+        emit(Result.Loading)
+        try {
+            val newArticlesForSection = remoteDataSource.getArticlesForSection(section)
+            println("result list size for section $section : ${newArticlesForSection.size}")
+            localDataSource.refreshDataForSection(section, newArticlesForSection)
+            emit(Result.Success(null))
+        } catch (e: Exception) {
+            println(e)
+            emit(Result.Error(e))
+        }
     }
 
-    override suspend fun searchInNews(keyword: String) {
-        remoteDataSource.searchInNews(keyword)
+    override suspend fun searchInNews(keyword: String): Flow<Result<List<NewsArticle>>> = flow {
+        emit(Result.Loading)
+        try {
+            val results = remoteDataSource.searchInNews(keyword)
+            println("number of results for search : $results")
+            emit(Result.Success(results))
+        } catch (e: Exception) {
+            println(e)
+            emit(Result.Error(e))
+        }
     }
 
     override suspend fun saveToBookmarks(article: NewsArticle) {
