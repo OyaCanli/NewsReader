@@ -61,6 +61,8 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
                         Timber.d("Article list received. List size : ${it.size}")
                         binding.swipeToRefresh.isRefreshing = false
                         articleAdapter.submitList(it)
+                    } else {
+                        Timber.d("Empty list received from database")
                     }
                 }
             }
@@ -69,6 +71,7 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { state ->
+                    Timber.d("UIState is $state")
                     when (state) {
                         UIState.LOADING -> binding.showLoading()
                         UIState.SUCCESS -> binding.showList()

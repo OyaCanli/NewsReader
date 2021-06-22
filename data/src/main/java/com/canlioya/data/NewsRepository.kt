@@ -17,30 +17,11 @@ class NewsRepository(
     private val userPreferences: IUserPreferences
 ) : INewsRepository {
 
-    override fun getArticlesForSection(section: String): Flow<Result<List<NewsArticle>>> = flow {
-        emit(Result.Loading)
-        println("Getting articles for section")
-        try {
-            localDataSource.getArticlesForSection(section).map {
-                emit(Result.Success(it))
-            }
-        } catch (e: IOException) {
-            println(e)
-            emit(Result.Error(e))
-        }
-    }
+    override fun getArticlesForSection(section: String): Flow<List<NewsArticle>> = localDataSource.getArticlesForSection(section)
 
-    override fun getBookmarks(): Flow<Result<List<NewsArticle>>> = flow {
-        emit(Result.Loading)
+    override fun getBookmarks(): Flow<List<NewsArticle>>  {
         println("Getting bookmarks")
-        try {
-            localDataSource.getBookmarks().map {
-                emit(Result.Success(it))
-            }
-        } catch (e: IOException) {
-            println(e)
-            emit(Result.Error(e))
-        }
+        return localDataSource.getBookmarks()
     }
 
     override suspend fun refreshAllData(): Flow<Result<Nothing?>> = flow {

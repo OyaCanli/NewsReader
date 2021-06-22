@@ -1,6 +1,7 @@
 package com.canlioya.local
 
 
+import android.database.SQLException
 import android.util.Log
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.canlioya.core.model.NewsArticle
@@ -10,6 +11,7 @@ import com.canlioya.data.IUserPreferences
 import com.canlioya.local.database.NewsDatabase
 import com.canlioya.local.mappers.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class DBDataSource(val database: NewsDatabase, val userPreferences: IUserPreferences) : ILocalDataSource {
@@ -24,7 +26,7 @@ class DBDataSource(val database: NewsDatabase, val userPreferences: IUserPrefere
 
     override fun getArticlesForSection(section: String) : Flow<List<NewsArticle>> {
         return database.newsDao().getArticlesForSection(section).map {
-            it.databaseToDomain()
+                it.databaseToDomain()
         }
     }
 

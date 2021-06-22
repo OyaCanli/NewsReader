@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface INewsRepository {
 
-    fun getArticlesForSection(section: String): Flow<Result<List<NewsArticle>>>
+    fun getArticlesForSection(section: String): Flow<List<NewsArticle>>
 
-    fun getBookmarks(): Flow<Result<List<NewsArticle>>>
+    fun getBookmarks(): Flow<List<NewsArticle>>
 
     suspend fun refreshAllData() : Flow<Result<Nothing?>>
 

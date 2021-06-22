@@ -21,9 +21,10 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class ArticleListViewModel @Inject constructor(private val interactors: Interactors,
-                                               savedStateHandle: SavedStateHandle,
-                                               @IODispatcher private val ioDispatcher: CoroutineDispatcher
+class ArticleListViewModel @Inject constructor(
+    private val interactors: Interactors,
+    savedStateHandle: SavedStateHandle,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val section = savedStateHandle.get<String>(SECTION_KEY)
@@ -38,17 +39,12 @@ class ArticleListViewModel @Inject constructor(private val interactors: Interact
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            interactors.getNewsForSection(section!!).collectLatest { result ->
-                when(result) {
-                    is Result.Loading -> _uiState.value = UIState.LOADING
-                    is Result.Error -> _uiState.value = UIState.ERROR
-                    is Result.Success -> {
-                        if(result.data.isNotEmpty()){
-                            _articles.value = result.data
-                            _uiState.value = UIState.SUCCESS
-                            Timber.d("news for section received. list size : ${result.data.size}")
-                        }
-                    }
+            _uiState.value = UIState.LOADING
+            interactors.getNewsForSection(section!!).collectLatest {
+                if (it.isNotEmpty()) {
+                    _articles.value = it
+                    _uiState.value = UIState.SUCCESS
+                    Timber.d("news for section received. list size : ${it.size}")
                 }
             }
         }
@@ -60,7 +56,7 @@ class ArticleListViewModel @Inject constructor(private val interactors: Interact
         }
     }
 
-    fun refreshDataForSection(){
+    fun refreshDataForSection() {
         viewModelScope.launch {
             interactors.refreshDataForSection(section!!)
         }
