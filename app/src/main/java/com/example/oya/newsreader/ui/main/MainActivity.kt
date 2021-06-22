@@ -1,35 +1,51 @@
 package com.example.oya.newsreader.ui.main
 
 import android.app.SearchManager
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.oya.newsreader.R
 import com.canlioya.data.IUserPreferences
 import com.example.oya.newsreader.databinding.ActivityMainBinding
 import com.example.oya.newsreader.common.Constants
+import com.example.oya.newsreader.common.isOnline
+import com.example.oya.newsreader.common.showSnack
 import com.example.oya.newsreader.ui.settings.SettingsActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    lateinit var binding: ActivityMainBinding
+
     @Inject
     lateinit var userPreferences: IUserPreferences
 
-    private var mSearchQuery: String? = null
+    private val viewModel: MainViewModel by viewModels()
+
+    private var networkReceiver: NetworkReceiver? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
@@ -46,10 +62,6 @@ class MainActivity : AppCompatActivity() {
             tab.text = sectionList[position]
         }.attach()
 
-        //Retrieve the search query saved before rotation
-        if (savedInstanceState != null) {
-            mSearchQuery = savedInstanceState.getString("searchQuery")
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -66,17 +78,17 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                mSearchQuery = newText
+                viewModel.searchQuery = newText
                 return false
             }
         })
 
         /*If there is search query saved during rotation,
         set the query again and expand the view*/
-        if (!TextUtils.isEmpty(mSearchQuery)) {
+        if (viewModel.searchQuery?.isNotBlank() == true) {
             /* Back up saved query before expanding the view,
              because as soon as view is expanded search query is set to ""*/
-            val backupQuery = mSearchQuery
+            val backupQuery = viewModel.searchQuery
             searchItem.expandActionView()
             searchView.setQuery(backupQuery, false)
             searchView.isFocusable = true
@@ -102,8 +114,77 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(Constants.SEARCH_QUERY, mSearchQuery)
+    /**
+     * When fetching failed with a network error, we start listening for
+     * network state by registering a broadcast receiver for CONNECTIVITY_CHANGE
+     */
+    private fun startListeningNetworkState() {
+        Timber.d("Start listening network state")
+        if (networkReceiver == null) {
+            networkReceiver = NetworkReceiver()
+        }
+        val intentFilter = IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")
+        registerReceiver(networkReceiver, intentFilter)
     }
+
+    /**
+     * When connection is reestablished or the user quits the app
+     * we unregister from the broadcast receiver
+     */
+    private fun stopListeningNetworkState() {
+        Timber.d("Stop listening network state")
+        networkReceiver?.let {
+            unregisterReceiver(it)
+            networkReceiver = null
+        }
+    }
+
+    /**
+     * Broadcast receiver for listening to network state.
+     * When triggered, we check if network is available
+     * and if available we start fetching again, we show
+     * a snack for informing the user and we unregister
+     * from the broadcast receiver
+     */
+    inner class NetworkReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Timber.d("Broadcast received for network state")
+            if (isOnline(context)) {
+                Timber.d("is online")
+                stopListeningNetworkState()
+                viewModel.startRefreshingData()
+                binding.mainContent.showSnack(
+                    text = R.string.internet_is_back,
+                    backgroundColor = android.R.color.holo_green_light
+                )
+            }
+        }
+    }
+
+    /**
+     * If user quits the app while broadcast receiver is active,
+     * we unregister not to waste system resources
+     */
+    override fun onStop() {
+        super.onStop()
+        stopListeningNetworkState()
+    }
+
+    /**
+     * When user comes back to app
+     * we check internet connection and it
+     * there is no internet we start listening network state
+     */
+    override fun onStart() {
+        super.onStart()
+        if (!isOnline(this)) {
+            binding.root.showSnack(
+                text = R.string.no_internet_warning,
+                length = Snackbar.LENGTH_INDEFINITE,
+                backgroundColor = R.color.colorPrimaryDark
+            )
+            startListeningNetworkState()
+        }
+    }
+
 }
