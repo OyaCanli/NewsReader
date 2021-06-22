@@ -16,18 +16,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name=".ui.details.DetailsActivity"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:launchMode="singleTop"
             android:exported="true" />
+        <activity
+            android:name=".ui.settings.SettingsActivity" />
         <activity
             android:name=".ui.main.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.main.MainActivity"
+            android:launchMode="singleTop"/>
 
         <meta-data
             android:name="preloaded_fonts"

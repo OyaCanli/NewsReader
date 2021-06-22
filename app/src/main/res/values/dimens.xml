@@ -10,7 +10,7 @@
     <dimen name="icon_dimension">36dp</dimen>
     <dimen name="trail_textSize">16sp</dimen>
     <dimen name="detailsTitle_textSize">20sp</dimen>
-    <dimen name="details_image_height">200dp</dimen>
+    <dimen name="details_image_height">240dp</dimen>
     <dimen name="line_height">1dp</dimen>
     <dimen name="line_gap">2dp</dimen>
     <dimen name="splash_header_textsize">40sp</dimen>

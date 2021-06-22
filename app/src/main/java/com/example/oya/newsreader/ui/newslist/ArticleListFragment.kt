@@ -19,6 +19,7 @@ import com.example.oya.newsreader.common.showList
 import com.example.oya.newsreader.common.showLoading
 import com.example.oya.newsreader.data.Interactors
 import com.example.oya.newsreader.databinding.FragmentListBinding
+import com.example.oya.newsreader.ui.details.DetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -106,9 +107,9 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
     }
 
     private fun openDetails(article: NewsArticle) {
-        /*val intent = Intent(context, DetailsActivity::class.java)
+        val intent = Intent(context, DetailsActivity::class.java)
         intent.putExtra(CHOSEN_ARTICLE, article)
-        startActivity(intent)*/
+        startActivity(intent)
     }
 
     override fun onRefresh() {

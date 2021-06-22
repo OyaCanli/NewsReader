@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.canlioya.core.model.NewsArticle
 import com.example.oya.newsreader.common.bindImage
 import com.example.oya.newsreader.common.fromHtml
+import com.example.oya.newsreader.common.splitDateAndTime
 import com.example.oya.newsreader.databinding.ItemArticleBinding
 
 class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<NewsArticle, ArticleAdapter.ViewHolder>(
@@ -33,11 +34,6 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
             binding.date.text = splitDateAndTime(currentArticle.date)
             binding.thumbnail.bindImage(currentArticle.thumbnailUrl)
             binding.section.text = currentArticle.section
-        }
-
-        private fun splitDateAndTime(dateTime : String) : String{
-            val parts = dateTime.split("T")
-            return "${parts[0]}\n${parts[1]}"
         }
 
         companion object {

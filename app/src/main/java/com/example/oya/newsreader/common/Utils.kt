@@ -16,6 +16,11 @@ fun fromHtml(text: String?): Spanned? {
     }
 }
 
+fun splitDateAndTime(dateTime : String) : String{
+    val parts = dateTime.split("T")
+    return "${parts[0]}\n${parts[1]}"
+}
+
 /**
  * Utility method for checking availability of internet connection
  */
