@@ -21,6 +21,7 @@ import com.example.oya.newsreader.databinding.ActivityMainBinding
 import com.example.oya.newsreader.common.Constants
 import com.example.oya.newsreader.common.isOnline
 import com.example.oya.newsreader.common.showSnack
+import com.example.oya.newsreader.ui.bookmarks.BookmarkActivity
 import com.example.oya.newsreader.ui.settings.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -107,8 +108,8 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.action_bookmarks -> {
-                /*val intent = Intent(this@MainActivity, BookmarksActivity::class.java)
-                startActivity(intent)*/
+                val intent = Intent(this@MainActivity, BookmarkActivity::class.java)
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)

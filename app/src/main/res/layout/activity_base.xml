@@ -33,7 +33,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include layout="@layout/activity_details"/>
-        <include layout="@layout/activity_search_bookmarks"/>
+        <include layout="@layout/activity_list"/>
         <include layout="@layout/activity_settings"/>
         <include layout="@layout/activity_sort_sections"/>
 

@@ -8,7 +8,9 @@ interface ILocalDataSource {
 
     suspend fun refreshDataForSection(section : String, list: List<NewsArticle>)
 
-    suspend fun saveToBookmarks(article: NewsArticle)
+    suspend fun setAsBookmark(articleId: String)
+
+    suspend fun removeFromBookmarks(articleId: String)
 
     fun getArticlesForSection(section: String): Flow<List<NewsArticle>>
 

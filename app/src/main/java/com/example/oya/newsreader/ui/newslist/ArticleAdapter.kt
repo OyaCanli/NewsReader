@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.canlioya.core.model.NewsArticle
+import com.example.oya.newsreader.R
 import com.example.oya.newsreader.common.bindImage
 import com.example.oya.newsreader.common.fromHtml
 import com.example.oya.newsreader.common.splitDateAndTime
@@ -22,7 +23,9 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentArticle = getItem(position)
         holder.bind(currentArticle)
-        holder.binding.root.setOnClickListener { view -> listener.onListItemClick(view, currentArticle) }
+        holder.binding.articleItemRoot.setOnClickListener {listener.onListItemClick(currentArticle) }
+        holder.binding.share.setOnClickListener { listener.onShareClick(currentArticle.webUrl) }
+        holder.binding.bookmark.setOnClickListener { listener.onBookmarkClick(currentArticle) }
     }
 
     class ViewHolder private constructor(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root){
@@ -34,6 +37,11 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
             binding.date.text = splitDateAndTime(currentArticle.date)
             binding.thumbnail.bindImage(currentArticle.thumbnailUrl)
             binding.section.text = currentArticle.section
+            if(currentArticle.isBookmarked){
+                binding.bookmark.setImageResource(R.drawable.ic_bookmark_filled)
+            } else {
+                binding.bookmark.setImageResource(R.drawable.ic_bookmark_outlined)
+            }
         }
 
         companion object {
@@ -57,5 +65,7 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
 }
 
 interface ListItemClickListener {
-    fun onListItemClick(view: View?, article : NewsArticle)
+    fun onListItemClick(article : NewsArticle)
+    fun onBookmarkClick(article : NewsArticle)
+    fun onShareClick(url : String)
 }

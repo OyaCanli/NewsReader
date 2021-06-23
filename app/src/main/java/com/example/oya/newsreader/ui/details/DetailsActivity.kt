@@ -9,16 +9,26 @@ import android.content.Intent
 import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import com.example.oya.newsreader.R
 import com.example.oya.newsreader.common.*
+import com.example.oya.newsreader.data.Interactors
+import com.example.oya.newsreader.ui.bookmarks.BookmarkActivity
 import com.example.oya.newsreader.ui.settings.SettingsActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class DetailsActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityDetailsBinding
 
+    private val viewModel : DetailsViewModel by viewModels()
+
     private var chosenArticle: NewsArticle? = null
+
+    @Inject
+    lateinit var interactors: Interactors
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +67,7 @@ class DetailsActivity : AppCompatActivity() {
             detailsImage.bindImage(chosenArticle.thumbnailUrl)
             detailsSection.text = chosenArticle.section
             detailsTime.text = splitDateAndTime(chosenArticle.date)
+            //todo: if is bookmarked, revise the icon on menu
         }
     }
 
@@ -77,7 +88,7 @@ class DetailsActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.action_bookmark -> {
-                //saveToBookmarks()
+                viewModel.toggleBookmarkState(chosenArticle!!)
             }
             R.id.action_share -> {
                 val intent = Intent(Intent.ACTION_SEND)
@@ -88,8 +99,8 @@ class DetailsActivity : AppCompatActivity() {
                 }
             }
             R.id.action_bookmarks -> {
-                /*val intent = Intent(this@DetailsActivity, BookmarksActivity::class.java)
-                startActivity(intent)*/
+                val intent = Intent(this@DetailsActivity, BookmarkActivity::class.java)
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)

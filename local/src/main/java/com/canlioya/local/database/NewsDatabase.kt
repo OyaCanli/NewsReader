@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [NewsEntity::class, BookmarkEntity::class],
-    version = 1, exportSchema = false)
+@Database(entities = [NewsEntity::class],
+    version = 2, exportSchema = false)
 abstract class NewsDatabase : RoomDatabase() {
 
     abstract fun newsDao(): NewsDao
@@ -19,8 +19,8 @@ abstract class NewsDatabase : RoomDatabase() {
         fun getInstance(context: Context): NewsDatabase {
             return sInstance ?: synchronized(this) {
                 sInstance ?: Room.databaseBuilder(context.applicationContext,
-                    NewsDatabase::class.java, DATABASE_NAME
-                )
+                    NewsDatabase::class.java, DATABASE_NAME)
+                    .fallbackToDestructiveMigration()
                     .build()
                     .also { sInstance = it }
             }

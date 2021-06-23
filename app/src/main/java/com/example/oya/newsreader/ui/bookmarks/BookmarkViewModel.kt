@@ -1,16 +1,12 @@
-package com.example.oya.newsreader.ui.newslist
-
+package com.example.oya.newsreader.ui.bookmarks
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.ListenableWorker
 import com.canlioya.core.model.NewsArticle
-import com.canlioya.core.model.Result
 import com.example.oya.newsreader.common.UIState
 import com.example.oya.newsreader.data.Interactors
 import com.example.oya.newsreader.di.IODispatcher
-import com.example.oya.newsreader.ui.main.SECTION_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,19 +16,16 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-
 @HiltViewModel
-class ArticleListViewModel @Inject constructor(
+class BookmarkViewModel @Inject constructor(
     private val interactors: Interactors,
     savedStateHandle: SavedStateHandle,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val section = savedStateHandle.get<String>(SECTION_KEY)
-
-    private var _articles = MutableStateFlow<List<NewsArticle>>(emptyList())
-    val articles: StateFlow<List<NewsArticle>>
-        get() = _articles
+    private var _bookmarks = MutableStateFlow<List<NewsArticle>>(emptyList())
+    val bookmarks: StateFlow<List<NewsArticle>>
+        get() = _bookmarks
 
     private val _uiState: MutableStateFlow<UIState> = MutableStateFlow(UIState.LOADING)
     val uiState: StateFlow<UIState>
@@ -41,11 +34,11 @@ class ArticleListViewModel @Inject constructor(
     init {
         viewModelScope.launch(ioDispatcher) {
             _uiState.value = UIState.LOADING
-            interactors.getNewsForSection(section!!).collectLatest {
+            interactors.getBookmarks().collectLatest {
                 if (it.isNotEmpty()) {
-                    _articles.value = it
+                    _bookmarks.value = it
                     _uiState.value = UIState.SUCCESS
-                    Timber.d("news for section received. list size : ${it.size}")
+                    Timber.d("bookmarks received. list size : ${it.size}")
                 }
             }
         }
@@ -56,12 +49,4 @@ class ArticleListViewModel @Inject constructor(
             interactors.toggleBookmarkState(article)
         }
     }
-
-    fun refreshDataForSection() {
-        viewModelScope.launch {
-            interactors.refreshDataForSection(section!!)
-        }
-    }
-
-
 }

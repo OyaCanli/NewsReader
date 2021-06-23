@@ -10,13 +10,13 @@ interface INewsRepository {
 
     fun getBookmarks(): Flow<List<NewsArticle>>
 
-    suspend fun refreshAllData() : Flow<Result<Nothing?>>
+    suspend fun refreshAllData()
 
-    suspend fun refreshDataForSection(section: String) : Flow<Result<Nothing?>>
+    suspend fun refreshDataForSection(section: String)
 
     suspend fun searchInNews(keyword: String) : Flow<Result<List<NewsArticle>>>
 
-    suspend fun saveToBookmarks(article: NewsArticle)
+    suspend fun toggleBookmarkState(article : NewsArticle)
 
     suspend fun clearUnusedData()
 }

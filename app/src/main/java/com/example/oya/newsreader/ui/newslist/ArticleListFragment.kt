@@ -37,8 +37,6 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
 
     private val binding by viewBinding(FragmentListBinding::bind)
 
-    @Inject
-    lateinit var interactors: Interactors
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,20 +82,25 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
         }
     }
 
+    override fun onListItemClick(article: NewsArticle) {
+        openDetails(article)
+    }
 
-    override fun onListItemClick(view: View?, article: NewsArticle) {
-        when (view?.id) {
-            R.id.article_item_root -> openDetails(article)
-            R.id.share -> shareTheLink(article.webUrl)
-            R.id.bookmark -> saveToBookmarks(article)
-        }
+    override fun onBookmarkClick(article: NewsArticle) {
+        saveToBookmarks(article)
+    }
+
+    override fun onShareClick(url: String) {
+        shareTheLink(url)
     }
 
     private fun saveToBookmarks(article: NewsArticle) {
-        viewModel.saveToBookmarks(article)
+        Timber.d("bookmark is clicked")
+        viewModel.toggleBookmarkState(article)
     }
 
     private fun shareTheLink(webUrl: String) {
+        Timber.d("share link is clicked")
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, webUrl)
@@ -113,6 +116,6 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
     }
 
     override fun onRefresh() {
-       viewModel.refreshDataForSection()
+        viewModel.refreshDataForSection()
     }
 }

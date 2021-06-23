@@ -13,8 +13,8 @@ interface NewsDao {
     @Query("SELECT * FROM news WHERE articleId = :articleId LIMIT 1")
     suspend fun getChosenArticle(articleId : String) : NewsEntity
 
-    @Query("SELECT * FROM bookmarks ORDER BY date DESC")
-    fun getBookmarkedArticles() : Flow<List<BookmarkEntity>>
+    @Query("SELECT * FROM news WHERE isBookmarked = 1 ORDER BY date DESC")
+    fun getBookmarkedArticles() : Flow<List<NewsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(article : NewsEntity)
@@ -23,37 +23,21 @@ interface NewsDao {
     suspend fun insertAll(list : List<NewsEntity>)
 
     @Transaction
-    open suspend fun bookmarkArticle(article: BookmarkEntity, isBookmarked: Boolean){
-        setAsBookmark(article.articleId, true)
-        if(isBookmarked){
-            insertBookmark(article)
-        } else {
-            deleteBookmark(article.articleId)
-        }
-    }
-
-    @Transaction
     open suspend fun refreshDataForSection(section: String, list : List<NewsEntity>){
         deleteArticlesFromSection(section)
         insertAll(list)
     }
 
-    @Query("UPDATE news SET isBookmarked = :isBookmarked WHERE articleId = :articleId")
-    suspend fun setAsBookmark(articleId : String, isBookmarked : Boolean)
+    @Query("UPDATE news SET isBookmarked = 1 WHERE articleId = :articleId")
+    suspend fun setAsBookmark(articleId : String)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertBookmark(article: BookmarkEntity)
+    @Query("UPDATE news SET isBookmarked = 0 WHERE articleId = :articleId")
+    suspend fun removeFromBookmarks(articleId : String)
 
-    @Query("DELETE FROM news")
-    suspend fun deleteAll()
-
-    @Query("DELETE FROM news WHERE section = :section")
+    @Query("DELETE FROM news WHERE section = :section AND isBookmarked = 0")
     suspend fun deleteArticlesFromSection(section: String)
 
-    @Query("DELETE FROM bookmarks WHERE articleId = :articleId")
-    suspend fun deleteBookmark(articleId : String)
-
-    @Query("DELETE FROM news WHERE section NOT IN (:sectionList)")
+    @Query("DELETE FROM news WHERE section NOT IN (:sectionList) AND isBookmarked = 0")
     suspend fun deleteUnusedArticles(sectionList : String)
 
     @RawQuery

@@ -17,36 +17,29 @@ class NewsRepository(
     private val userPreferences: IUserPreferences
 ) : INewsRepository {
 
-    override fun getArticlesForSection(section: String): Flow<List<NewsArticle>> = localDataSource.getArticlesForSection(section)
+    override fun getArticlesForSection(section: String): Flow<List<NewsArticle>> =
+        localDataSource.getArticlesForSection(section)
 
-    override fun getBookmarks(): Flow<List<NewsArticle>>  {
+    override fun getBookmarks(): Flow<List<NewsArticle>> {
         println("Getting bookmarks")
         return localDataSource.getBookmarks()
     }
 
-    override suspend fun refreshAllData(): Flow<Result<Nothing?>> = flow {
-        emit(Result.Loading)
+    override suspend fun refreshAllData() {
         println("refreshdata is called")
         val sections = userPreferences.getSectionListPreference()
         println("sections: $sections")
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             sections.forEach {
                 async { refreshDataForSection(it) }
             }
         }
     }
 
-    override suspend fun refreshDataForSection(section: String): Flow<Result<Nothing?>> = flow {
-        emit(Result.Loading)
-        try {
-            val newArticlesForSection = remoteDataSource.getArticlesForSection(section)
-            println("result list size for section $section : ${newArticlesForSection.size}")
-            localDataSource.refreshDataForSection(section, newArticlesForSection)
-            emit(Result.Success(null))
-        } catch (e: Exception) {
-            println(e)
-            emit(Result.Error(e))
-        }
+    override suspend fun refreshDataForSection(section: String) {
+        val newArticlesForSection = remoteDataSource.getArticlesForSection(section)
+        println("result list size for section $section : ${newArticlesForSection.size}")
+        localDataSource.refreshDataForSection(section, newArticlesForSection)
     }
 
     override suspend fun searchInNews(keyword: String): Flow<Result<List<NewsArticle>>> = flow {
@@ -61,8 +54,14 @@ class NewsRepository(
         }
     }
 
-    override suspend fun saveToBookmarks(article: NewsArticle) {
-        localDataSource.saveToBookmarks(article)
+    override suspend fun toggleBookmarkState(article: NewsArticle) {
+        if(article.isBookmarked){
+            println("removing article from bookmarks")
+            localDataSource.removeFromBookmarks(article.articleId)
+        } else {
+            println("bookmarking article")
+            localDataSource.setAsBookmark(article.articleId)
+        }
     }
 
     override suspend fun clearUnusedData() {
