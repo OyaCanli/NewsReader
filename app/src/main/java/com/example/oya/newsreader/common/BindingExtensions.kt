@@ -10,7 +10,9 @@ fun FragmentListBinding.showLoading() {
 }
 
 fun FragmentListBinding.showList() {
-    recycler.visibility = View.VISIBLE
+    if(recycler.visibility != View.VISIBLE){
+        recycler.visibility = View.VISIBLE
+    }
     loadingIndicator.visibility = View.GONE
 }
 

@@ -13,6 +13,9 @@ import com.example.oya.newsreader.common.fromHtml
 import com.example.oya.newsreader.common.splitDateAndTime
 import com.example.oya.newsreader.databinding.ItemArticleBinding
 
+const val BOOKMARK_ITEM = 37913
+const val REMOVE_BOOKMARK = 12796
+
 class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<NewsArticle, ArticleAdapter.ViewHolder>(
     NewsDiffCallback()
 ){
@@ -28,8 +31,19 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
         holder.binding.bookmark.setOnClickListener { listener.onBookmarkClick(currentArticle) }
     }
 
-    class ViewHolder private constructor(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root){
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if(payloads.isNotEmpty()){
+            when(payloads[0] as? Int) {
+                BOOKMARK_ITEM -> holder.binding.bookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                REMOVE_BOOKMARK -> holder.binding.bookmark.setImageResource(R.drawable.ic_bookmark_outlined)
+                else -> super.onBindViewHolder(holder, position, payloads)
+            }
+        } else {
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
 
+    class ViewHolder private constructor(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(currentArticle: NewsArticle){
             binding.title.text = currentArticle.title
             binding.trail.text = fromHtml(currentArticle.articleTrail)
@@ -55,11 +69,19 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
 
     private class NewsDiffCallback : DiffUtil.ItemCallback<NewsArticle>() {
         override fun areItemsTheSame(oldItem: NewsArticle, newItem: NewsArticle): Boolean {
-            return oldItem === newItem
+            return oldItem.articleId == newItem.articleId
         }
 
         override fun areContentsTheSame(oldItem: NewsArticle, newItem: NewsArticle): Boolean {
             return oldItem == newItem
+        }
+
+        override fun getChangePayload(oldItem: NewsArticle, newItem: NewsArticle): Any? {
+            return when {
+                !oldItem.isBookmarked && newItem.isBookmarked -> BOOKMARK_ITEM
+                oldItem.isBookmarked && !newItem.isBookmarked -> REMOVE_BOOKMARK
+                else -> super.getChangePayload(oldItem, newItem)
+            }
         }
     }
 }
