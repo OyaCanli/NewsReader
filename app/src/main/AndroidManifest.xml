@@ -15,16 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.bookmarks.BookmarkActivity"
-            android:parentActivityName=".ui.main.MainActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.details.DetailsActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:parentActivityName=".ui.main.MainActivity" />
-        <activity android:name=".ui.settings.SettingsActivity" />
+
+
         <activity
             android:name=".ui.main.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -34,9 +26,40 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.main.MainActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop" >
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".ui.search.SearchableActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.search.SearchableActivity"
+            android:label="Search Results"
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <activity
+            android:name=".ui.bookmarks.BookmarkActivity"
+            android:exported="true"
+            android:parentActivityName=".ui.main.MainActivity" />
+
+        <activity
+            android:name=".ui.details.DetailsActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.main.MainActivity" />
+
+        <activity android:name=".ui.settings.SettingsActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

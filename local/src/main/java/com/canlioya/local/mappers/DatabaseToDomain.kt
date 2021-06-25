@@ -50,7 +50,7 @@ fun List<NewsArticle>.domainToDatabase() = this.map {
 
 fun convertStringDateToLong(date : String) : Long? {
     val timeZone = TimeZone.getTimeZone("UTC")
-    val sourceFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    val sourceFormat = SimpleDateFormat("LLL dd, yyyy'T'HH:mm")
     sourceFormat.timeZone = timeZone
     var parsedTime: Date? = null
     try {

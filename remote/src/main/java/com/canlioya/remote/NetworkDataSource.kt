@@ -21,9 +21,13 @@ class NetworkDataSource @Inject constructor(
     private val apiService: NewsApiService
 ) : INetworkDataSource {
 
-    override suspend fun getArticlesForSection(section: String) : List<NewsArticle> {
+    override suspend fun getArticlesForSection(section: String): List<NewsArticle> {
         try {
-            val response = apiService.getArticles(section, userPreferences.getArticlePerPagePreference(), userPreferences.getOrderByPreference()).response
+            val response = apiService.getArticles(
+                section,
+                userPreferences.getArticlePerPagePreference(),
+                userPreferences.getOrderByPreference()
+            ).response
             return response.results?.toDomainNews() ?: emptyList()
         } catch (e: HttpException) {
             println(e)
@@ -35,13 +39,14 @@ class NetworkDataSource @Inject constructor(
     }
 
     override suspend fun searchInNews(keywords: String): List<NewsArticle> {
-        TODO("Not yet implemented")
+        val response = apiService.searchInNews(keywords, "25").response
+        return response.results?.toDomainNews() ?: emptyList()
     }
 
     override suspend fun checkHotNews(): NewsArticle? {
         return try {
             val results = apiService.getLatestNews(buildUrlForNotification()).response.results
-            if(results?.isNotEmpty() == true){
+            if (results?.isNotEmpty() == true) {
                 results[0].toNewsArticle()
             } else {
                 null
@@ -75,7 +80,7 @@ class NetworkDataSource @Inject constructor(
 
     private fun getSectionsString() = userPreferences.getSectionListPreference().joinToString("|")
 
-    private fun getFormattedTime() : String {
+    private fun getFormattedTime(): String {
         val nowInMillis = Calendar.getInstance().timeInMillis
         val interval = TimeUnit.MINUTES.toMillis(30L)
 

@@ -24,6 +24,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
+import android.content.ComponentName
+import com.canli.oya.newsreader.ui.search.SearchableActivity
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -64,7 +67,11 @@ class MainActivity : AppCompatActivity() {
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
         val searchManager = getSystemService(SEARCH_SERVICE) as SearchManager
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+            ComponentName(
+                this,
+                SearchableActivity::class.java
+            )))
 
         //Get a back-up of search query in case user rotates the phone before submitting
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

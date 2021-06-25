@@ -9,6 +9,7 @@
     <string name="toast_message_sort_sections">Sort sections by dragging them up or down</string>
     <string name="no_bookmarks">You don\'t have any bookmarks yet.</string>
     <string name="snackbar_message_article_deleted">Article is deleted from bookmarks.</string>
+    <string name="search_results_for">Search results for %1$s</string>
 
     <!-- sections -->
     <string name="politics">Politics</string>
