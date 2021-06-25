@@ -16,7 +16,11 @@ class SyncUtils @Inject constructor(
     @ApplicationContext private val applicationContext: Context
 ) {
 
-    fun setUpSyncNewsJob() {
+    fun scheduleSyncNewsJob() {
+        if(!userPreferences.isSyncEnabled()){
+            return //If sync is disabled, don't schedule syncs
+        }
+
         val networkType =
             if (userPreferences.shouldSyncOnlyOnWifi()) NetworkType.UNMETERED else NetworkType.CONNECTED
 

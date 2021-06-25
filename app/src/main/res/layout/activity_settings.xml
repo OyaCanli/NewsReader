@@ -30,7 +30,7 @@
     <fragment
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/settings_fragment"
-        android:name="com.example.oya.newsreader.ui.settings.SettingsFragment"
+        android:name="com.canli.oya.newsreader.ui.settings.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

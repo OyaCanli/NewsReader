@@ -9,4 +9,6 @@ interface INetworkDataSource {
 
     suspend fun searchInNews(keywords : String) : List<NewsArticle>
 
+    suspend fun checkHotNews(): NewsArticle?
+
 }

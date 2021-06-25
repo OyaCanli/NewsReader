@@ -47,6 +47,10 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
         saveToPrefs(stringVersion)
     }
 
+    override fun isSyncEnabled(): Boolean {
+        return preferences.getBoolean(context.getString(R.string.pref_key_offline_reading), true)
+    }
+
     private fun saveToPrefs(stringVersion: String) {
         val editor = preferences.edit()
         editor.putString(SORTED_SECTIONS_KEY, stringVersion)
@@ -70,14 +74,18 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
     }
 
     override fun shouldSyncOnlyOnWifi(): Boolean {
-        return preferences.getBoolean(context.getString(R.string.only_on_wifi_key), context.resources.getBoolean(R.bool.pref_only_on_wifi_default))
+        return preferences.getBoolean(context.getString(R.string.only_on_wifi_key), true)
     }
 
     override fun shouldSyncOnlyWhenIdle(): Boolean {
-        return preferences.getBoolean(context.getString(R.string.pref_key_only_when_device_idle), context.resources.getBoolean(R.bool.pref_only_when_device_idle_default))
+        return preferences.getBoolean(context.getString(R.string.pref_key_only_when_device_idle), true)
     }
 
     override fun shouldSyncOnlyWhenCharging(): Boolean {
-        return preferences.getBoolean(context.getString(R.string.pref_key_only_on_charge), context.resources.getBoolean(R.bool.pref_only_on_charge_default))
+        return preferences.getBoolean(context.getString(R.string.pref_key_only_on_charge), false)
+    }
+
+    override fun isNotificationEnabled(): Boolean {
+        return preferences.getBoolean(context.getString(R.string.pref_key_enableNotifications), true)
     }
 }

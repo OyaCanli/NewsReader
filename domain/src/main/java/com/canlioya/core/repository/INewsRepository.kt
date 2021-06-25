@@ -19,4 +19,6 @@ interface INewsRepository {
     suspend fun toggleBookmarkState(article : NewsArticle)
 
     suspend fun clearUnusedData()
+
+    suspend fun checkHotNews() : NewsArticle?
 }

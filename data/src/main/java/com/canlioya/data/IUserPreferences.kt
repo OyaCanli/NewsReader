@@ -12,6 +12,8 @@ interface IUserPreferences {
 
     fun setSectionListPreference(list : List<String>)
 
+    fun isSyncEnabled() : Boolean
+
     fun getBackUpFrequency(): Long
 
     fun shouldSyncOnlyOnWifi() : Boolean
@@ -19,4 +21,6 @@ interface IUserPreferences {
     fun shouldSyncOnlyWhenIdle() : Boolean
 
     fun shouldSyncOnlyWhenCharging() : Boolean
+
+    fun isNotificationEnabled() : Boolean
 }

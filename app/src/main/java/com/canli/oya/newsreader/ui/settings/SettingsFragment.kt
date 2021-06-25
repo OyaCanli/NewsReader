@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.InputType
 import androidx.preference.*
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import com.canli.oya.newsreader.data.Interactors
 import com.canli.oya.newsreader.synch.SyncUtils
 import com.canlioya.data.IUserPreferences
@@ -14,6 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import com.canli.oya.newsreader.R
+import com.canli.oya.newsreader.notification.NotificationUtils
 import java.lang.NumberFormatException
 import java.util.*
 import javax.inject.Inject
@@ -32,6 +32,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     @Inject
     lateinit var syncUtils: SyncUtils
+
+    @Inject
+    lateinit var notificationUtils : NotificationUtils
 
     @Inject
     lateinit var interactors: Interactors
@@ -94,13 +97,17 @@ class SettingsFragment : PreferenceFragmentCompat(),
                 val shouldEnable = sharedPreferences.getBoolean(key, true)
                 enableOrDisableBackUpPreferences(shouldEnable)
                 if (shouldEnable) {
-                    syncUtils.setUpSyncNewsJob()
+                    syncUtils.scheduleSyncNewsJob()
                 } else {
                     syncUtils.cancelBackUps()
                 }
             }
             enableNotificationsKey -> {
-
+                if(userPreferences.isNotificationEnabled()){
+                    notificationUtils.scheduleNotificationJob()
+                } else {
+                    notificationUtils.cancelNotifications()
+                }
             }
             sectionChoicesKey -> {
                 Timber.d("section preferences changed")
@@ -109,7 +116,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     resources.getStringArray(R.array.pref_section_default_values).toSet()
                 val sections = sharedPreferences.getStringSet(key, defaultSections)
                 userPreferences.setSectionListPreference(sections?.toSet()!!)
-                //TODO : do this with workmanager foreground service
+
                 GlobalScope.launch {
                     interactors.refreshAllData()
                     //Clear cached articles of the sections user doesn't want anymore

@@ -67,4 +67,8 @@ class NewsRepository(
     override suspend fun clearUnusedData() {
         localDataSource.clearUnusedData()
     }
+
+    override suspend fun checkHotNews(): NewsArticle? {
+        return remoteDataSource.checkHotNews()
+    }
 }
