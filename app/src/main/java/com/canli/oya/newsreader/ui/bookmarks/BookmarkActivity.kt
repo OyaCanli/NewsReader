@@ -10,10 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.canli.oya.newsreader.R
-import com.canli.oya.newsreader.common.CHOSEN_ARTICLE
-import com.canli.oya.newsreader.common.UIState
-import com.canli.oya.newsreader.common.showList
-import com.canli.oya.newsreader.common.showLoading
+import com.canli.oya.newsreader.common.*
 import com.canli.oya.newsreader.databinding.ActivityListBinding
 import com.canli.oya.newsreader.ui.details.DetailsActivity
 import com.canli.oya.newsreader.ui.newslist.ArticleAdapter
@@ -27,9 +24,9 @@ import timber.log.Timber
 @AndroidEntryPoint
 class BookmarkActivity : AppCompatActivity(), ListItemClickListener {
 
-    lateinit var binding : ActivityListBinding
+    lateinit var binding: ActivityListBinding
 
-    private val viewModel : BookmarkViewModel by viewModels()
+    private val viewModel: BookmarkViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +43,8 @@ class BookmarkActivity : AppCompatActivity(), ListItemClickListener {
             AppCompatResources.getDrawable(
                 this,
                 R.drawable.item_divider
-            )!!)
+            )!!
+        )
 
         val articleAdapter = ArticleAdapter(this)
         binding.recycler.apply {
@@ -74,8 +72,7 @@ class BookmarkActivity : AppCompatActivity(), ListItemClickListener {
                     when (state) {
                         UIState.LOADING -> binding.showLoading()
                         UIState.SUCCESS -> binding.showList()
-                        UIState.ERROR -> {//todo}
-                        }
+                        UIState.EMPTY -> binding.showEmpty(R.string.no_bookmarks)
                     }
                 }
             }

@@ -8,4 +8,5 @@ enum class UIState {
     LOADING,
     SUCCESS,
     ERROR,
+    EMPTY
 }

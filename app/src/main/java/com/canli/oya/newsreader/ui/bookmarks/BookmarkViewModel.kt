@@ -39,6 +39,8 @@ class BookmarkViewModel @Inject constructor(
                     _bookmarks.value = it
                     _uiState.value = UIState.SUCCESS
                     Timber.d("bookmarks received. list size : ${it.size}")
+                } else {
+                    _uiState.value = UIState.EMPTY
                 }
             }
         }
