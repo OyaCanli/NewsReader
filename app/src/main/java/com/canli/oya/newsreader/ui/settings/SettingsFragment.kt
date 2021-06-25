@@ -89,6 +89,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         val enableBackUpKey = getString(R.string.pref_key_offline_reading)
         val enableNotificationsKey = getString(R.string.pref_key_enableNotifications)
         val sectionChoicesKey = getString(R.string.pref_key_sections)
+        val itemPerPageKey = getString(R.string.pref_key_itemsPerPage)
 
         when (key) {
             enableBackUpKey -> {
@@ -117,12 +118,17 @@ class SettingsFragment : PreferenceFragmentCompat(),
                 val sections = sharedPreferences.getStringSet(key, defaultSections)
                 userPreferences.setSectionListPreference(sections?.toSet()!!)
 
-                GlobalScope.launch {
-                    interactors.refreshAllData()
-                    //Clear cached articles of the sections user doesn't want anymore
-                    interactors.cleanUnusedData()
-                }
+                refreshAllData()
             }
+            itemPerPageKey -> refreshAllData()
+        }
+    }
+
+    private fun refreshAllData(){
+        GlobalScope.launch {
+            interactors.refreshAllData()
+            //Clear cached articles of the sections user doesn't want anymore
+            interactors.cleanUnusedData()
         }
     }
 

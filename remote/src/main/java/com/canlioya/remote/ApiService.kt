@@ -14,7 +14,7 @@ interface NewsApiService {
      * @param albumId
      */
     @GET("search?api-key=test&show-fields=byline%2CtrailText%2Cthumbnail%2Cbody")
-    suspend fun getArticles(@Query("section") section: String, @Query("page-size") pageSize : Int, @Query("order-by") orderBy : String) : Root
+    suspend fun getArticles(@Query("section") section: String, @Query("page-size") pageSize : String, @Query("order-by") orderBy : String) : Root
 
     @GET
     suspend fun getLatestNews(@Url url : String) : Root

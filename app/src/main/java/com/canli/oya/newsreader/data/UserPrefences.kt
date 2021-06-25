@@ -11,10 +11,9 @@ import java.util.*
 import javax.inject.Inject
 
 
-const val KEY_ORDER_BY = "order_by"
+
 const val ORDER_BY_DEFAULT = "newest"
-const val KEY_ARTICLE_PER_PAGE = "article_per_page"
-const val ARTICLE_PER_PAGE_DEFAULT = 25
+const val ARTICLE_PER_PAGE_DEFAULT = "20"
 const val SORTED_SECTIONS_KEY = "sorted_section_key"
 const val DEFAULT_SYNC_FREQUENCY = 8L
 
@@ -25,11 +24,11 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
     private val defaultSections : List<String> = context.resources.getStringArray(R.array.pref_section_default_values).toCollection(ArrayList())
 
     override fun getOrderByPreference(): String {
-        return preferences.getString(KEY_ORDER_BY, ORDER_BY_DEFAULT) ?: ORDER_BY_DEFAULT
+        return preferences.getString(context.getString(R.string.pref_key_orderBy), ORDER_BY_DEFAULT) ?: ORDER_BY_DEFAULT
     }
 
-    override fun getArticlePerPagePreference(): Int {
-        return preferences.getInt(KEY_ARTICLE_PER_PAGE, ARTICLE_PER_PAGE_DEFAULT)
+    override fun getArticlePerPagePreference(): String {
+        return preferences.getString(context.getString(R.string.pref_key_itemsPerPage), ARTICLE_PER_PAGE_DEFAULT) ?: ARTICLE_PER_PAGE_DEFAULT
     }
 
     override fun getSectionListPreference(): List<String> {

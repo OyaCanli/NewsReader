@@ -4,7 +4,7 @@ interface IUserPreferences {
 
     fun getOrderByPreference(): String
 
-    fun getArticlePerPagePreference(): Int
+    fun getArticlePerPagePreference(): String
 
     fun getSectionListPreference() : List<String>
 
