@@ -12,13 +12,13 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.canlioya.technicaltest"
+        applicationId "com.canlioya.newsreader"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "com.canlioya.technicaltest.testutils.CustomTestRunner"
+        testInstrumentationRunner "com.canlioya.newsreader.testutils.CustomTestRunner"
     }
 
     buildTypes {
