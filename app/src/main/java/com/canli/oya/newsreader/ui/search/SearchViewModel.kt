@@ -1,6 +1,5 @@
 package com.canli.oya.newsreader.ui.search
 
-import android.app.SearchManager
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

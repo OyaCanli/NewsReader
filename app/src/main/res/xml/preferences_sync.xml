@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:title="@string/offline_reading">
+
+    <PreferenceCategory android:title="@string/category_title_backUp"
+        android:key="@string/pref_cat_key_backUp">
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_offline_reading_default"
+            android:key="@string/pref_key_offline_reading"
+            android:summaryOff="@string/disabled"
+            android:summaryOn="@string/enabled"
+            android:title="@string/enable_offline_reading_title" />
+
+        <ListPreference
+            android:defaultValue="@string/pref_backUpFrequency_default"
+            android:entries="@array/pref_backUpFrequency_labels"
+            android:entryValues="@array/pref_backUpFrequency_values"
+            app:useSimpleSummaryProvider="true"
+            android:key="@string/pref_key_backUpFrequency"
+            android:title="@string/back_up_frequency" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/pref_cat_key_backup_only"
+        android:title="@string/pref_backUp_only">
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_only_on_wifi_default"
+            android:key="@string/only_on_wifi_key"
+            android:summaryOff="@string/on_any_network"
+            android:summaryOn="@string/only_on_wifi"
+            android:title="@string/only_on_wifi_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_only_when_device_idle_default"
+            android:key="@string/pref_key_only_when_device_idle"
+            android:summaryOff="@string/pref_sum_off_device_idle"
+            android:summaryOn="@string/pref_sum_only_when_my_device_idle"
+            android:title="@string/pref_title_only_when_device_idle" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_only_on_charge_default"
+            android:key="@string/pref_key_only_on_charge"
+            android:summaryOff="@string/pref_sum_off_on_charging"
+            android:summaryOn="@string/pref_sum_only_on_charge"
+            android:title="@string/pref_title_only_when_charging" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

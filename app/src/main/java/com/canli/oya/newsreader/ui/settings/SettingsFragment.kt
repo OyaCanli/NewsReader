@@ -39,14 +39,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
     @Inject
     lateinit var interactors: Interactors
 
-    private var pref_onlyOnWifi: Preference? = null
-    private var pref_onlyWhenIdle: Preference? = null
-    private var pref_onlyOnCharge: Preference? = null
-    private var pref_backUpFrequency: Preference? = null
-
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preferences, rootKey)
+        setPreferencesFromResource(R.xml.preferences_main, rootKey)
 
         //Register a onSharedPreferenceChangeListener so that changes in the settings are applied right away
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
@@ -54,8 +49,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         /*Set an OnPreferenceChangeListener to EditPreference. OnPreferenceChangeListener is called BEFORE the
         change is saved to preferences and we want to verify whether data is valid before saving it.
         That's why OnPreferenceChangeListener is better for this case.*/
-        val itemPerPagePref: EditTextPreference? =
-            findPreference(getString(R.string.pref_key_itemsPerPage))
+        val itemPerPagePref: EditTextPreference? = findPreference(getString(R.string.pref_key_itemsPerPage))
         itemPerPagePref?.apply {
             onPreferenceChangeListener = this@SettingsFragment
             setOnBindEditTextListener { editText ->
@@ -64,21 +58,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
 
         //Set an OnPreferenceClickListener to "sort sections" item so that it opens another activity when clicked
-        val sortSectionsPref: Preference? =
-            findPreference(getString(R.string.pref_key_sort_sections))
+        val sortSectionsPref: Preference? = findPreference(getString(R.string.pref_key_sort_sections))
         sortSectionsPref?.onPreferenceClickListener = this
-
-        pref_backUpFrequency = findPreference(getString(R.string.pref_key_backUpFrequency))
-
-        //Options related to back up will be disabled if user cancel back up.
-        pref_onlyOnWifi = findPreference(getString(R.string.only_on_wifi_key))
-        pref_onlyWhenIdle = findPreference(getString(R.string.pref_key_only_when_device_idle))
-        pref_onlyOnCharge = findPreference(getString(R.string.pref_key_only_on_charge))
-        val offlineEnabled = sharedPreferences.getBoolean(
-            requireContext().getString(R.string.pref_key_offline_reading),
-            requireContext().resources.getBoolean(R.bool.pref_offline_reading_default)
-        )
-        enableOrDisableBackUpPreferences(offlineEnabled)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
@@ -86,23 +67,11 @@ class SettingsFragment : PreferenceFragmentCompat(),
         onSharedPreferenceChanged is called AFTER the changes are made to preferences. So when you get a
         preference within this method, you'll receive the freshly changed new preference value.*/
 
-        val enableBackUpKey = getString(R.string.pref_key_offline_reading)
         val enableNotificationsKey = getString(R.string.pref_key_enableNotifications)
         val sectionChoicesKey = getString(R.string.pref_key_sections)
         val itemPerPageKey = getString(R.string.pref_key_itemsPerPage)
 
         when (key) {
-            enableBackUpKey -> {
-                /*If user enables back-ups, enable the options related to backup and schedule backup
-                If user disables backups, disable the options related to backup and cancel backup services*/
-                val shouldEnable = sharedPreferences.getBoolean(key, true)
-                enableOrDisableBackUpPreferences(shouldEnable)
-                if (shouldEnable) {
-                    syncUtils.scheduleSyncNewsJob()
-                } else {
-                    syncUtils.cancelBackUps()
-                }
-            }
             enableNotificationsKey -> {
                 if(userPreferences.isNotificationEnabled()){
                     notificationUtils.scheduleNotificationJob()
@@ -171,13 +140,6 @@ class SettingsFragment : PreferenceFragmentCompat(),
             startActivity(intent)
         }*///todo
         return false
-    }
-
-    private fun enableOrDisableBackUpPreferences(isEnabled: Boolean) {
-        pref_onlyOnWifi!!.isEnabled = isEnabled
-        pref_onlyWhenIdle!!.isEnabled = isEnabled
-        pref_onlyOnCharge!!.isEnabled = isEnabled
-        pref_backUpFrequency!!.isEnabled = isEnabled
     }
 
     override fun onDestroy() {

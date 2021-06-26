@@ -7,6 +7,8 @@ import androidx.preference.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 import android.content.Intent
 import android.view.MenuItem
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.common.USER_CLICKED_SETTINGS_FROM
 import com.canli.oya.newsreader.databinding.ActivitySettingsBinding
@@ -14,7 +16,9 @@ import com.canli.oya.newsreader.ui.main.MainActivity
 
 
 @AndroidEntryPoint
-class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsActivity : AppCompatActivity(),
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var binding : ActivitySettingsBinding
 
@@ -36,6 +40,28 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
 
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         preferences.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onPreferenceStartFragment(
+        caller: PreferenceFragmentCompat,
+        pref: Preference
+    ): Boolean {
+        // Instantiate the new Fragment
+        val args = pref.extras
+        val fragment = supportFragmentManager.fragmentFactory.instantiate(
+            classLoader,
+            pref.fragment
+        )
+        fragment.arguments = args
+        fragment.setTargetFragment(caller, 0)
+        // Replace the existing Fragment with the new Fragment
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.settings_fragment, fragment)
+            .addToBackStack(null)
+            .commit()
+
+        title = pref.title
+        return true
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

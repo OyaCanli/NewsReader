@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditTextPreference
+        android:defaultValue="25"
+        android:inputType="number"
+        android:key="@string/pref_key_itemsPerPage"
+        android:singleLine="true"
+        app:useSimpleSummaryProvider="true"
+        android:title="@string/articles_per_page" />
+
+    <ListPreference
+        android:defaultValue="@string/pref_orderby_default"
+        android:entries="@array/pref_orderby_labels"
+        android:entryValues="@array/pref_orderby_values"
+        app:useSimpleSummaryProvider="true"
+        android:key="@string/pref_key_orderBy"
+        android:title="@string/pref_order_by" />
+
+    <PreferenceCategory
+        android:key="@string/pref_key_personalize_sections"
+        android:title="@string/personalize_sections">
+
+        <MultiSelectListPreference
+            android:defaultValue="@array/pref_section_default_values"
+            android:dialogTitle="@string/choose_sections"
+            android:entries="@array/pref_section_labels"
+            android:entryValues="@array/pref_section_values"
+            android:key="@string/pref_key_sections"
+            android:title="@string/choose_sections" />
+
+        <Preference
+            android:key="@string/pref_key_sort_sections"
+            android:title="@string/sort_sections" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/pref_key_background_services"
+        android:title="@string/background_services">
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_notifications_default"
+            android:key="@string/pref_key_enableNotifications"
+            android:summaryOff="@string/disabled"
+            android:summaryOn="@string/enabled"
+            android:title="@string/notifications" />
+
+        <Preference
+            app:fragment="com.canli.oya.newsreader.ui.settings.SyncPrefsFragment"
+            app:title="@string/offline_reading" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
