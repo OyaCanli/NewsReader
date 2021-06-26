@@ -102,7 +102,7 @@ class BookmarkActivity : AppCompatActivity(), ListItemClickListener {
         openDetails(article)
     }
 
-    override fun onBookmarkClick(article: NewsArticle) {
+    override fun onBookmarkClick(position : Int, article: NewsArticle) {
         toggleBookmarkState(article)
     }
 

@@ -7,9 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import java.io.IOException
 
 class NewsRepository(
     private val localDataSource: ILocalDataSource,
@@ -60,7 +58,7 @@ class NewsRepository(
             localDataSource.removeFromBookmarks(article.articleId)
         } else {
             println("bookmarking article")
-            localDataSource.setAsBookmark(article.articleId)
+            localDataSource.saveAsBookmark(article)
         }
     }
 

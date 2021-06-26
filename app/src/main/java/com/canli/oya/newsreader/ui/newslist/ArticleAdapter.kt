@@ -12,6 +12,7 @@ import com.canli.oya.newsreader.common.fromHtml
 import com.canli.oya.newsreader.common.splitDateAndTime
 import com.canli.oya.newsreader.databinding.ItemArticleBinding
 import com.canlioya.core.model.NewsArticle
+import timber.log.Timber
 
 const val BOOKMARK_ITEM = 37913
 const val REMOVE_BOOKMARK = 12796
@@ -26,9 +27,7 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentArticle = getItem(position)
         holder.bind(currentArticle)
-        holder.binding.articleItemRoot.setOnClickListener {listener.onListItemClick(currentArticle) }
-        holder.binding.share.setOnClickListener { listener.onShareClick(currentArticle.webUrl) }
-        holder.binding.bookmark.setOnClickListener { listener.onBookmarkClick(currentArticle) }
+        holder.bindListener(currentArticle, listener, position)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
@@ -38,6 +37,8 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
                 REMOVE_BOOKMARK -> holder.binding.bookmark.setImageResource(R.drawable.ic_bookmark_outlined)
                 else -> super.onBindViewHolder(holder, position, payloads)
             }
+            val currentArticle = getItem(position)
+            holder.bindListener(currentArticle, listener, position)
         } else {
             super.onBindViewHolder(holder, position, payloads)
         }
@@ -58,6 +59,12 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
             }
         }
 
+        fun bindListener(currentArticle: NewsArticle, listener: ListItemClickListener, position: Int){
+            binding.articleItemRoot.setOnClickListener {listener.onListItemClick(currentArticle) }
+            binding.share.setOnClickListener { listener.onShareClick(currentArticle.webUrl) }
+            binding.bookmark.setOnClickListener { listener.onBookmarkClick(position, currentArticle) }
+        }
+
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -69,14 +76,19 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
 
     private class NewsDiffCallback : DiffUtil.ItemCallback<NewsArticle>() {
         override fun areItemsTheSame(oldItem: NewsArticle, newItem: NewsArticle): Boolean {
+            Timber.d("Checking if items are same: ${oldItem === newItem}")
             return oldItem.articleId == newItem.articleId
         }
 
         override fun areContentsTheSame(oldItem: NewsArticle, newItem: NewsArticle): Boolean {
+            Timber.d("Checking if contents are same: ${oldItem == newItem}")
             return oldItem == newItem
         }
 
         override fun getChangePayload(oldItem: NewsArticle, newItem: NewsArticle): Any? {
+            Timber.d("getChangePayLoad is called.")
+            Timber.d("oldItem is bookmarked: ${oldItem.isBookmarked}")
+            Timber.d("newItem is bookmarked: ${newItem.isBookmarked}")
             return when {
                 !oldItem.isBookmarked && newItem.isBookmarked -> BOOKMARK_ITEM
                 oldItem.isBookmarked && !newItem.isBookmarked -> REMOVE_BOOKMARK
@@ -88,6 +100,6 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
 
 interface ListItemClickListener {
     fun onListItemClick(article : NewsArticle)
-    fun onBookmarkClick(article : NewsArticle)
+    fun onBookmarkClick(position : Int, article : NewsArticle)
     fun onShareClick(url : String)
 }

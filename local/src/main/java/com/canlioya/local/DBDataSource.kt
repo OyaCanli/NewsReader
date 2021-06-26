@@ -10,6 +10,7 @@ import com.canlioya.local.database.NewsDatabase
 import com.canlioya.local.mappers.databaseToDomain
 import com.canlioya.local.mappers.domainToDatabase
 import com.canlioya.local.mappers.toNewsArticle
+import com.canlioya.local.mappers.toNewsEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -19,8 +20,18 @@ class DBDataSource(val database: NewsDatabase, val userPreferences: IUserPrefere
         database.newsDao().refreshDataForSection(section, list.domainToDatabase())
     }
 
-    override suspend fun setAsBookmark(articleId: String) {
-        database.newsDao().setAsBookmark(articleId)
+    override suspend fun saveAsBookmark(article: NewsArticle) {
+        if(articleAlreadyExists(article.articleId)){
+            database.newsDao().setAsBookmark(article.articleId)
+        } else {
+            val bookmarkedVersion = article.copy(isBookmarked = true)
+            database.newsDao().insert(bookmarkedVersion.toNewsEntity())
+        }
+    }
+
+    private suspend fun articleAlreadyExists(articleId : String) : Boolean {
+        val count = database.newsDao().doesArticleExistOnDB(articleId)
+        return count != 0
     }
 
     override suspend fun removeFromBookmarks(articleId: String) {
@@ -48,6 +59,11 @@ class DBDataSource(val database: NewsDatabase, val userPreferences: IUserPrefere
         Log.d("DBDataSource", "clearUnusedData is called. Sections are :$sections")
         val query = SimpleSQLiteQuery(buildQueryForDelete(sections))
         database.newsDao().deleteUnusedArticles(query) //todo try other method as well
+    }
+
+    override suspend fun addAsBookmark(article: NewsArticle) {
+        val bookmark = article.copy(isBookmarked = true)
+        database.newsDao().insert(bookmark.toNewsEntity())
     }
 
     private fun buildQueryForDelete(sections : List<String>) : String {

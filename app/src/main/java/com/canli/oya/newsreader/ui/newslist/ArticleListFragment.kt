@@ -84,17 +84,13 @@ class ArticleListFragment : Fragment(R.layout.fragment_list), ListItemClickListe
         openDetails(article)
     }
 
-    override fun onBookmarkClick(article: NewsArticle) {
-        saveToBookmarks(article)
+    override fun onBookmarkClick(position : Int, article: NewsArticle) {
+        Timber.d("bookmark is clicked. IS BOOKMARKED: ${article.isBookmarked}")
+        viewModel.toggleBookmarkState(article)
     }
 
     override fun onShareClick(url: String) {
         shareTheLink(url)
-    }
-
-    private fun saveToBookmarks(article: NewsArticle) {
-        Timber.d("bookmark is clicked")
-        viewModel.toggleBookmarkState(article)
     }
 
     private fun shareTheLink(webUrl: String) {

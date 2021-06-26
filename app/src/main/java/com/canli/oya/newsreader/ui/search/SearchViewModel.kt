@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,6 +50,17 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun toogleBookmarkState(position : Int, article: NewsArticle) {
+        Timber.d("Article is bookmarked: ${article.isBookmarked}")
+        viewModelScope.launch {
+            Timber.d("Article is bookmarked: ${article.isBookmarked}")
+            interactors.toggleBookmarkState(article)
+        }
+        val results : ArrayList<NewsArticle> = ArrayList(_results.value)
+        results[position] = article.copy(isBookmarked = !article.isBookmarked) //toggle state
+        _results.value = results
     }
 
 }

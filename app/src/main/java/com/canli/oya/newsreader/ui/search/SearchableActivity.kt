@@ -17,6 +17,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.canli.oya.newsreader.common.*
+import com.canli.oya.newsreader.ui.newslist.BOOKMARK_ITEM
+import com.canli.oya.newsreader.ui.newslist.REMOVE_BOOKMARK
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -24,6 +26,8 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchableActivity : AppCompatActivity(), ListItemClickListener {
+
+    private lateinit var articleAdapter: ArticleAdapter
 
     lateinit var binding: ActivityListBinding
 
@@ -58,7 +62,7 @@ class SearchableActivity : AppCompatActivity(), ListItemClickListener {
             )!!
         )
 
-        val articleAdapter = ArticleAdapter(this)
+        articleAdapter = ArticleAdapter(this)
         binding.recycler.apply {
             adapter = articleAdapter
             addItemDecoration(itemDecoration)
@@ -93,33 +97,21 @@ class SearchableActivity : AppCompatActivity(), ListItemClickListener {
     }
 
     override fun onListItemClick(article: NewsArticle) {
-        openDetails(article)
-    }
-
-    override fun onBookmarkClick(article: NewsArticle) {
-        toggleBookmarkState(article)
-    }
-
-    override fun onShareClick(url: String) {
-        shareTheLink(url)
-    }
-
-    private fun toggleBookmarkState(article: NewsArticle) {
-        //viewModel.toggleBookmarkState(article) //todo: this implementation should be different than others, since article is not yet in database
-    }
-
-    private fun shareTheLink(webUrl: String) {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, webUrl)
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivity(intent)
-        }
-    }
-
-    private fun openDetails(article: NewsArticle) {
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(CHOSEN_ARTICLE, article)
         startActivity(intent)
+    }
+
+    override fun onBookmarkClick(position : Int, article: NewsArticle) {
+        viewModel.toogleBookmarkState(position, article)
+    }
+
+    override fun onShareClick(url: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, url)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
     }
 }

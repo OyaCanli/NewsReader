@@ -7,7 +7,7 @@ interface ILocalDataSource {
 
     suspend fun refreshDataForSection(section : String, list: List<NewsArticle>)
 
-    suspend fun setAsBookmark(articleId: String)
+    suspend fun saveAsBookmark(article: NewsArticle)
 
     suspend fun removeFromBookmarks(articleId: String)
 
@@ -18,4 +18,6 @@ interface ILocalDataSource {
     suspend fun getArticleDetails(articleId: String): NewsArticle
 
     suspend fun clearUnusedData()
+
+    suspend fun addAsBookmark(article: NewsArticle)
 }
