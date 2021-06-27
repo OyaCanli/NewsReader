@@ -1,5 +1,6 @@
 package com.canli.oya.newsreader.ui.settings
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
@@ -135,10 +136,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onPreferenceClick(preference: Preference?): Boolean {
         //This is like a clicklistener for preference items. I set it here to open a new activity
-        /*if (preference!!.key.equals(getString(R.string.pref_key_sort_sections))) {
+        if (preference?.key.equals(getString(R.string.pref_key_sort_sections))) {
             val intent = Intent(activity, SortSectionsActivity::class.java)
             startActivity(intent)
-        }*///todo
+        }
         return false
     }
 

@@ -72,12 +72,8 @@ class SettingsActivity : AppCompatActivity(),
         //User might have come to settings from several places.
         // If they came from MainActivity, and if prefs have changed, MAinActivity should be recreated
         if (item.itemId == android.R.id.home) {
-            if (preferencesChanged && intentComingFrom.equals(MainActivity::class.java.simpleName)) {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            } else {
-                onBackPressed()
-            }
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }

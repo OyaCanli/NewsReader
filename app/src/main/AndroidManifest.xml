@@ -16,13 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
         <activity
             android:name=".ui.main.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -59,7 +57,11 @@
             android:launchMode="singleTop"
             android:parentActivityName=".ui.main.MainActivity" />
 
-        <activity android:name=".ui.settings.SettingsActivity" />
+        <activity android:name=".ui.settings.SettingsActivity"
+            android:launchMode="singleTop"/>
+
+        <activity android:name=".ui.settings.SortSectionsActivity"
+            android:parentActivityName=".ui.settings.SettingsActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"
