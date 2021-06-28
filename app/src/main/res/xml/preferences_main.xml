@@ -12,14 +12,6 @@
         app:useSimpleSummaryProvider="true"
         android:title="@string/articles_per_page" />
 
-    <ListPreference
-        android:defaultValue="@string/pref_orderby_default"
-        android:entries="@array/pref_orderby_labels"
-        android:entryValues="@array/pref_orderby_values"
-        app:useSimpleSummaryProvider="true"
-        android:key="@string/pref_key_orderBy"
-        android:title="@string/pref_order_by" />
-
     <PreferenceCategory
         android:key="@string/pref_key_personalize_sections"
         android:title="@string/personalize_sections">

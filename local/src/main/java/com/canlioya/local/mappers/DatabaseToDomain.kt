@@ -8,7 +8,6 @@ import java.util.*
 
 
 fun NewsEntity.toNewsArticle(): NewsArticle {
-    val formattedDate = convertLongToFormattedDate(this.date)
     return NewsArticle(
         this.articleId,
         this.title,
@@ -16,7 +15,7 @@ fun NewsEntity.toNewsArticle(): NewsArticle {
         this.author,
         this.articleTrail,
         this.articleBody,
-        formattedDate,
+        this.date ?: "",
         this.webUrl,
         this.section,
         this.isBookmarked
@@ -29,7 +28,6 @@ fun List<NewsEntity>.databaseToDomain() = this.map {
 }
 
 fun NewsArticle.toNewsEntity(): NewsEntity {
-    val longDate = convertStringDateToLong(this.date)
     return NewsEntity(
         this.articleId,
         this.title,
@@ -37,7 +35,7 @@ fun NewsArticle.toNewsEntity(): NewsEntity {
         this.author,
         this.articleTrail,
         this.articleBody,
-        longDate,
+        this.date,
         this.webUrl,
         this.section,
         this.isBookmarked
@@ -46,30 +44,4 @@ fun NewsArticle.toNewsEntity(): NewsEntity {
 
 fun List<NewsArticle>.domainToDatabase() = this.map {
     it.toNewsEntity()
-}
-
-fun convertStringDateToLong(date : String) : Long? {
-    val timeZone = TimeZone.getTimeZone("UTC")
-    val sourceFormat = SimpleDateFormat("LLL dd, yyyy'T'HH:mm")
-    sourceFormat.timeZone = timeZone
-    var parsedTime: Date? = null
-    try {
-        parsedTime = sourceFormat.parse(date)
-    } catch (e: ParseException) {
-        e.printStackTrace()
-    }
-    return parsedTime?.time
-}
-
-fun convertLongToFormattedDate(time : Long?) : String {
-    if(time ==null) {
-        return ""
-    }
-
-    val date = Date(time)
-
-    val tz = TimeZone.getDefault()
-    val destFormat = SimpleDateFormat("LLL dd, yyyy'T'HH:mm")
-    destFormat.timeZone = tz
-    return destFormat.format(date)
 }
