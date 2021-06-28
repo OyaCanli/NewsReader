@@ -2,8 +2,6 @@ package com.canlioya.data
 
 interface IUserPreferences {
 
-    fun getOrderByPreference(): String
-
     fun getArticlePerPagePreference(): String
 
     fun getSectionListPreference() : List<String>

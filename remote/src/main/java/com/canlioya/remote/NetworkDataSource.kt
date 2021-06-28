@@ -25,8 +25,7 @@ class NetworkDataSource @Inject constructor(
         try {
             val response = apiService.getArticles(
                 section,
-                userPreferences.getArticlePerPagePreference(),
-                userPreferences.getOrderByPreference()
+                userPreferences.getArticlePerPagePreference()
             ).response
             return response.results?.toDomainNews() ?: emptyList()
         } catch (e: HttpException) {

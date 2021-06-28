@@ -6,7 +6,9 @@ import com.canlioya.core.repository.INewsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
 class NewsRepository(
@@ -40,20 +42,21 @@ class NewsRepository(
         localDataSource.refreshDataForSection(section, newArticlesForSection)
     }
 
-    override suspend fun searchInNews(keyword: String): Flow<Result<List<NewsArticle>>> = flow {
-        emit(Result.Loading)
-        try {
+    override suspend fun searchInNews(keyword: String): Flow<Result<List<NewsArticle>>> {
+        return flow <Result<List<NewsArticle>>>{
             val results = remoteDataSource.searchInNews(keyword)
             println("number of results for search : $results")
             emit(Result.Success(results))
-        } catch (e: Exception) {
+        }.onStart {
+            emit(Result.Loading)
+        }.catch { e ->
             println(e)
             emit(Result.Error(e))
         }
     }
 
     override suspend fun toggleBookmarkState(article: NewsArticle) {
-        if(article.isBookmarked){
+        if (article.isBookmarked) {
             println("removing article from bookmarks")
             localDataSource.removeFromBookmarks(article.articleId)
         } else {
