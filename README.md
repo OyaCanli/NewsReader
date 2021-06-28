@@ -3,12 +3,24 @@ Udacity Android Basics Nanodegree Project 7 News App:
 
 Here is a video that demonstrates the app in action: https://www.youtube.com/watch?v=e50ZY0AXcxQ
 
+#### UPDATE (2021)
+After 3 years, I finally started to refactor this app which was not building anymore. So much changed in Android in 3 years:
+Android support library -> AndroidX
+Java -> Kotlin
+Raw Http request -> Retrofit
+Content provider -> Room
+FirebaseJobScheduler, IntentService -> WorkManager
+Loader, Asynctask -> Coroutines and Flows
+Besides many other deprecated libraries, APIs, methods..
+Furthermore, I was a beginner when I had created this project. And althouth I'm still proud to create such a sophisticated app as a beginner,
+code quality and architecture was miserable, and there was no tests, so I try to give a better shape to this project, as much as time permits. (end of update)
+
 ##### The app contains:
 - An animated splash screen. Fetching from internet begins at this activity.
 - MainActivity with a ViewPager where each tab shows the articles of a section. Articles are shown with a recyclerview
 - Each list item has a button for sharing article on social media, and another for adding it to bookmarks. When you click on the rest of the list item it opens DetailsActivity
 - DetailsActivity where user can read the article within the app
-- SettingsActivity where user can chose which sections to display in the MainActivity, in which order the sections should be displayed, how many articles per page should be shown and sort order. User can also choose whether to have regular notifications and regular backups for offline reading.
+- SettingsActivity where user can chose which sections to display in the MainActivity, in which order the sections should be displayed, or how many articles per page should be shown. User can also choose whether to have regular notifications and regular backups for offline reading.
 - A search wigdet in the toolbar which shows the results in another activity.
 - A bookmarks activity where bookmarked articles are shown. Bookmarked articles can be deleted by swiping left or right. A snackbar makes it possible to undo delete.
 ##### Behind the scenes:
