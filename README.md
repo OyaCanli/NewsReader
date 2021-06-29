@@ -4,16 +4,16 @@ Udacity Android Basics Nanodegree Project 7 News App:
 Here is a video that demonstrates the app in action: https://www.youtube.com/watch?v=e50ZY0AXcxQ
 
 #### UPDATE (2021)
-After 3 years, I finally started to refactor this app which was not building anymore. So much changed in Android in 3 years:
-Android support library -> AndroidX
-Java -> Kotlin
-Raw Http request -> Retrofit
-Content provider -> Room
-FirebaseJobScheduler, IntentService -> WorkManager
-Loader, Asynctask -> Coroutines and Flows
-Besides many other deprecated libraries, APIs, methods..
+After 3 years, I finally started to refactor this app which was not building anymore. So much changed in Android in 3 years:  
+Android support library -> AndroidX  
+Java -> Kotlin  
+Raw Http request -> Retrofit  
+Content provider -> Room  
+FirebaseJobScheduler, IntentService -> WorkManager  
+Loader, Asynctask -> Coroutines and Flows  
+Besides many other deprecated libraries, APIs, methods..  
 Furthermore, I was a beginner when I had created this project. And althouth I'm still proud to create such a sophisticated app as a beginner,
-code quality and architecture was miserable, and there was no tests, so I try to give a better shape to this project, as much as time permits. (end of update)
+code quality and architecture was miserable, and there was no tests, so I try to give a better shape to this project, as much as time permits. Original project is in the legacy branch (end of update)
 
 ##### The app contains:
 - An animated splash screen. Fetching from internet begins at this activity.
