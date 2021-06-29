@@ -19,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
     private val interactors: Interactors,
-    savedStateHandle: SavedStateHandle,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -33,15 +32,19 @@ class BookmarkViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            _uiState.value = UIState.LOADING
-            interactors.getBookmarks().collectLatest {
-                if (it.isNotEmpty()) {
-                    _bookmarks.value = it
-                    _uiState.value = UIState.SUCCESS
-                    Timber.d("bookmarks received. list size : ${it.size}")
-                } else {
-                    _uiState.value = UIState.EMPTY
-                }
+            startCollectingBookmarks()
+        }
+    }
+
+    suspend fun startCollectingBookmarks() {
+        _uiState.value = UIState.LOADING
+        interactors.getBookmarks().collectLatest {
+            if (it.isNotEmpty()) {
+                _bookmarks.value = it
+                _uiState.value = UIState.SUCCESS
+                Timber.d("bookmarks received. list size : ${it.size}")
+            } else {
+                _uiState.value = UIState.EMPTY
             }
         }
     }
