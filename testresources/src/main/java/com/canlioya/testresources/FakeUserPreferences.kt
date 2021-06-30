@@ -1,4 +1,6 @@
-package com.canlioya.data
+package com.canlioya.testresources
+
+import com.canlioya.data.IUserPreferences
 
 class FakeUserPreferences : IUserPreferences {
 

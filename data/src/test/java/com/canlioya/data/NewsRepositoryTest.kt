@@ -2,10 +2,12 @@ package com.canlioya.data
 
 import com.canlioya.core.model.NewsArticle
 import com.canlioya.core.model.Result
+import com.canlioya.testresources.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +25,7 @@ class NewsRepositoryTest {
     @Test
     fun getArticlesForSection_FiltersCorrectly() = runBlockingTest {
         val results = repository.getArticlesForSection("politics").first()
-        assert(results.contains(samplePoliticsArticle))
+        assert(results.contains(getSamplePoliticsArticle()))
         assert(results.size == 1)
     }
 
@@ -36,11 +38,12 @@ class NewsRepositoryTest {
     @Test
     fun getBookmarks_returnBookmarkedArticles() = runBlockingTest {
         //By default there was no bookmarks, so first bookmarking sample politics article
-        repository.toggleBookmarkState(samplePoliticsArticle)
+        val sampleArticle = getSamplePoliticsArticle()
+        repository.toggleBookmarkState(sampleArticle)
 
         val bookmarks = repository.getBookmarks().first()
-        assert(bookmarks.contains(samplePoliticsArticle))
-        assert(bookmarks.size == 1)
+        assertThat(bookmarks.size, `is`(1))
+        assertThat(bookmarks[0].articleId, `is`(sampleArticle.articleId))
     }
 
     @Test
@@ -51,22 +54,26 @@ class NewsRepositoryTest {
 
     @Test
     fun searchInNews_returnCorrectResult() = runBlockingTest {
+        val sampleArticle = getSampleTechnologyArticle()
        val searchResults = repository.searchInNews("Google").drop(1).first()
        assert(searchResults is Result.Success)
        val resultList = (searchResults as Result.Success).data
-       assert(resultList.contains(sampleTechnologyArticle))
+       assert(resultList.contains(sampleArticle))
        assert(resultList.size == 1)
     }
 
     @Test
     fun toggleBookmarkOfExistingArticle() = runBlockingTest {
-        repository.toggleBookmarkState(sampleWorldArticle)
+        val sampleArticle = getSampleWorldArticle()
+        repository.toggleBookmarkState(sampleArticle)
         var bookmarks = repository.getBookmarks().first()
-        assert(bookmarks.contains(sampleWorldArticle))
+        assertThat(bookmarks.size, `is`(1))
+        assertThat(bookmarks[0].articleId, `is`(sampleArticle.articleId))
 
-        repository.toggleBookmarkState(sampleWorldArticle)
+        sampleArticle.isBookmarked = true
+        repository.toggleBookmarkState(sampleArticle)
         bookmarks = repository.getBookmarks().first()
-        assert(!bookmarks.contains(sampleWorldArticle))
+        assert(bookmarks.isEmpty())
     }
 
     @Test
@@ -77,7 +84,7 @@ class NewsRepositoryTest {
         assert(bookmarks.size == 1)
         assert(bookmarks[0].articleId == randomArticle.articleId)
 
-        repository.toggleBookmarkState(sampleWorldArticle)
+        repository.toggleBookmarkState(randomArticle)
         bookmarks = repository.getBookmarks().first()
         assert(!bookmarks.contains(randomArticle))
     }

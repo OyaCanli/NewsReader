@@ -5,7 +5,6 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
     id 'dagger.hilt.android.plugin'
-    id 'org.jetbrains.dokka'
 }
 
 android {
@@ -18,7 +17,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "com.canlioya.newsreader.testutils.CustomTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -27,24 +26,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures{
+
+    buildFeatures {
         viewBinding true
     }
-    sourceSets {
-        androidTest {
-            java.srcDirs += "src/sharedTest/java"
-        }
-        test {
-            java.srcDirs += "src/sharedTest/java"
-        }
-    }
+
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -63,6 +58,8 @@ dependencies {
     implementation project(':local')
     implementation project(':remote')
     implementation project(':data')
+    testImplementation project(':testresources')
+    androidTestImplementation project(':testresources')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin"
     implementation "androidx.core:core-ktx:$version_core"
     implementation "androidx.appcompat:appcompat:$version_material"

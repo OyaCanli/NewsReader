@@ -11,8 +11,7 @@ java {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':domain')
-    testImplementation project(':testresources')
-    implementation 'junit:junit:4.12'
+    implementation project(':data')
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_coroutines"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version_coroutines"
 }

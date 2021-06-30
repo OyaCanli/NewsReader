@@ -1,17 +1,19 @@
-package com.canlioya.data
+package com.canlioya.testresources
 
 import com.canlioya.core.model.NewsArticle
+import com.canlioya.data.ILocalDataSource
+import com.canlioya.data.IUserPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class FakeLocalDataSource(
-    val articles: MutableList<NewsArticle> = sampleArticles,
-    val userPreferences: IUserPreferences = FakeUserPreferences()
+    private val articles: MutableList<NewsArticle> = getSampleArticles(),
+    private val userPreferences: IUserPreferences = FakeUserPreferences()
 ) : ILocalDataSource {
 
     override suspend fun refreshDataForSection(section: String, list: List<NewsArticle>) {
         //Clear articles from given section
-        articles.filter {
+        articles.removeAll {
             it.section == section
         }
         //Add new articles given for this section

@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        version_gradle = '7.0.0-beta03'
+        version_gradle = '4.2.1'
         version_kotlin = "1.5.10"
         version_retrofit = "2.9.0"
         version_moshi = "1.9.3"
@@ -35,7 +35,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$version_kotlin"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$version_hilt"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$version_dokka"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

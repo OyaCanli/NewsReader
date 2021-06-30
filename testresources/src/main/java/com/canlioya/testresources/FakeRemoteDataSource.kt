@@ -1,8 +1,10 @@
-package com.canlioya.data
+package com.canlioya.testresources
 
 import com.canlioya.core.model.NewsArticle
+import com.canlioya.data.INetworkDataSource
 
-class FakeRemoteDataSource(val articles : MutableList<NewsArticle> = sampleArticles) : INetworkDataSource {
+class FakeRemoteDataSource(val articles : MutableList<NewsArticle> = getSampleArticles()) :
+    INetworkDataSource {
 
     override suspend fun getArticlesForSection(section: String): List<NewsArticle> {
         return articles.filter {
@@ -12,9 +14,9 @@ class FakeRemoteDataSource(val articles : MutableList<NewsArticle> = sampleArtic
 
     override suspend fun searchInNews(keywords: String): List<NewsArticle> {
         return when(keywords) {
-            "Coranavirus" -> listOf(sampleWorldArticle)
-            "industry" -> listOf(samplePoliticsArticle)
-            "Google" -> listOf(sampleTechnologyArticle)
+            "Coranavirus" -> listOf(getSampleWorldArticle())
+            "industry" -> listOf(getSamplePoliticsArticle())
+            "Google" -> listOf(getSampleTechnologyArticle())
             else -> emptyList()
         }
     }

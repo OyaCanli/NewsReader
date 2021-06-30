@@ -1,8 +1,8 @@
-package com.canlioya.data
+package com.canlioya.testresources
 
 import com.canlioya.core.model.NewsArticle
 
-val sampleTechnologyArticle = NewsArticle(
+private val sampleTechnologyArticle = NewsArticle(
     "technology/2021/jun/25/google-starts-warning-users-if-search-results-are-likely-to-be-poor",
     "Google starts warning users if search results are likely to be poor",
     "https://media.guim.co.uk/736c11dd626962215fdabb561995497be48cdafc/0_171_3500_2100/500.jpg",
@@ -14,7 +14,9 @@ val sampleTechnologyArticle = NewsArticle(
     "technology",
     false)
 
-val samplePoliticsArticle = NewsArticle(
+fun getSampleTechnologyArticle() = sampleTechnologyArticle.copy()
+
+private val samplePoliticsArticle = NewsArticle(
     "politics/2021/jun/28/mps-criticise-ministers-failure-to-plan-industrial-policy",
     "MPs criticise ministers’ failure to plan industrial policy",
     "https://media.guim.co.uk/e1c5311fecbbcbf4c0267f48610f6fd30268b7f1/0_99_4000_2400/500.jpg",
@@ -27,7 +29,9 @@ val samplePoliticsArticle = NewsArticle(
     false
 )
 
-val sampleWorldArticle = NewsArticle(
+fun getSamplePoliticsArticle() = samplePoliticsArticle.copy()
+
+private val sampleWorldArticle = NewsArticle(
     "world/live/2021/jun/28/coronavirus-south-africa-tightens-restrictions-italy-mask-free-from-today",
     "Coronavirus live news: Portugal to quarantine unvaccinated British visitors; Taiwan tightens border rules ",
     "https://media.guim.co.uk/9afac335afaff0a57358da3fca477d931410f391/0_223_3500_2101/500.jpg",
@@ -40,4 +44,8 @@ val sampleWorldArticle = NewsArticle(
     false
 )
 
-val sampleArticles = mutableListOf(samplePoliticsArticle, sampleWorldArticle, sampleTechnologyArticle)
+fun getSampleWorldArticle() = sampleWorldArticle.copy()
+
+private val sampleArticles = listOf(samplePoliticsArticle, sampleWorldArticle, sampleTechnologyArticle)
+
+fun getSampleArticles() = sampleArticles.toMutableList()
