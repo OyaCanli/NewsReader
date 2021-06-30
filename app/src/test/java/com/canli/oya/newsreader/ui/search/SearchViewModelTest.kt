@@ -1,55 +1,62 @@
-package com.canli.oya.newsreader.ui.bookmarks
+package com.canli.oya.newsreader.ui.search
 
-
+import android.widget.SearchView
 import com.canli.oya.newsreader.common.UIState
 import com.canli.oya.newsreader.data.Interactors
 import com.canlioya.core.usecases.*
-import com.canlioya.data.*
-import com.canlioya.testresources.*
+import com.canlioya.data.NewsRepository
+import com.canlioya.testresources.FakeLocalDataSource
+import com.canlioya.testresources.FakeRemoteDataSource
+import com.canlioya.testresources.FakeUserPreferences
+import com.canlioya.testresources.getSampleTechnologyArticle
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
 import org.junit.Test
 
+
 @ExperimentalCoroutinesApi
-class BookmarkViewModelTest {
+class SearchViewModelTest {
 
     @Test
-    fun startCollectingBookmarks_noBookmarks_returnEmpty() = runBlockingTest{
+    fun searchKeyword_withResult_returnResult()  = runBlockingTest {
         val testDispatcher = TestCoroutineDispatcher()
         val repo = NewsRepository(FakeLocalDataSource(), FakeRemoteDataSource(), FakeUserPreferences())
         val interactors = Interactors(
             GetNewsForSection(repo), GetBookmarks(repo), ToggleBookmarkState(repo),
             RefreshAllData(repo), RefreshDataForSection(repo), SearchInNews(repo), CleanUnusedData(repo)
         )
-        val viewModel = BookmarkViewModel(interactors, testDispatcher)
-        val bookmarks = viewModel.bookmarks.first()
-        assert(bookmarks.isEmpty())
+        val viewModel = SearchViewModel(interactors, testDispatcher)
+
+        viewModel.searchInNews("Google")
+
+        val results = viewModel.results.first()
+        assertThat(results.size, `is`(1))
+        assertThat(results[0].articleId, `is`(getSampleTechnologyArticle().articleId))
+
         val uiState = viewModel.uiState.value
-        assertThat(uiState, `is`(UIState.EMPTY))
+        assertThat(uiState, `is`(UIState.SUCCESS))
     }
 
     @Test
-    fun startCollectingBookmarks_withBookmarks_returnBookmarks() = runBlockingTest{
+    fun searchKeyword_withoutResult_returnEmpty()  = runBlockingTest {
         val testDispatcher = TestCoroutineDispatcher()
-        val fakeLocalDataSource = FakeLocalDataSource(
-            mutableListOf(getSampleWorldArticle().copy(isBookmarked = true),
-        getSampleTechnologyArticle(), getSamplePoliticsArticle()))
-        val repo = NewsRepository(fakeLocalDataSource, FakeRemoteDataSource(), FakeUserPreferences())
+        val repo = NewsRepository(FakeLocalDataSource(), FakeRemoteDataSource(), FakeUserPreferences())
         val interactors = Interactors(
             GetNewsForSection(repo), GetBookmarks(repo), ToggleBookmarkState(repo),
             RefreshAllData(repo), RefreshDataForSection(repo), SearchInNews(repo), CleanUnusedData(repo)
         )
-        val viewModel = BookmarkViewModel(interactors, testDispatcher)
-        val sampleArticle = getSampleWorldArticle()
-        viewModel.startCollectingBookmarks()
-        val bookmarks = viewModel.bookmarks.first()
-        assert(bookmarks[0].articleId == sampleArticle.articleId)
+        val viewModel = SearchViewModel(interactors, testDispatcher)
+
+        viewModel.searchInNews("Xdor")
+
+        val results = viewModel.results.first()
+        assert(results.isEmpty())
+
         val uiState = viewModel.uiState.value
-        assertThat(uiState, `is`(UIState.SUCCESS))
+        assertThat(uiState, `is`(UIState.EMPTY))
     }
 }

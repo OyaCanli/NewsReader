@@ -1,6 +1,6 @@
 package com.canli.oya.newsreader.ui.details
 
-import androidx.lifecycle.SavedStateHandle
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.canli.oya.newsreader.data.Interactors
@@ -14,12 +14,11 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val interactors: Interactors,
-    savedStateHandle: SavedStateHandle,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     fun toggleBookmarkState(article: NewsArticle) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             interactors.toggleBookmarkState(article)
         }
     }

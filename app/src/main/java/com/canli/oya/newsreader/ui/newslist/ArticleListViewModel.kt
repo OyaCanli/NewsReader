@@ -52,13 +52,13 @@ class ArticleListViewModel @Inject constructor(
     }
 
     fun toggleBookmarkState(article: NewsArticle) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             interactors.toggleBookmarkState(article)
         }
     }
 
     fun refreshDataForSection() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             interactors.refreshDataForSection(section!!)
         }
     }

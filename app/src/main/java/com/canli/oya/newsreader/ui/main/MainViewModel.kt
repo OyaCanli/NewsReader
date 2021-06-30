@@ -1,6 +1,5 @@
 package com.canli.oya.newsreader.ui.main
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.canli.oya.newsreader.data.Interactors
 import com.canli.oya.newsreader.di.IODispatcher
@@ -12,7 +11,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val interactors: Interactors,
-                                        savedStateHandle: SavedStateHandle,
                                         @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 

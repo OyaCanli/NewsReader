@@ -17,8 +17,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.canli.oya.newsreader.common.*
-import com.canli.oya.newsreader.ui.newslist.BOOKMARK_ITEM
-import com.canli.oya.newsreader.ui.newslist.REMOVE_BOOKMARK
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -103,7 +101,7 @@ class SearchableActivity : AppCompatActivity(), ListItemClickListener {
     }
 
     override fun onBookmarkClick(position : Int, article: NewsArticle) {
-        viewModel.toogleBookmarkState(position, article)
+        viewModel.toggleBookmarkState(position, article)
     }
 
     override fun onShareClick(url: String) {

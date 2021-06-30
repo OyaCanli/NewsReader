@@ -23,10 +23,10 @@ class NewsRepositoryTest {
     }
 
     @Test
-    fun getArticlesForSection_FiltersCorrectly() = runBlockingTest {
+    fun getArticlesForSection_filtersCorrectly() = runBlockingTest {
         val results = repository.getArticlesForSection("politics").first()
-        assert(results.contains(getSamplePoliticsArticle()))
-        assert(results.size == 1)
+        assertThat(results.size, `is`(1))
+        assertThat(results[0].articleId, `is`(getSamplePoliticsArticle().articleId))
     }
 
     @Test

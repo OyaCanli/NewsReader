@@ -1,6 +1,5 @@
 package com.canli.oya.newsreader.ui.search
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.canli.oya.newsreader.common.UIState
@@ -20,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val interactors: Interactors,
-    savedStateHandle: SavedStateHandle,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -33,7 +31,7 @@ class SearchViewModel @Inject constructor(
         get() = _results
 
     fun searchInNews(query : String) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             interactors.searchInNews(query).collectLatest { result ->
                 when(result){
                     is Result.Loading -> _uiState.value = UIState.LOADING
@@ -51,7 +49,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun toogleBookmarkState(position : Int, article: NewsArticle) {
+    fun toggleBookmarkState(position : Int, article: NewsArticle) {
         Timber.d("Article is bookmarked: ${article.isBookmarked}")
         viewModelScope.launch {
             Timber.d("Article is bookmarked: ${article.isBookmarked}")

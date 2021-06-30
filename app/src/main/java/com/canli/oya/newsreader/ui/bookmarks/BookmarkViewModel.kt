@@ -51,7 +51,7 @@ class BookmarkViewModel @Inject constructor(
     }
 
     fun toggleBookmarkState(article: NewsArticle) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             interactors.toggleBookmarkState(article)
         }
     }
