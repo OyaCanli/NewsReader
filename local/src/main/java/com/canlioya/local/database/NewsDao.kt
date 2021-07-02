@@ -34,6 +34,9 @@ interface NewsDao {
     @Query("UPDATE news SET isBookmarked = 0 WHERE articleId = :articleId")
     suspend fun removeFromBookmarks(articleId : String)
 
+    @Query("SELECT COUNT(1) FROM news WHERE articleId= :articleId AND isBookmarked = 1")
+    suspend fun isBookmarked(articleId: String) : Int
+
     @Query("SELECT COUNT(1) FROM news WHERE articleId= :articleId")
     suspend fun doesArticleExistOnDB(articleId : String) : Int
 

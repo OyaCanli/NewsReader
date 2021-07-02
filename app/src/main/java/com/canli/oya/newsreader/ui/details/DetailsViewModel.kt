@@ -8,6 +8,7 @@ import com.canli.oya.newsreader.di.IODispatcher
 import com.canlioya.core.model.NewsArticle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +19,7 @@ class DetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun toggleBookmarkState(article: NewsArticle) {
-        viewModelScope.launch(ioDispatcher) {
+        GlobalScope.launch(ioDispatcher) {
             interactors.toggleBookmarkState(article)
         }
     }

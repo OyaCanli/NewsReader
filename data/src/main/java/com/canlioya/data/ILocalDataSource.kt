@@ -16,4 +16,6 @@ interface ILocalDataSource {
     fun getBookmarks(): Flow<List<NewsArticle>>
 
     suspend fun clearUnusedData()
+
+    suspend fun isAlreadyBookmarked(articleId: String) : Boolean
 }

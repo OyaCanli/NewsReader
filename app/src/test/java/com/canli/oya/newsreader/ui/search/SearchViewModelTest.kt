@@ -1,6 +1,6 @@
 package com.canli.oya.newsreader.ui.search
 
-import android.widget.SearchView
+
 import com.canli.oya.newsreader.common.UIState
 import com.canli.oya.newsreader.data.Interactors
 import com.canlioya.core.usecases.*

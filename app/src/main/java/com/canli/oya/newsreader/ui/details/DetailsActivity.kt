@@ -66,7 +66,6 @@ class DetailsActivity : AppCompatActivity() {
             detailsImage.bindImage(chosenArticle.thumbnailUrl)
             detailsSection.text = chosenArticle.section
             detailsTime.text = splitDateAndTime(chosenArticle.date)
-            //todo: if is bookmarked, revise the icon on menu
         }
     }
 
@@ -74,6 +73,16 @@ class DetailsActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_details, menu)
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val bookmarkItem = menu?.getItem(3)
+        if(chosenArticle?.isBookmarked == true){
+            bookmarkItem?.setIcon(R.drawable.ic_bookmark_filled)
+        } else {
+            bookmarkItem?.setIcon(R.drawable.ic_bookmark_outlined)
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -88,6 +97,8 @@ class DetailsActivity : AppCompatActivity() {
             }
             R.id.action_bookmark -> {
                 viewModel.toggleBookmarkState(chosenArticle!!)
+                chosenArticle?.isBookmarked = !chosenArticle!!.isBookmarked
+                invalidateOptionsMenu()
             }
             R.id.action_share -> {
                 val intent = Intent(Intent.ACTION_SEND)

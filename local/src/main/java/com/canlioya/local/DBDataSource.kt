@@ -71,6 +71,11 @@ class DBDataSource(val database: NewsDatabase, val userPreferences: IUserPrefere
         return count != 0
     }
 
+    override suspend fun isAlreadyBookmarked(articleId: String) : Boolean {
+        val count = database.newsDao().isBookmarked(articleId)
+        return count != 0
+    }
+
     /**
      * Remove from bookmarks by setting isBookmarked = false
      *

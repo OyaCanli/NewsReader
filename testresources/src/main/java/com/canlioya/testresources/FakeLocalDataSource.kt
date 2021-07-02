@@ -60,4 +60,11 @@ class FakeLocalDataSource(
             section.contains(it.section)
         }
     }
+
+    override suspend fun isAlreadyBookmarked(articleId: String): Boolean {
+        val article = articles.find {
+            it.articleId == articleId
+        }
+        return article?.isBookmarked ?: false
+    }
 }

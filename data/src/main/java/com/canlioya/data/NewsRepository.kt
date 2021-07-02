@@ -56,13 +56,17 @@ class NewsRepository(
     }
 
     override suspend fun toggleBookmarkState(article: NewsArticle) {
-        if (article.isBookmarked) {
+        if (checkIfAlreadyBookmarked(article.articleId)) {
             println("removing article from bookmarks")
             localDataSource.removeFromBookmarks(article.articleId)
         } else {
             println("bookmarking article")
             localDataSource.saveAsBookmark(article)
         }
+    }
+
+    private suspend fun checkIfAlreadyBookmarked(articleId : String) : Boolean {
+        return localDataSource.isAlreadyBookmarked(articleId)
     }
 
     override suspend fun clearUnusedData() {
