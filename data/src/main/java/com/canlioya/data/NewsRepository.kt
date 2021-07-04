@@ -47,6 +47,12 @@ class NewsRepository(
             val results = remoteDataSource.searchInNews(keyword)
             println("number of results for search : $results")
             emit(Result.Success(results))
+            results.forEach {
+                if(localDataSource.isAlreadyBookmarked(it.articleId)){
+                    it.isBookmarked = true
+                }
+            }
+            emit(Result.Success(results))
         }.onStart {
             emit(Result.Loading)
         }.catch { e ->
