@@ -218,3 +218,9 @@ fun EmptyScreen() {
         Text(text = "No results found")
     }
 }
+
+interface ListItemClickListener {
+    fun onListItemClick(article : NewsArticle)
+    fun onBookmarkClick(position : Int, article : NewsArticle)
+    fun onShareClick(url : String)
+}

@@ -5,30 +5,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.canli.oya.newsreader.R
-import com.canli.oya.newsreader.common.*
-import com.canli.oya.newsreader.databinding.ActivityListBinding
+import com.canli.oya.newsreader.common.CHOSEN_ARTICLE
 import com.canli.oya.newsreader.ui.details.DetailsActivity
-import com.canli.oya.newsreader.ui.main.*
-import com.canli.oya.newsreader.ui.newslist.ArticleAdapter
+import com.canli.oya.newsreader.ui.main.MainScreen
+import com.canli.oya.newsreader.ui.main.OverflowMenu
+import com.canli.oya.newsreader.ui.main.SettingsDropDownItem
+import com.canli.oya.newsreader.ui.main.UpButton
 import com.canli.oya.newsreader.ui.newslist.ListItemClickListener
 import com.canli.oya.newsreader.ui.newslist.NewsListScreen
-import com.canli.oya.newsreader.ui.settings.SettingsActivity
 import com.canlioya.core.model.NewsArticle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class BookmarkActivity : ComponentActivity(), ListItemClickListener {
