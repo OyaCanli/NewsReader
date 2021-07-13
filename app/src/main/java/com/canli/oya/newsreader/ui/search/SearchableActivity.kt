@@ -1,44 +1,30 @@
 package com.canli.oya.newsreader.ui.search
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.recyclerview.widget.DividerItemDecoration
-import com.canli.oya.newsreader.R
-import com.canli.oya.newsreader.databinding.ActivityListBinding
-import com.canli.oya.newsreader.ui.details.DetailsActivity
-import com.canli.oya.newsreader.ui.newslist.ArticleAdapter
-import com.canli.oya.newsreader.ui.newslist.ListItemClickListener
-import com.canlioya.core.model.NewsArticle
 import android.app.SearchManager
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.common.*
+import com.canli.oya.newsreader.ui.details.DetailsActivity
+import com.canli.oya.newsreader.ui.main.*
+import com.canli.oya.newsreader.ui.newslist.ListItemClickListener
+import com.canli.oya.newsreader.ui.newslist.NewsListScreen
+import com.canlioya.core.model.NewsArticle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
-class SearchableActivity : AppCompatActivity(), ListItemClickListener {
-
-    private lateinit var articleAdapter: ArticleAdapter
-
-    lateinit var binding: ActivityListBinding
+class SearchableActivity : ComponentActivity(), ListItemClickListener {
 
     private val viewModel: SearchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        //Set the toolbar and enable up button
-        setSupportActionBar(binding.toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val intent = intent
         var query: String? = null
@@ -50,47 +36,22 @@ class SearchableActivity : AppCompatActivity(), ListItemClickListener {
             viewModel.searchInNews(it)
         }
 
-        binding.toolbar.title = getString(R.string.search_results_for, query)
-
-        val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        itemDecoration.setDrawable(
-            AppCompatResources.getDrawable(
-                this,
-                R.drawable.item_divider
-            )!!
-        )
-
-        articleAdapter = ArticleAdapter(this)
-        binding.recycler.apply {
-            adapter = articleAdapter
-            addItemDecoration(itemDecoration)
-        }
-
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.results.collectLatest {
-                    if (it.isNotEmpty()) {
-                        Timber.d("Results received. List size : ${it.size}")
-                        articleAdapter.submitList(it)
-                    } else {
-                        Timber.d("No results")
-                    }
-                }
-            }
-        }
-
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collectLatest { state ->
-                    Timber.d("UIState is $state")
-                    when (state) {
-                        UIState.LOADING -> binding.showLoading()
-                        UIState.SUCCESS -> binding.showList()
-                        UIState.EMPTY -> binding.showEmpty(R.string.no_results)
-                        UIState.ERROR -> {} //todo: check internet
-                    }
-                }
-            }
+        setContent {
+            MainScreen(
+                topAppBar = {
+                    SearchAppBar(
+                        title = getString(R.string.search_results_for, query),
+                        onUpClicked = {
+                            onBackPressed()
+                        })
+                },
+                content = {
+                    NewsListScreen(
+                        list = viewModel.results,
+                        itemClickListener = this,
+                        uiState = viewModel.uiState
+                    )
+                })
         }
     }
 
@@ -112,4 +73,23 @@ class SearchableActivity : AppCompatActivity(), ListItemClickListener {
             startActivity(intent)
         }
     }
+}
+
+@Composable
+private fun SearchAppBar(title : String,
+                         onUpClicked: () -> Unit) {
+    TopAppBar(
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            UpButton(onUpClicked = onUpClicked)
+        },
+        actions = {
+            OverflowMenu {
+                BookmarksDropDownItem()
+                SettingsDropDownItem()
+            }
+        }
+    )
 }

@@ -7,6 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -15,8 +19,7 @@ import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.common.*
 import com.canli.oya.newsreader.databinding.ActivityListBinding
 import com.canli.oya.newsreader.ui.details.DetailsActivity
-import com.canli.oya.newsreader.ui.main.MainActivity
-import com.canli.oya.newsreader.ui.main.MainScreen
+import com.canli.oya.newsreader.ui.main.*
 import com.canli.oya.newsreader.ui.newslist.ArticleAdapter
 import com.canli.oya.newsreader.ui.newslist.ListItemClickListener
 import com.canli.oya.newsreader.ui.newslist.NewsListScreen
@@ -39,7 +42,6 @@ class BookmarkActivity : ComponentActivity(), ListItemClickListener {
             MainScreen(
                 topAppBar = {
                     BookmarkAppBar(
-                        onSettingsClicked = { launchSettings() },
                         onUpClicked = {
                             onBackPressed()
                         })
@@ -56,11 +58,6 @@ class BookmarkActivity : ComponentActivity(), ListItemClickListener {
 
     private fun toggleBookmarkState(article: NewsArticle) {
         viewModel.toggleBookmarkState(article)
-    }
-
-    private fun launchSettings() {
-        val intent = Intent(this@BookmarkActivity, SettingsActivity::class.java)
-        startActivity(intent)
     }
 
     private fun shareTheLink(webUrl: String) {
@@ -89,4 +86,21 @@ class BookmarkActivity : ComponentActivity(), ListItemClickListener {
     override fun onShareClick(url: String) {
         shareTheLink(url)
     }
+}
+
+@Composable
+private fun BookmarkAppBar(onUpClicked: () -> Unit) {
+    TopAppBar(
+        title = {
+            Text(text = stringResource(R.string.bookmark))
+        },
+        navigationIcon = {
+            UpButton(onUpClicked = onUpClicked)
+        },
+        actions = {
+            OverflowMenu {
+                SettingsDropDownItem()
+            }
+        }
+    )
 }

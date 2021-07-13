@@ -1,5 +1,7 @@
 package com.canli.oya.newsreader.ui.main
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -11,10 +13,13 @@ import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.canli.oya.newsreader.R
+import com.canli.oya.newsreader.ui.bookmarks.BookmarkActivity
+import com.canli.oya.newsreader.ui.settings.SettingsActivity
 
 @Composable
 fun UpButton(onUpClicked: () -> Unit) {
@@ -28,8 +33,9 @@ fun UpButton(onUpClicked: () -> Unit) {
 }
 
 @Composable
-fun SettingsDropDownItem(onClick: () -> Unit) {
-    DropdownMenuItem(onClick = onClick) {
+fun SettingsDropDownItem() {
+    val context = LocalContext.current
+    DropdownMenuItem(onClick = { launchSettings(context) }) {
         Icon(
             Icons.Filled.Settings,
             contentDescription = stringResource(R.string.settings),
@@ -40,9 +46,15 @@ fun SettingsDropDownItem(onClick: () -> Unit) {
     }
 }
 
+private fun launchSettings(context : Context) {
+    val intent = Intent(context, SettingsActivity::class.java)
+    context.startActivity(intent)
+}
+
 @Composable
-fun BookmarksDropDownItem(onClick: () -> Unit) {
-    DropdownMenuItem(onClick = onClick) {
+fun BookmarksDropDownItem() {
+    val context = LocalContext.current
+    DropdownMenuItem(onClick = { launchBookmarks(context) }) {
         Icon(
             painter = painterResource(R.drawable.ic_bookmark_filled),
             contentDescription = stringResource(R.string.bookmark),
@@ -51,6 +63,11 @@ fun BookmarksDropDownItem(onClick: () -> Unit) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(stringResource(R.string.bookmark))
     }
+}
+
+private fun launchBookmarks(context : Context) {
+    val intent = Intent(context, BookmarkActivity::class.java)
+    context.startActivity(intent)
 }
 
 @Composable
