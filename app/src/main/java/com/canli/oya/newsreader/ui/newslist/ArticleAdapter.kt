@@ -76,19 +76,15 @@ class ArticleAdapter(private val listener: ListItemClickListener) : ListAdapter<
 
     private class NewsDiffCallback : DiffUtil.ItemCallback<NewsArticle>() {
         override fun areItemsTheSame(oldItem: NewsArticle, newItem: NewsArticle): Boolean {
-            Timber.d("Checking if items are same: ${oldItem === newItem}")
             return oldItem.articleId == newItem.articleId
         }
 
         override fun areContentsTheSame(oldItem: NewsArticle, newItem: NewsArticle): Boolean {
-            Timber.d("Checking if contents are same: ${oldItem == newItem}")
             return oldItem == newItem
         }
 
         override fun getChangePayload(oldItem: NewsArticle, newItem: NewsArticle): Any? {
             Timber.d("getChangePayLoad is called.")
-            Timber.d("oldItem is bookmarked: ${oldItem.isBookmarked}")
-            Timber.d("newItem is bookmarked: ${newItem.isBookmarked}")
             return when {
                 !oldItem.isBookmarked && newItem.isBookmarked -> BOOKMARK_ITEM
                 oldItem.isBookmarked && !newItem.isBookmarked -> REMOVE_BOOKMARK

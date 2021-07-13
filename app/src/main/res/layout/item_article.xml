@@ -26,11 +26,11 @@
         android:id="@+id/thumbnail"
         android:layout_width="@dimen/thumbnail_width"
         android:layout_height="@dimen/thumbnail_height"
+        android:contentDescription="@string/content_desc_thumbnail"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_launcher_background"
-        android:contentDescription="@string/content_desc_thumbnail"/>
+        tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier2"
