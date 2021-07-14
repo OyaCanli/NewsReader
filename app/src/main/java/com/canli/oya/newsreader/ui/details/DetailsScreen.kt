@@ -2,7 +2,9 @@ package com.canli.oya.newsreader.ui.details
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -32,7 +34,11 @@ import com.canlioya.core.model.NewsArticle
 @Composable
 fun DetailsScreen(currentArticle : NewsArticle) {
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    val scrollState = rememberScrollState()
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(scrollState)) {
         ArticleImage(
             currentArticle.thumbnailUrl,
             modifier = Modifier
