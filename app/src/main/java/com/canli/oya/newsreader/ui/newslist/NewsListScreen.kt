@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.common.UIState
+import com.canli.oya.newsreader.common.fromHtml
 import com.canli.oya.newsreader.common.splitDateAndTime
 import com.canlioya.core.model.NewsArticle
 import com.google.accompanist.coil.rememberCoilPainter
@@ -83,7 +84,7 @@ fun NewsItem(currentArticle: NewsArticle, position: Int, itemClickListener: List
                     .size(120.dp))
         }
         Spacer(modifier = Modifier.height(8.dp))
-        TrailText(currentArticle.articleTrail)
+        ItemTrailText(currentArticle.articleTrail)
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -116,11 +117,11 @@ fun ItemTitle(title : String, modifier: Modifier) {
 }
 
 @Composable
-fun TrailText(trailText : String?) {
+fun ItemTrailText(trailText : String?) {
     trailText?.let {
         Text(
-            text = it,
-            fontSize = 16.sp
+            text = fromHtml(it),
+            fontSize = 16.sp,
         )
     }
 }

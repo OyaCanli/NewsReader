@@ -29,8 +29,8 @@ class NotificationUtils @Inject constructor(
     val NEWS_NOTIFICATION_ID = 4567
     val NOTIFICATION_CHANNEL_ID = "news_notification_channel"
 
-    fun scheduleNotificationJob(){
-        if(!userPreferences.isNotificationEnabled()){
+    fun scheduleNotificationJob() {
+        if (!userPreferences.isNotificationEnabled()) {
             return //If notifications are disabled, don't schedule the job
         }
 
@@ -44,7 +44,8 @@ class NotificationUtils @Inject constructor(
 
         val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWork>(
             30,
-            TimeUnit.MINUTES)
+            TimeUnit.MINUTES
+        )
             .setConstraints(constraints)
             .build()
 
@@ -75,11 +76,14 @@ class NotificationUtils @Inject constructor(
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle(article.title)
-                .setContentText(fromHtml(article.articleTrail))
-                .setStyle(NotificationCompat.BigTextStyle().bigText(fromHtml(article.articleTrail)))
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentIntent(contentIntent(context, article))
                 .setAutoCancel(true)
+        article.articleTrail?.let {
+            notificationBuilder.setContentText(fromHtml(it))
+            notificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText(fromHtml(it)))
+        }
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.priority = NotificationCompat.PRIORITY_HIGH
         }

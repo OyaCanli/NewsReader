@@ -16,9 +16,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.canli.oya.newsreader.R
+import com.canli.oya.newsreader.common.fromHtml
 import com.canli.oya.newsreader.ui.main.*
 import com.canli.oya.newsreader.ui.newslist.*
 import com.canlioya.core.model.NewsArticle
@@ -50,7 +55,7 @@ fun DetailsScreen(currentArticle : NewsArticle) {
             }
             DateAndTime(date = currentArticle.date)
             Spacer(modifier = Modifier.height(8.dp))
-            TrailText(trailText = currentArticle.articleTrail)
+            DetailsTrailText(trailText = currentArticle.articleTrail)
             Spacer(modifier = Modifier.height(8.dp))
             ArticleBody(text = currentArticle.articleBody)
         }
@@ -60,7 +65,18 @@ fun DetailsScreen(currentArticle : NewsArticle) {
 @Composable
 fun ArticleBody(text: String?) {
     text?.let {
-        Text(it)
+        Text(fromHtml(it))
+    }
+}
+
+@Composable
+fun DetailsTrailText(trailText : String?) {
+    trailText?.let {
+        Text(
+            text = fromHtml(it),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
