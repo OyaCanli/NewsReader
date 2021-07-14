@@ -10,16 +10,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import com.canli.oya.newsreader.R
-import com.canli.oya.newsreader.common.*
-import com.canli.oya.newsreader.ui.details.DetailsActivity
 import com.canli.oya.newsreader.ui.main.*
-import com.canli.oya.newsreader.ui.newslist.ListItemClickListener
+import com.canli.oya.newsreader.ui.newslist.BookmarkClickListener
 import com.canli.oya.newsreader.ui.newslist.NewsListScreen
 import com.canlioya.core.model.NewsArticle
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchableActivity : ComponentActivity(), ListItemClickListener {
+class SearchableActivity : ComponentActivity(), BookmarkClickListener {
 
     private val viewModel: SearchViewModel by viewModels()
 
@@ -48,30 +46,15 @@ class SearchableActivity : ComponentActivity(), ListItemClickListener {
                 content = {
                     NewsListScreen(
                         list = viewModel.results,
-                        itemClickListener = this,
+                        bookmarkClickListener = this,
                         uiState = viewModel.uiState
                     )
                 })
         }
     }
 
-    override fun onListItemClick(article: NewsArticle) {
-        val intent = Intent(this, DetailsActivity::class.java)
-        intent.putExtra(CHOSEN_ARTICLE, article)
-        startActivity(intent)
-    }
-
     override fun onBookmarkClick(position : Int, article: NewsArticle) {
         viewModel.toggleBookmarkState(position, article)
-    }
-
-    override fun onShareClick(url: String) {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, url)
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivity(intent)
-        }
     }
 }
 

@@ -1,15 +1,15 @@
 package com.canli.oya.newsreader.ui.details
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.canli.oya.newsreader.common.*
+import com.canli.oya.newsreader.common.CHOSEN_ARTICLE
+import com.canli.oya.newsreader.common.shortToast
 import com.canli.oya.newsreader.data.Interactors
 import com.canli.oya.newsreader.ui.main.MainScreen
 import com.canlioya.core.model.NewsArticle
@@ -42,30 +42,19 @@ class DetailsActivity : ComponentActivity() {
             MainScreen(
                 topAppBar = {
                     DetailsAppBar(
+                        url = chosenArticle!!.webUrl,
                         isBookmarked = isBookmarked,
                         onUpClicked = {
                             onBackPressed()
                         },
                     onBookmarkClicked = {
                         isBookmarked = !isBookmarked
-                        viewModel.toggleBookmarkState(chosenArticle!!)
-                    },
-                    onShareClicked = {
-                        shareTheLink(chosenArticle!!.webUrl)
+                        viewModel.toggleBookmarkState(chosenArticle)
                     })
                 },
                 content = {
                     DetailsScreen(chosenArticle!!)
                 })
-        }
-    }
-
-    private fun shareTheLink(webUrl: String) {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, webUrl)
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivity(intent)
         }
     }
 }

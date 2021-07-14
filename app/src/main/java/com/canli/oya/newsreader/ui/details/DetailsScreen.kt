@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.common.fromHtml
+import com.canli.oya.newsreader.common.shareTheLink
 import com.canli.oya.newsreader.ui.main.*
 import com.canli.oya.newsreader.ui.newslist.*
 import com.canlioya.core.model.NewsArticle
@@ -88,11 +90,12 @@ fun DetailsTrailText(trailText : String?) {
 
 @Composable
 fun DetailsAppBar(
+    url : String,
     isBookmarked: Boolean,
     onBookmarkClicked: () -> Unit,
     onUpClicked: () -> Unit,
-    onShareClicked: () -> Unit,
 ) {
+    val context = LocalContext.current
     TopAppBar(
         title = {
             Text(text = stringResource(R.string.app_name))
@@ -101,7 +104,7 @@ fun DetailsAppBar(
             UpButton(onUpClicked = onUpClicked)
         },
         actions = {
-            IconButton(onClick = {onShareClicked() }) {
+            IconButton(onClick = { shareTheLink(context, url) }) {
                 Icon(Icons.Filled.Share,
                     stringResource(id = R.string.cd_share),
                     tint = Color.White
@@ -144,15 +147,15 @@ fun DetailsPreview() {
     MainScreen(
         topAppBar = {
             DetailsAppBar(
+                url = currentArticle.webUrl,
                 isBookmarked = currentArticle.isBookmarked,
                 onUpClicked = {},
                 onBookmarkClicked = {
                     currentArticle.isBookmarked = !currentArticle.isBookmarked
-                },
-                onShareClicked = {})
+                })
         },
         content = {
-            DetailsScreen(currentArticle!!)
+            DetailsScreen(currentArticle)
         })
 
 }

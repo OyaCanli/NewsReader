@@ -1,10 +1,13 @@
 package com.canli.oya.newsreader.ui.newslist
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -15,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -25,7 +29,9 @@ import androidx.compose.ui.unit.sp
 import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.common.UIState
 import com.canli.oya.newsreader.common.fromHtml
+import com.canli.oya.newsreader.common.shareTheLink
 import com.canli.oya.newsreader.common.splitDateAndTime
+import com.canli.oya.newsreader.ui.details.DetailsActivity
 import com.canlioya.core.model.NewsArticle
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +40,7 @@ import kotlinx.coroutines.flow.StateFlow
 fun NewsListScreen(
     uiState: StateFlow<UIState>,
     list: StateFlow<List<NewsArticle>>,
-    itemClickListener: ListItemClickListener
+    bookmarkClickListener: BookmarkClickListener
 ) {
     val articles by list.collectAsState()
 
@@ -42,7 +48,7 @@ fun NewsListScreen(
 
     when (state) {
         UIState.LOADING -> LoadingIndicator()
-        UIState.SUCCESS -> NewsList(list = articles, itemClickListener)
+        UIState.SUCCESS -> NewsList(list = articles, bookmarkClickListener)
         UIState.EMPTY -> EmptyScreen()
         UIState.ERROR -> {/*todo: handle network error case*/
         }
@@ -58,8 +64,11 @@ fun LoadingIndicator() {
 }
 
 @Composable
-fun NewsList(list: List<NewsArticle>, itemClickListener: ListItemClickListener) {
-    LazyColumn {
+fun NewsList(list: List<NewsArticle>, itemClickListener: BookmarkClickListener) {
+
+    val scrollState = rememberLazyListState()
+
+    LazyColumn(state = scrollState) {
         itemsIndexed(items = list) { index, item ->
             NewsItem(item, index, itemClickListener)
             Divider()
@@ -68,10 +77,12 @@ fun NewsList(list: List<NewsArticle>, itemClickListener: ListItemClickListener) 
 }
 
 @Composable
-fun NewsItem(currentArticle: NewsArticle, position: Int, itemClickListener: ListItemClickListener) {
+fun NewsItem(currentArticle: NewsArticle, position: Int, itemClickListener: BookmarkClickListener) {
+    val context = LocalContext.current
+
     Column(modifier = Modifier
         .fillMaxWidth()
-        .clickable { itemClickListener.onListItemClick(currentArticle) }
+        .clickable { openDetails(context, currentArticle) }
         .padding(16.dp)) {
         Row(
             horizontalArrangement = Arrangement.End,
@@ -98,11 +109,15 @@ fun NewsItem(currentArticle: NewsArticle, position: Int, itemClickListener: List
             BookmarkButton(currentArticle.isBookmarked, onBookmarkClicked = {
                 itemClickListener.onBookmarkClick(position, currentArticle)
             })
-            ShareButton {
-                itemClickListener.onShareClick(currentArticle.webUrl)
-            }
+            ShareButton(currentArticle.webUrl)
         }
     }
+}
+
+private fun openDetails(context : Context, article: NewsArticle) {
+    val intent = Intent(context, DetailsActivity::class.java)
+    intent.putExtra(CHOSEN_ARTICLE, article)
+    context.startActivity(intent)
 }
 
 @Composable
@@ -184,14 +199,15 @@ fun BookmarkButton(isBookmarked: Boolean, onBookmarkClicked: () -> Unit) {
 }
 
 @Composable
-fun ShareButton(onShareClicked: () -> Unit) {
+fun ShareButton(url : String) {
+    val context = LocalContext.current
     Icon(
         painter = painterResource(id = R.drawable.ic_share_dark),
         contentDescription = stringResource(R.string.cd_share),
         tint = Color.DarkGray,
         modifier = Modifier
             .clip(CircleShape)
-            .clickable { onShareClicked() }
+            .clickable { shareTheLink(context, url)}
             .padding(8.dp)
     )
 }
@@ -211,10 +227,8 @@ fun ListPreview() {
         "politics",
         false
     )
-    val dummyClickListener = object : ListItemClickListener {
-        override fun onListItemClick(article: NewsArticle) {}
+    val dummyClickListener = object : BookmarkClickListener {
         override fun onBookmarkClick(position: Int, article: NewsArticle) {}
-        override fun onShareClick(url: String) {}
 
     }
     NewsItem(currentArticle = samplePoliticsArticle, 0, dummyClickListener)
@@ -229,8 +243,6 @@ fun EmptyScreen() {
     }
 }
 
-interface ListItemClickListener {
-    fun onListItemClick(article : NewsArticle)
+interface BookmarkClickListener {
     fun onBookmarkClick(position : Int, article : NewsArticle)
-    fun onShareClick(url : String)
 }
