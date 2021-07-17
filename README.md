@@ -10,9 +10,10 @@ Java -> Kotlin
 Raw Http request -> Retrofit  
 Content provider -> Room  
 FirebaseJobScheduler, IntentService -> WorkManager  
-Loader, Asynctask -> Coroutines and Flows  
+Loader, Asynctask -> Coroutines and Flows
+View -> Compose
 Besides many other deprecated libraries, APIs, methods..  
-Furthermore, I was a beginner when I had created this project. And althouth I'm still proud to create such a sophisticated app as a beginner,
+Furthermore, I was a beginner when I had created this project. And although I'm still proud to create such a sophisticated app as a beginner,
 code quality and architecture was miserable, and there was no tests, so I try to give a better shape to this project, as much as time permits. Original project is in the legacy branch (end of update)
 
 ##### The app contains:
