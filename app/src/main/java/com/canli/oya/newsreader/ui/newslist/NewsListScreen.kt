@@ -2,6 +2,7 @@ package com.canli.oya.newsreader.ui.newslist
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,6 +34,8 @@ import com.canli.oya.newsreader.common.fromHtml
 import com.canli.oya.newsreader.common.shareTheLink
 import com.canli.oya.newsreader.common.splitDateAndTime
 import com.canli.oya.newsreader.ui.details.DetailsActivity
+import com.canli.oya.newsreader.ui.theme.Red500
+import com.canli.oya.newsreader.ui.theme.Red700
 import com.canlioya.core.model.NewsArticle
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.flow.StateFlow
@@ -71,7 +75,7 @@ fun NewsList(list: List<NewsArticle>, itemClickListener: BookmarkClickListener) 
     LazyColumn(state = scrollState) {
         itemsIndexed(items = list) { index, item ->
             NewsItem(item, index, itemClickListener)
-            Divider()
+            TwoLineDivider()
         }
     }
 }
@@ -118,6 +122,30 @@ private fun openDetails(context : Context, article: NewsArticle) {
     val intent = Intent(context, DetailsActivity::class.java)
     intent.putExtra(CHOSEN_ARTICLE, article)
     context.startActivity(intent)
+}
+
+@Preview
+@Composable
+fun TwoLineDivider() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        SimpleHorizontalLine()
+        Spacer(modifier = Modifier.height(3.dp))
+        SimpleHorizontalLine()
+    }
+}
+
+@Composable
+fun SimpleHorizontalLine() {
+    Canvas(modifier = Modifier.fillMaxWidth()) {
+        val canvasWidth = size.width
+
+        drawLine(
+            start = Offset(x = 0f, y = 0f),
+            end = Offset(x = canvasWidth, y = 0f),
+            color = Red500,
+            strokeWidth = 3F
+        )
+    }
 }
 
 @Composable
@@ -207,7 +235,7 @@ fun ShareButton(url : String) {
         tint = Color.DarkGray,
         modifier = Modifier
             .clip(CircleShape)
-            .clickable { shareTheLink(context, url)}
+            .clickable { shareTheLink(context, url) }
             .padding(8.dp)
     )
 }
