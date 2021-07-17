@@ -95,5 +95,11 @@
     <string name="no_internet_warning">We have trouble connecting to the internet</string>
     <string name="internet_is_back">Internet is back. Loading your content.</string>
     <string name="bookmark_this_article">Bookmark this article</string>
+    <string name="cd_share">Share button</string>
+    <string name="cd_remove_from_bookmarks">Remove from bookmarks</string>
+    <string name="cd_bookmark">Bookmark</string>
+    <string name="more">More</string>
+    <string name="cd_home_btn">Return home</string>
+    <string name="cd_favorite_item">Save to favorites</string>
 
 </resources>

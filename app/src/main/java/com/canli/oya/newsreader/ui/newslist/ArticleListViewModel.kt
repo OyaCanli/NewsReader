@@ -38,6 +38,10 @@ class ArticleListViewModel @Inject constructor(
     val uiState: StateFlow<UIState>
         get() = _uiState
 
+    private val _isRefreshing : MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isRefreshing : StateFlow<Boolean>
+        get() = _isRefreshing
+
     init {
         viewModelScope.launch(ioDispatcher) {
             _uiState.value = UIState.LOADING
@@ -45,6 +49,7 @@ class ArticleListViewModel @Inject constructor(
                 if (it.isNotEmpty()) {
                     _articles.value = it
                     _uiState.value = UIState.SUCCESS
+                    _isRefreshing.value = false
                     Timber.d("news for section received. list size : ${it.size}")
                 }
             }
@@ -58,6 +63,7 @@ class ArticleListViewModel @Inject constructor(
     }
 
     fun refreshDataForSection() {
+        _isRefreshing.value = true
         viewModelScope.launch(ioDispatcher) {
             interactors.refreshDataForSection(section!!)
         }

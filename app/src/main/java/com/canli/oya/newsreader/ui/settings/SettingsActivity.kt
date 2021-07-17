@@ -22,8 +22,6 @@ class SettingsActivity : AppCompatActivity(),
 
     private lateinit var binding : ActivitySettingsBinding
 
-    private var intentComingFrom =  MainActivity::class.java.simpleName
-
     private var preferencesChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,9 +32,6 @@ class SettingsActivity : AppCompatActivity(),
         setSupportActionBar(binding.toolbar)
         binding.toolbar.setTitle(R.string.settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val bundle = intent.extras
-        intentComingFrom = bundle?.getString(USER_CLICKED_SETTINGS_FROM) ?: MainActivity::class.java.simpleName
 
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         preferences.registerOnSharedPreferenceChangeListener(this)
