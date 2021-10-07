@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -25,10 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.common.fromHtml
 import com.canli.oya.newsreader.common.shareTheLink
@@ -42,17 +41,19 @@ import com.canli.oya.newsreader.ui.newslist.Author
 import com.canli.oya.newsreader.ui.newslist.DateAndTime
 import com.canli.oya.newsreader.ui.newslist.ItemTitle
 import com.canli.oya.newsreader.ui.newslist.Section
+import com.canli.oya.newsreader.ui.theme.Red500
 import com.canlioya.core.model.NewsArticle
 
-
 @Composable
-fun DetailsScreen(currentArticle : NewsArticle) {
+fun DetailsScreen(currentArticle: NewsArticle) {
 
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .verticalScroll(scrollState)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+    ) {
         ArticleImage(
             currentArticle.thumbnailUrl,
             modifier = Modifier
@@ -65,6 +66,7 @@ fun DetailsScreen(currentArticle : NewsArticle) {
                 .padding(16.dp)
         ) {
             ItemTitle(title = currentArticle.title, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -73,6 +75,7 @@ fun DetailsScreen(currentArticle : NewsArticle) {
                 Author(author = currentArticle.author, modifier = Modifier.weight(1f))
                 Section(currentArticle.section)
             }
+            Spacer(modifier = Modifier.height(8.dp))
             DateAndTime(date = currentArticle.date)
             Spacer(modifier = Modifier.height(8.dp))
             DetailsTrailText(trailText = currentArticle.articleTrail)
@@ -85,24 +88,26 @@ fun DetailsScreen(currentArticle : NewsArticle) {
 @Composable
 fun ArticleBody(text: String?) {
     text?.let {
-        Text(fromHtml(it))
+        Text(
+            text = fromHtml(it),
+            style = MaterialTheme.typography.body2
+        )
     }
 }
 
 @Composable
-fun DetailsTrailText(trailText : String?) {
+fun DetailsTrailText(trailText: String?) {
     trailText?.let {
         Text(
             text = fromHtml(it),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.subtitle1
         )
     }
 }
 
 @Composable
 fun DetailsAppBar(
-    url : String,
+    url: String,
     isBookmarked: Boolean,
     onBookmarkClicked: () -> Unit,
     onUpClicked: () -> Unit,
@@ -112,12 +117,14 @@ fun DetailsAppBar(
         title = {
             Text(text = stringResource(R.string.app_name))
         },
+        backgroundColor = Red500,
         navigationIcon = {
             UpButton(onUpClicked = onUpClicked)
         },
         actions = {
             IconButton(onClick = { shareTheLink(context, url) }) {
-                Icon(Icons.Filled.Share,
+                Icon(
+                    Icons.Filled.Share,
                     stringResource(id = R.string.cd_share),
                     tint = Color.White
                 )
@@ -164,11 +171,11 @@ fun DetailsPreview() {
                 onUpClicked = {},
                 onBookmarkClicked = {
                     currentArticle.isBookmarked = !currentArticle.isBookmarked
-                })
+                }
+            )
         },
         content = {
             DetailsScreen(currentArticle)
-        })
-
+        }
+    )
 }
-

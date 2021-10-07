@@ -5,17 +5,25 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
     primary = Red200,
     primaryVariant = Red700,
-    secondary = Blue200
+    onPrimary = Color.Black,
+    secondary = Red200,
+    onSecondary = Color.Black,
+    error = Red200
 )
 
 private val LightColorPalette = lightColors(
     primary = Red500,
     primaryVariant = Red700,
-    secondary = Blue200
+    onPrimary = Color.White,
+    secondary = Red700,
+    secondaryVariant = Red900,
+    onSecondary = Color.White,
+    error = Red800
 
     /* Other default colors to override
     background = Color.White,
@@ -40,7 +48,7 @@ fun NewsReaderTheme(
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = NewsTypography,
         shapes = Shapes,
         content = content
     )

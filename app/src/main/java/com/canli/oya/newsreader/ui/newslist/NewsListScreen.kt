@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,6 +25,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,16 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.common.UIState
 import com.canli.oya.newsreader.common.fromHtml
@@ -107,6 +106,7 @@ fun NewsItem(currentArticle: NewsArticle, position: Int, itemClickListener: Book
             modifier = Modifier.fillMaxWidth()
         ) {
             ItemTitle(currentArticle.title, Modifier.weight(2f))
+            Spacer(Modifier.width(8.dp))
             ArticleImage(
                 currentArticle.thumbnailUrl,
                 Modifier
@@ -152,13 +152,15 @@ fun TwoLineDivider() {
 
 @Composable
 fun SimpleHorizontalLine() {
+    val lineColor = MaterialTheme.colors.primary
+
     Canvas(modifier = Modifier.fillMaxWidth()) {
         val canvasWidth = size.width
 
         drawLine(
             start = Offset(x = 0f, y = 0f),
             end = Offset(x = canvasWidth, y = 0f),
-            color = Red500,
+            color = lineColor,
             strokeWidth = 3F
         )
     }
@@ -168,9 +170,7 @@ fun SimpleHorizontalLine() {
 fun ItemTitle(title: String, modifier: Modifier) {
     Text(
         text = title,
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color.DarkGray,
+        style = MaterialTheme.typography.h6,
         modifier = modifier
     )
 }
@@ -180,7 +180,7 @@ fun ItemTrailText(trailText: String?) {
     trailText?.let {
         Text(
             text = fromHtml(it),
-            fontSize = 16.sp,
+            style = MaterialTheme.typography.subtitle1
         )
     }
 }
@@ -202,7 +202,7 @@ fun ArticleImage(url: String?, modifier: Modifier) {
 fun Author(author: String?, modifier: Modifier) {
     Text(
         text = author ?: "",
-        fontStyle = FontStyle.Italic,
+        style = MaterialTheme.typography.subtitle2,
         color = MaterialTheme.colors.primary,
         modifier = modifier
     )
@@ -223,7 +223,8 @@ fun Section(section: String) {
 fun DateAndTime(date: String, modifier: Modifier = Modifier) {
     Text(
         text = splitDateAndTime(date),
-        modifier = modifier
+        modifier = modifier,
+        style = MaterialTheme.typography.caption
     )
 }
 
@@ -234,7 +235,6 @@ fun BookmarkButton(isBookmarked: Boolean, onBookmarkClicked: () -> Unit) {
         contentDescription = if (isBookmarked) stringResource(R.string.cd_remove_from_bookmarks) else stringResource(
             R.string.cd_bookmark
         ),
-        tint = Color.DarkGray,
         modifier = Modifier
             .clip(CircleShape)
             .clickable { onBookmarkClicked() }
@@ -248,7 +248,6 @@ fun ShareButton(url: String) {
     Icon(
         painter = painterResource(id = R.drawable.ic_share_dark),
         contentDescription = stringResource(R.string.cd_share),
-        tint = Color.DarkGray,
         modifier = Modifier
             .clip(CircleShape)
             .clickable { shareTheLink(context, url) }
