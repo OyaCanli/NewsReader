@@ -19,7 +19,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DetailsActivity : ComponentActivity() {
 
-    private val viewModel : DetailsViewModel by viewModels()
+    private val viewModel: DetailsViewModel by viewModels()
 
     @Inject
     lateinit var interactors: Interactors
@@ -29,7 +29,7 @@ class DetailsActivity : ComponentActivity() {
 
         val chosenArticle = intent?.getSerializableExtra(CHOSEN_ARTICLE) as? NewsArticle
 
-        if(chosenArticle == null) {
+        if (chosenArticle == null) {
             shortToast("Error retrieving chosen article.")
             onBackPressed()
         }
@@ -47,14 +47,16 @@ class DetailsActivity : ComponentActivity() {
                         onUpClicked = {
                             onBackPressed()
                         },
-                    onBookmarkClicked = {
-                        isBookmarked = !isBookmarked
-                        viewModel.toggleBookmarkState(chosenArticle)
-                    })
+                        onBookmarkClicked = {
+                            isBookmarked = !isBookmarked
+                            viewModel.toggleBookmarkState(chosenArticle)
+                        }
+                    )
                 },
                 content = {
                     DetailsScreen(chosenArticle!!)
-                })
+                }
+            )
         }
     }
 }

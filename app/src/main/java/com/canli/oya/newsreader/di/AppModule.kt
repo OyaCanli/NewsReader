@@ -26,24 +26,26 @@ import dagger.hilt.components.SingletonComponent
 class AppModule {
 
     @Provides
-    fun provideUserPreferences(@ApplicationContext context : Context, preferences : SharedPreferences) : IUserPreferences = UserPreferences(context, preferences)
+    fun provideUserPreferences(@ApplicationContext context: Context, preferences: SharedPreferences): IUserPreferences = UserPreferences(context, preferences)
 
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context) : NewsDatabase = NewsDatabase.getInstance(context)
+    fun provideDatabase(@ApplicationContext context: Context): NewsDatabase = NewsDatabase.getInstance(context)
 
     @Provides
-    fun provideLocalDataSource(database : NewsDatabase, prefs: IUserPreferences) : ILocalDataSource = DBDataSource(database, prefs)
+    fun provideLocalDataSource(database: NewsDatabase, prefs: IUserPreferences): ILocalDataSource = DBDataSource(database, prefs)
 
     @Provides
-    fun provideNetworkDataSource(preferences: IUserPreferences, apiService: NewsApiService) : INetworkDataSource = NetworkDataSource(preferences, apiService)
+    fun provideNetworkDataSource(preferences: IUserPreferences, apiService: NewsApiService): INetworkDataSource = NetworkDataSource(preferences, apiService)
 
     @Provides
-    fun provideRepository(localDS: ILocalDataSource, remoteDS: INetworkDataSource, prefs: IUserPreferences) : INewsRepository = NewsRepository(localDS, remoteDS, prefs)
+    fun provideRepository(localDS: ILocalDataSource, remoteDS: INetworkDataSource, prefs: IUserPreferences): INewsRepository = NewsRepository(localDS, remoteDS, prefs)
 
     @Provides
-    fun provideInteractors(repo : INewsRepository) : Interactors = Interactors(GetNewsForSection(repo), GetBookmarks(repo), ToggleBookmarkState(repo),
-        RefreshAllData(repo), RefreshDataForSection(repo),SearchInNews(repo), CleanUnusedData(repo))
+    fun provideInteractors(repo: INewsRepository): Interactors = Interactors(
+        GetNewsForSection(repo), GetBookmarks(repo), ToggleBookmarkState(repo),
+        RefreshAllData(repo), RefreshDataForSection(repo), SearchInNews(repo), CleanUnusedData(repo)
+    )
 
     @Provides
-    fun getSharedPreferences(@ApplicationContext context : Context) : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    fun getSharedPreferences(@ApplicationContext context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 }

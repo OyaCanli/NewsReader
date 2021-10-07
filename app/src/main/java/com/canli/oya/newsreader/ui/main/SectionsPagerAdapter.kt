@@ -8,7 +8,7 @@ import com.canli.oya.newsreader.ui.newslist.ArticleListFragment
 
 const val SECTION_KEY = "sectionKey"
 
-class SectionsPagerAdapter(activity: FragmentActivity, val sections : List<String>) : FragmentStateAdapter(activity) {
+class SectionsPagerAdapter(activity: FragmentActivity, val sections: List<String>) : FragmentStateAdapter(activity) {
 
     override fun getItemCount() = sections.size
 

@@ -3,7 +3,6 @@ package com.canli.oya.newsreader.ui.settings
 import android.graphics.Color
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
-import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE
 import androidx.recyclerview.widget.RecyclerView
 
 class SectionMoveCallback(private val adapter : SortSectionsAdapter) : ItemTouchHelper.Callback() {

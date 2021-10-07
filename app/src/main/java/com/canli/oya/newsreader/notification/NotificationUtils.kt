@@ -2,23 +2,22 @@ package com.canli.oya.newsreader.notification
 
 import android.app.*
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.work.*
+import com.canli.oya.newsreader.R
+import com.canli.oya.newsreader.common.CHOSEN_ARTICLE
+import com.canli.oya.newsreader.common.fromHtml
 import com.canli.oya.newsreader.synch.RefreshDataWork
+import com.canli.oya.newsreader.ui.details.DetailsActivity
+import com.canlioya.core.model.NewsArticle
 import com.canlioya.data.IUserPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.canli.oya.newsreader.ui.details.DetailsActivity
-import android.content.Intent
-import com.canli.oya.newsreader.R
-import com.canlioya.core.model.NewsArticle
-import androidx.core.content.ContextCompat
-import android.os.Build
-import androidx.core.app.NotificationCompat
-import com.canli.oya.newsreader.common.CHOSEN_ARTICLE
-import com.canli.oya.newsreader.common.fromHtml
-
 
 @Singleton
 class NotificationUtils @Inject constructor(
@@ -31,7 +30,7 @@ class NotificationUtils @Inject constructor(
 
     fun scheduleNotificationJob() {
         if (!userPreferences.isNotificationEnabled()) {
-            return //If notifications are disabled, don't schedule the job
+            return // If notifications are disabled, don't schedule the job
         }
 
         val networkType =

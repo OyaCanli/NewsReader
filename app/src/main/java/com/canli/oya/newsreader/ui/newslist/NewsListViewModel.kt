@@ -1,16 +1,13 @@
 package com.canli.oya.newsreader.ui.newslist
 
-
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.ListenableWorker
 import com.canli.oya.newsreader.common.UIState
 import com.canli.oya.newsreader.data.Interactors
 import com.canli.oya.newsreader.di.IODispatcher
 import com.canli.oya.newsreader.ui.main.SECTION_KEY
 import com.canlioya.core.model.NewsArticle
-import com.canlioya.core.model.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,9 +17,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-
 @HiltViewModel
-class ArticleListViewModel @Inject constructor(
+class NewsListViewModel @Inject constructor(
     private val interactors: Interactors,
     savedStateHandle: SavedStateHandle,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
@@ -38,8 +34,8 @@ class ArticleListViewModel @Inject constructor(
     val uiState: StateFlow<UIState>
         get() = _uiState
 
-    private val _isRefreshing : MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isRefreshing : StateFlow<Boolean>
+    private val _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing
 
     init {
@@ -68,6 +64,4 @@ class ArticleListViewModel @Inject constructor(
             interactors.refreshDataForSection(section!!)
         }
     }
-
-
 }

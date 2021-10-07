@@ -22,7 +22,7 @@ const val CHOSEN_ARTICLE = "chosenArticle"
 @AndroidEntryPoint
 class ArticleListFragment : Fragment(), BookmarkClickListener {
 
-    private val viewModel: ArticleListViewModel by viewModels()
+    private val viewModel: NewsListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -2,11 +2,9 @@ package com.canli.oya.newsreader.ui.settings
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.canli.oya.newsreader.databinding.ItemDragsortListBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SortSectionsAdapter(val sectionList : ArrayList<String>) : RecyclerView.Adapter<SortSectionsAdapter.ViewHolder>(){

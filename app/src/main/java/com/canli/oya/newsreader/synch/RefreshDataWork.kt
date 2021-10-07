@@ -32,7 +32,7 @@ class RefreshDataWork @AssistedInject constructor(
         } catch (e: SQLException) {
             Timber.e(e)
             Result.failure()
-        } catch(e : Throwable) {
+        } catch (e: Throwable) {
             Timber.e(e)
             Result.failure()
         }

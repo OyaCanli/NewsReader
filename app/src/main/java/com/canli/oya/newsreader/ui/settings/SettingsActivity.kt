@@ -1,18 +1,17 @@
 package com.canli.oya.newsreader.ui.settings
 
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.preference.PreferenceManager
-import dagger.hilt.android.AndroidEntryPoint
 import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import com.canli.oya.newsreader.R
-import com.canli.oya.newsreader.common.USER_CLICKED_SETTINGS_FROM
 import com.canli.oya.newsreader.databinding.ActivitySettingsBinding
 import com.canli.oya.newsreader.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint

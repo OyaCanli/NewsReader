@@ -30,13 +30,13 @@ class SearchViewModel @Inject constructor(
     val results: StateFlow<List<NewsArticle>>
         get() = _results
 
-    fun searchInNews(query : String) {
+    fun searchInNews(query: String) {
         viewModelScope.launch(ioDispatcher) {
             interactors.searchInNews(query).collectLatest { result ->
-                when(result){
+                when (result) {
                     is Result.Loading -> _uiState.value = UIState.LOADING
                     is Result.Success -> {
-                        if(result.data.isNotEmpty()){
+                        if (result.data.isNotEmpty()) {
                             _uiState.value = UIState.SUCCESS
                             _results.value = result.data
                         } else {
@@ -49,15 +49,14 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun toggleBookmarkState(position : Int, article: NewsArticle) {
+    fun toggleBookmarkState(position: Int, article: NewsArticle) {
         Timber.d("Article is bookmarked: ${article.isBookmarked}")
         viewModelScope.launch {
             Timber.d("Article is bookmarked: ${article.isBookmarked}")
             interactors.toggleBookmarkState(article)
         }
-        val results : ArrayList<NewsArticle> = ArrayList(_results.value)
-        results[position] = article.copy(isBookmarked = !article.isBookmarked) //toggle state
+        val results: ArrayList<NewsArticle> = ArrayList(_results.value)
+        results[position] = article.copy(isBookmarked = !article.isBookmarked) // toggle state
         _results.value = results
     }
-
 }

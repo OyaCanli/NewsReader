@@ -28,7 +28,7 @@ object NetworkModule {
 
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(interceptor)
-            .connectTimeout(30, TimeUnit.SECONDS) //Backend is really slow
+            .connectTimeout(30, TimeUnit.SECONDS) // Backend is really slow
             .readTimeout(30, TimeUnit.SECONDS)
             .build()
 

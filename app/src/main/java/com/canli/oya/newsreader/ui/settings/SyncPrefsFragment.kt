@@ -10,8 +10,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SyncPrefsFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener{
+class SyncPrefsFragment :
+    PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
@@ -27,12 +28,12 @@ class SyncPrefsFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences_sync, rootKey)
 
-        //Register a onSharedPreferenceChangeListener so that changes in the settings are applied right away
+        // Register a onSharedPreferenceChangeListener so that changes in the settings are applied right away
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
 
         backUpFrequencyPref = findPreference(getString(R.string.pref_key_backUpFrequency))
 
-        //Options related to back up will be disabled if user cancel back up.
+        // Options related to back up will be disabled if user cancel back up.
         onlyOnWifiPref = findPreference(getString(R.string.only_on_wifi_key))
         onlyWhenIdlePref = findPreference(getString(R.string.pref_key_only_when_device_idle))
         onlyOnChargePref = findPreference(getString(R.string.pref_key_only_on_charge))
@@ -53,7 +54,7 @@ class SyncPrefsFragment : PreferenceFragmentCompat(),
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val enableBackUpKey = getString(R.string.pref_key_offline_reading)
 
-        when(key){
+        when (key) {
             enableBackUpKey -> {
                 /*If user enables back-ups, enable the options related to backup and schedule backup
                 If user disables backups, disable the options related to backup and cancel backup services*/

@@ -1,10 +1,8 @@
 package com.canli.oya.newsreader.ui.settings
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.databinding.ActivitySortSectionsBinding
 import com.canlioya.data.IUserPreferences
 import dagger.hilt.android.AndroidEntryPoint

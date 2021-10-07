@@ -2,7 +2,7 @@
 buildscript {
     ext {
         version_gradle = '7.1.0-alpha01'
-        version_kotlin = "1.5.10"
+        version_kotlin = "1.5.30"
         version_retrofit = "2.9.0"
         version_moshi = "1.9.3"
         version_recyclerview = "1.2.1"
@@ -26,7 +26,7 @@ buildscript {
         version_roboelectric = '4.3.1'
         version_fragment = '1.3.4'
         workmanager_version = '2.5.0'
-        compose_version = '1.0.0-rc01'
+        composeVersion = '1.0.3'
     }
     repositories {
         google()

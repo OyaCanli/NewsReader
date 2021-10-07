@@ -13,9 +13,7 @@ import com.canli.oya.newsreader.data.Interactors
 import com.canli.oya.newsreader.databinding.ActivitySplashBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint

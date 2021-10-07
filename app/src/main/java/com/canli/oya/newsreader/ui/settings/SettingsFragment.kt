@@ -4,26 +4,27 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
-import androidx.preference.*
 import android.widget.Toast
+import androidx.preference.*
+import com.canli.oya.newsreader.R
 import com.canli.oya.newsreader.data.Interactors
+import com.canli.oya.newsreader.notification.NotificationUtils
 import com.canli.oya.newsreader.synch.SyncUtils
 import com.canlioya.data.IUserPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import com.canli.oya.newsreader.R
-import com.canli.oya.newsreader.notification.NotificationUtils
 import java.lang.NumberFormatException
 import java.util.*
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class SettingsFragment : PreferenceFragmentCompat(),
+class SettingsFragment :
+    PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener,
-    Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
+    Preference.OnPreferenceChangeListener,
+    Preference.OnPreferenceClickListener {
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
@@ -35,16 +36,15 @@ class SettingsFragment : PreferenceFragmentCompat(),
     lateinit var syncUtils: SyncUtils
 
     @Inject
-    lateinit var notificationUtils : NotificationUtils
+    lateinit var notificationUtils: NotificationUtils
 
     @Inject
     lateinit var interactors: Interactors
 
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences_main, rootKey)
 
-        //Register a onSharedPreferenceChangeListener so that changes in the settings are applied right away
+        // Register a onSharedPreferenceChangeListener so that changes in the settings are applied right away
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
 
         /*Set an OnPreferenceChangeListener to EditPreference. OnPreferenceChangeListener is called BEFORE the
@@ -58,7 +58,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
             }
         }
 
-        //Set an OnPreferenceClickListener to "sort sections" item so that it opens another activity when clicked
+        // Set an OnPreferenceClickListener to "sort sections" item so that it opens another activity when clicked
         val sortSectionsPref: Preference? = findPreference(getString(R.string.pref_key_sort_sections))
         sortSectionsPref?.onPreferenceClickListener = this
     }
@@ -74,7 +74,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
         when (key) {
             enableNotificationsKey -> {
-                if(userPreferences.isNotificationEnabled()){
+                if (userPreferences.isNotificationEnabled()) {
                     notificationUtils.scheduleNotificationJob()
                 } else {
                     notificationUtils.cancelNotifications()
@@ -82,7 +82,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
             }
             sectionChoicesKey -> {
                 Timber.d("section preferences changed")
-                //Sort and save new section preferences
+                // Sort and save new section preferences
                 val defaultSections: Set<String> =
                     resources.getStringArray(R.array.pref_section_default_values).toSet()
                 val sections = sharedPreferences.getStringSet(key, defaultSections)
@@ -94,10 +94,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
     }
 
-    private fun refreshAllData(){
+    private fun refreshAllData() {
         GlobalScope.launch {
             interactors.refreshAllData()
-            //Clear cached articles of the sections user doesn't want anymore
+            // Clear cached articles of the sections user doesn't want anymore
             interactors.cleanUnusedData()
         }
     }
@@ -106,7 +106,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         /*If you have set OnPreferenceChangeListener to a preference, then whenever that preference
         is changed this method will be called. (Remember that OnSharedPreferenceChangeListener
         is called for any changes in any of preferences) Another major difference is that OnPreferenceChange
-        is called BEFORE the change is saved to preferences, whereas ONSharedPreferenceChange is called AFTER
+        is called BEFORE the change is saved to preferences, whereas OnSharedPreferenceChange is called AFTER
         the change is saved. For my EditTextPreference I want to verify the data BEFORE saving, in order to
         avoid a crash. That's why I preferred a OnPReferenceChangeListener for this one.*/
 
@@ -116,9 +116,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
             val error: Toast =
                 Toast.makeText(activity, R.string.warning_edittext_preference, Toast.LENGTH_SHORT)
             try {
-                //Try to parse user's entry to integer
+                // Try to parse user's entry to integer
                 val size = stringSize.toInt()
-                //If there is an error during parsing(if user entered a text for instance, it will jump to catch part)
+                // If there is an error during parsing(if user entered a text for instance, it will jump to catch part)
                 if (size > 50 || size < 1) {
                     /*If user entered a number more than 50 or less than 1, show warning message
                     and RETURN, so user's entry will not be saved in this case*/
@@ -126,7 +126,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     return false
                 }
             } catch (nfe: NumberFormatException) {
-                //If user entered a text, show a warning message and RETURN, so user's entry will not be saved in this case
+                // If user entered a text, show a warning message and RETURN, so user's entry will not be saved in this case
                 error.show()
                 return false
             }
@@ -135,7 +135,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     override fun onPreferenceClick(preference: Preference?): Boolean {
-        //This is like a clicklistener for preference items. I set it here to open a new activity
+        // This is like a clicklistener for preference items. I set it here to open a new activity
         if (preference?.key.equals(getString(R.string.pref_key_sort_sections))) {
             val intent = Intent(activity, SortSectionsActivity::class.java)
             startActivity(intent)
@@ -144,7 +144,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     override fun onDestroy() {
-        //We need to unregister OnSharedPreferenceChangedListener in order to avoid memory leaks
+        // We need to unregister OnSharedPreferenceChangedListener in order to avoid memory leaks
         super.onDestroy()
         preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }

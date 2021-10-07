@@ -1,6 +1,5 @@
 package com.canli.oya.newsreader.ui.bookmarks
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.canli.oya.newsreader.common.UIState
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(

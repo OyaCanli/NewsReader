@@ -10,16 +10,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val interactors: Interactors,
-                                        @IODispatcher private val ioDispatcher: CoroutineDispatcher
+class MainViewModel @Inject constructor(
+    private val interactors: Interactors,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    var searchQuery : String? = null
+    var searchQuery: String? = null
 
-    fun startRefreshingData(){
+    fun startRefreshingData() {
         GlobalScope.launch {
             interactors.refreshAllData
         }
     }
-
 }

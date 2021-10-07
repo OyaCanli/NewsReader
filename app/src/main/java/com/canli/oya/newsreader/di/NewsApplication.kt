@@ -19,7 +19,7 @@ class NewsApplication : Application(), Configuration.Provider {
     lateinit var syncUtils: SyncUtils
 
     @Inject
-    lateinit var notificationUtils : NotificationUtils
+    lateinit var notificationUtils: NotificationUtils
 
     override fun getWorkManagerConfiguration(): Configuration {
         return Configuration.Builder()
@@ -34,8 +34,5 @@ class NewsApplication : Application(), Configuration.Provider {
         syncUtils.scheduleSyncNewsJob()
 
         notificationUtils.scheduleNotificationJob()
-
     }
-
-
 }

@@ -46,7 +46,7 @@ fun SettingsDropDownItem() {
     }
 }
 
-private fun launchSettings(context : Context) {
+private fun launchSettings(context: Context) {
     val intent = Intent(context, SettingsActivity::class.java)
     context.startActivity(intent)
 }

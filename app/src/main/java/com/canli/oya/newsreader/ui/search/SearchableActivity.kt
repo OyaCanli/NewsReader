@@ -10,7 +10,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import com.canli.oya.newsreader.R
-import com.canli.oya.newsreader.ui.main.*
+import com.canli.oya.newsreader.ui.main.BookmarksDropDownItem
+import com.canli.oya.newsreader.ui.main.MainScreen
+import com.canli.oya.newsreader.ui.main.OverflowMenu
+import com.canli.oya.newsreader.ui.main.SettingsDropDownItem
+import com.canli.oya.newsreader.ui.main.UpButton
 import com.canli.oya.newsreader.ui.newslist.BookmarkClickListener
 import com.canli.oya.newsreader.ui.newslist.NewsListScreen
 import com.canlioya.core.model.NewsArticle
@@ -41,7 +45,8 @@ class SearchableActivity : ComponentActivity(), BookmarkClickListener {
                         title = getString(R.string.search_results_for, query),
                         onUpClicked = {
                             onBackPressed()
-                        })
+                        }
+                    )
                 },
                 content = {
                     NewsListScreen(
@@ -49,18 +54,21 @@ class SearchableActivity : ComponentActivity(), BookmarkClickListener {
                         bookmarkClickListener = this,
                         uiState = viewModel.uiState
                     )
-                })
+                }
+            )
         }
     }
 
-    override fun onBookmarkClick(position : Int, article: NewsArticle) {
+    override fun onBookmarkClick(position: Int, article: NewsArticle) {
         viewModel.toggleBookmarkState(position, article)
     }
 }
 
 @Composable
-private fun SearchAppBar(title : String,
-                         onUpClicked: () -> Unit) {
+private fun SearchAppBar(
+    title: String,
+    onUpClicked: () -> Unit
+) {
     TopAppBar(
         title = {
             Text(text = title)

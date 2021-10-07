@@ -32,7 +32,8 @@ class BookmarkActivity : ComponentActivity(), BookmarkClickListener {
                     BookmarkAppBar(
                         onUpClicked = {
                             onBackPressed()
-                        })
+                        }
+                    )
                 },
                 content = {
                     NewsListScreen(
@@ -40,7 +41,8 @@ class BookmarkActivity : ComponentActivity(), BookmarkClickListener {
                         bookmarkClickListener = this,
                         uiState = viewModel.uiState
                     )
-                })
+                }
+            )
         }
     }
 

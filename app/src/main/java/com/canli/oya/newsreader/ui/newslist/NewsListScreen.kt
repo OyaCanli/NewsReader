@@ -5,12 +5,25 @@ import android.content.Intent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,7 +48,6 @@ import com.canli.oya.newsreader.common.shareTheLink
 import com.canli.oya.newsreader.common.splitDateAndTime
 import com.canli.oya.newsreader.ui.details.DetailsActivity
 import com.canli.oya.newsreader.ui.theme.Red500
-import com.canli.oya.newsreader.ui.theme.Red700
 import com.canlioya.core.model.NewsArticle
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.flow.StateFlow
@@ -54,7 +66,7 @@ fun NewsListScreen(
         UIState.LOADING -> LoadingIndicator()
         UIState.SUCCESS -> NewsList(list = articles, bookmarkClickListener)
         UIState.EMPTY -> EmptyScreen()
-        UIState.ERROR -> {/*todo: handle network error case*/
+        UIState.ERROR -> { /*todo: handle network error case*/
         }
     }
 }
@@ -84,19 +96,23 @@ fun NewsList(list: List<NewsArticle>, itemClickListener: BookmarkClickListener) 
 fun NewsItem(currentArticle: NewsArticle, position: Int, itemClickListener: BookmarkClickListener) {
     val context = LocalContext.current
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { openDetails(context, currentArticle) }
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { openDetails(context, currentArticle) }
+            .padding(16.dp)
+    ) {
         Row(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.fillMaxWidth()
         ) {
             ItemTitle(currentArticle.title, Modifier.weight(2f))
-            ArticleImage(currentArticle.thumbnailUrl,
+            ArticleImage(
+                currentArticle.thumbnailUrl,
                 Modifier
                     .weight(1f)
-                    .size(120.dp))
+                    .size(120.dp)
+            )
         }
         Spacer(modifier = Modifier.height(8.dp))
         ItemTrailText(currentArticle.articleTrail)
@@ -118,7 +134,7 @@ fun NewsItem(currentArticle: NewsArticle, position: Int, itemClickListener: Book
     }
 }
 
-private fun openDetails(context : Context, article: NewsArticle) {
+private fun openDetails(context: Context, article: NewsArticle) {
     val intent = Intent(context, DetailsActivity::class.java)
     intent.putExtra(CHOSEN_ARTICLE, article)
     context.startActivity(intent)
@@ -149,7 +165,7 @@ fun SimpleHorizontalLine() {
 }
 
 @Composable
-fun ItemTitle(title : String, modifier: Modifier) {
+fun ItemTitle(title: String, modifier: Modifier) {
     Text(
         text = title,
         fontSize = 20.sp,
@@ -160,7 +176,7 @@ fun ItemTitle(title : String, modifier: Modifier) {
 }
 
 @Composable
-fun ItemTrailText(trailText : String?) {
+fun ItemTrailText(trailText: String?) {
     trailText?.let {
         Text(
             text = fromHtml(it),
@@ -170,7 +186,7 @@ fun ItemTrailText(trailText : String?) {
 }
 
 @Composable
-fun ArticleImage(url : String?, modifier : Modifier) {
+fun ArticleImage(url: String?, modifier: Modifier) {
     Image(
         painter = rememberCoilPainter(
             url,
@@ -183,7 +199,7 @@ fun ArticleImage(url : String?, modifier : Modifier) {
 }
 
 @Composable
-fun Author(author : String?, modifier : Modifier) {
+fun Author(author: String?, modifier: Modifier) {
     Text(
         text = author ?: "",
         fontStyle = FontStyle.Italic,
@@ -193,7 +209,7 @@ fun Author(author : String?, modifier : Modifier) {
 }
 
 @Composable
-fun Section(section : String) {
+fun Section(section: String) {
     Surface(color = MaterialTheme.colors.primary) {
         Text(
             text = section,
@@ -204,7 +220,7 @@ fun Section(section : String) {
 }
 
 @Composable
-fun DateAndTime(date: String, modifier : Modifier = Modifier) {
+fun DateAndTime(date: String, modifier: Modifier = Modifier) {
     Text(
         text = splitDateAndTime(date),
         modifier = modifier
@@ -227,7 +243,7 @@ fun BookmarkButton(isBookmarked: Boolean, onBookmarkClicked: () -> Unit) {
 }
 
 @Composable
-fun ShareButton(url : String) {
+fun ShareButton(url: String) {
     val context = LocalContext.current
     Icon(
         painter = painterResource(id = R.drawable.ic_share_dark),
@@ -257,7 +273,6 @@ fun ListPreview() {
     )
     val dummyClickListener = object : BookmarkClickListener {
         override fun onBookmarkClick(position: Int, article: NewsArticle) {}
-
     }
     NewsItem(currentArticle = samplePoliticsArticle, 0, dummyClickListener)
 }
@@ -265,12 +280,14 @@ fun ListPreview() {
 @Preview
 @Composable
 fun EmptyScreen() {
-    Box(modifier = Modifier.fillMaxSize(),
-    contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
         Text(text = "No results found")
     }
 }
 
 interface BookmarkClickListener {
-    fun onBookmarkClick(position : Int, article : NewsArticle)
+    fun onBookmarkClick(position: Int, article: NewsArticle)
 }
