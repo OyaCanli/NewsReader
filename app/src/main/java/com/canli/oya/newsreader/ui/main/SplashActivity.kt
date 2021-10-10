@@ -1,76 +1,39 @@
 package com.canli.oya.newsreader.ui.main
 
-
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import androidx.annotation.AnimRes
-import androidx.appcompat.app.AppCompatActivity
-import com.canli.oya.newsreader.R
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.lifecycle.lifecycleScope
 import com.canli.oya.newsreader.data.Interactors
-import com.canli.oya.newsreader.databinding.ActivitySplashBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : ComponentActivity() {
 
-    private lateinit var binding : ActivitySplashBinding
+    @Inject lateinit var interactors: Interactors
 
-    @Inject lateinit var interactors : Interactors
-
-    private var animatingViewCount = 0
-
-    private lateinit var animationList : List<Pair<View, Int>>
-
-    private var animsEnded = false
-
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        //Prepare animation with views
-        val fadeAnimation = AnimationUtils.loadAnimation(this@SplashActivity, R.anim.fade_anim)
-        binding.splashTitle.startAnimation(fadeAnimation)
-
-        animationList = listOf(binding.viewFromLeft to R.anim.translate_from_left,
-            binding.viewFromBottom to R.anim.translate_from_bottom,
-            binding.viewFromRight to R.anim.translate_from_right,
-            binding.viewFromTop to R.anim.translate_from_top)
-
-        val firstAnim = animationList[0]
-        animateView(firstAnim.first, firstAnim.second)
 
         GlobalScope.launch {
             interactors.refreshAllData()
         }
-    }
 
-    private fun animateView(view: View, @AnimRes animResource : Int){
-        val translation = AnimationUtils.loadAnimation(this@SplashActivity, animResource)
-        translation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {}
-            override fun onAnimationRepeat(animation: Animation?) {}
+        lifecycleScope.launch {
+            delay(3000)
+            startMainActivity()
+        }
 
-            override fun onAnimationEnd(animation: Animation?) {
-                if (animatingViewCount == 3) {
-                    animsEnded = true
-                    startMainActivity()
-                    return
-                }
-
-                animatingViewCount++
-                val currentAnim = animationList[animatingViewCount]
-                animateView(currentAnim.first, currentAnim.second)
-            }
-        })
-        view.startAnimation(translation)
-        view.visibility = View.VISIBLE
+        setContent {
+            AnimatedSplashScreen()
+        }
     }
 
     private fun startMainActivity() {
